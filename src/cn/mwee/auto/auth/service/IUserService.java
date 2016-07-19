@@ -1,0 +1,102 @@
+/**
+ * 
+ */
+package cn.mwee.auto.auth.service;
+
+import java.util.List;
+import java.util.Set;
+
+import cn.mwee.auto.auth.model.AuthUser;
+import cn.mwee.auto.deploy.contract.commom.BaseContract;
+
+/**
+ * 用户信息维护
+ * 
+ * @author mengfanyuan
+ * 2016年6月28日下午7:44:37
+ */
+public interface IUserService {
+
+	/**
+	 * query user by userId
+	 * @param authUserId
+	 * @return
+	 */
+	AuthUser select(Integer authUserId);
+
+	/**
+	 * query by userName
+	 * @param userName
+	 * @return
+     */
+	AuthUser queryByUserName(String userName);
+	
+	/**
+	 * query user by condition
+	 * @param authUser
+	 * @return
+	 */
+	List<AuthUser> query(AuthUser authUser);
+	
+	/**
+	 * create user
+	 * @param authUser
+	 * @return
+	 */
+	boolean addUser(AuthUser authUser) throws Exception;
+	
+	/**
+	 * update user by userId
+	 * @param authUser
+	 * @return
+	 */
+	boolean updateUser(AuthUser authUser);
+	
+	/**
+	 * 修改密码
+	 * @param authUser
+	 * @return
+	 */
+	boolean updatePassword(AuthUser authUser);
+	
+	/**
+	 * delete user by userId
+	 * @param authUserId
+	 * @return
+	 */
+	boolean delUser(Integer authUserId);
+	
+	/**
+	 * 用户角色
+	 * @param username
+	 * @return
+	 */
+	Set<String> queryRoles(String username);
+	
+	/**
+	 * 用户权限
+	 * @param username
+	 * @return
+	 */
+	Set<String> queryPermissions(String username);
+
+	/**
+	 * 查询用户列表
+	 * @return
+     */
+	List<AuthUser> queryUsers(BaseContract contract);
+
+	/**
+	 * 用户授权角色
+	 * @param authUser
+	 * @param roles
+     */
+	int updateUserGrant(AuthUser authUser, String roles);
+
+	/**
+	 * 逻辑删除用户
+	 * @param authUserId
+	 * @return
+     */
+	int delUserLogic(Integer authUserId);
+}

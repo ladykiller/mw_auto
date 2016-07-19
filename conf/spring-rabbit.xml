@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:rabbit="http://www.springframework.org/schema/rabbit"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="
+    http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+		 http://www.springframework.org/schema/rabbit http://www.springframework.org/schema/rabbit/spring-rabbit-1.5.xsd">
+
+	<!-- =========================== message queue =========================== -->
+	
+	<!-- misc vhost 连接工厂 -->
+	<rabbit:connection-factory
+		id="autoConnectionFactory"
+		addresses="${mq.addresses}"
+		virtual-host="${mq.vhostMisc}"
+		username="${mq.username}"
+		password="${mq.password}"
+		cache-mode="${mq.cacheMode}"
+		channel-cache-size="${mq.cacheSize}"
+		connection-timeout="${mq.connectionTimeout}"
+	/>
+	
+	<!-- misc vhost 管理器 -->
+	<rabbit:admin id="miscAdmin" connection-factory="autoConnectionFactory"/>
+	
+	<!-- JSON 消息转换器 -->
+	<bean id="jsonMessageConvertor" class="cn.mwee.auto.misc.mq.FastJsonMessageConverter"/>
+	
+	<!-- ================= AppEvent 消息队列配置 ================= -->
+	
+	<!-- exchange.common.AappEvent -->
+	<rabbit:topic-exchange name="exchange.common.AppEvent" declared-by="miscAdmin" auto-declare="true" auto-delete="false" durable="true">
+		<rabbit:exchange-arguments>
+		</rabbit:exchange-arguments>
+		<rabbit:bindings>
+			<!-- 消息事件 -->
+			<rabbit:binding pattern="soa.notify.flow.create" queue="queue.flow.task" />
+		</rabbit:bindings>
+	</rabbit:topic-exchange>
+	
+	<!-- 发送方: AMQP Template -->
+	
+	<rabbit:template id="appEventTemplate" connection-factory="autoConnectionFactory" exchange="exchange.common.AppEvent" message-converter="jsonMessageConvertor"/>
+	
+	<bean id="appEventMQSender" class="cn.mwee.auto.misc.mq.MQSender" p:template-ref="appEventTemplate"/>
+	
+	<!-- ================= AppEvent 消息队列配置 ================= -->	
+		
+	<!-- ================= Message Center Event 消息队列配置 ================= -->
+	
+	<rabbit:queue name="queue.flow.task" declared-by="miscAdmin" auto-declare="true" auto-delete="false" durable="true" exclusive="false">
+		<rabbit:queue-arguments>
+			<entry key="x-max-length" value="1000000" value-type="java.lang.Long"/>
+			<entry key="x-max-length-bytes" value="300485760" value-type="java.lang.Long"/>
+		</rabbit:queue-arguments>
+	</rabbit:queue>
+
+	<!-- ================= Message Center Event 消息队列配置 ================= -->
+
+</beans>
