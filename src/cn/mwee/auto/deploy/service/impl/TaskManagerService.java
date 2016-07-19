@@ -10,6 +10,7 @@ import cn.mwee.auto.common.db.BaseQueryResult;
 import cn.mwee.auto.deploy.contract.QueryTasksRequest;
 import cn.mwee.auto.deploy.contract.QueryTasksResult;
 import cn.mwee.auto.deploy.model.AutoTaskExample;
+import static cn.mwee.auto.deploy.util.AutoConsts.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,7 @@ import cn.mwee.auto.deploy.dao.AutoTaskMapper;
 import cn.mwee.auto.deploy.model.AutoTask;
 import cn.mwee.auto.deploy.service.ITaskManagerService;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -28,31 +30,26 @@ public class TaskManagerService implements ITaskManagerService {
 
 	@Autowired
 	private AutoTaskMapper autoTaskMapper;
-	
-	
-	/* (non-Javadoc)
-	 * @see cn.mwee.auto.deploy.service.ITaskManagerService#addTask(cn.mwee.auto.deploy.model.AutoTask)
-	 */
+
 	@Override
-	public boolean addTask(AutoTask task) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean addTask(AutoTask task)
+	{
+		return autoTaskMapper.insert(task) > 0;
 	}
 
-	/* (non-Javadoc)
-	 * @see cn.mwee.auto.deploy.service.ITaskManagerService#getTask(java.lang.Integer)
-	 */
 	@Override
 	public AutoTask getTask(Integer taskId) {
-		// TODO Auto-generated method stub
 		return autoTaskMapper.selectByPrimaryKey(taskId);
 	}
 
 	@Override
 	public boolean deleteTask(Integer taskId)
 	{
-
-		return false;
+		AutoTask task = new AutoTask();
+		task.setId(taskId);
+		task.setInuse(InUseType.NOT_USE);
+		task.setUpdateTime(new Date());
+		return autoTaskMapper.updateByPrimaryKeySelective(task) > 0;
 	}
 
 	@Override
@@ -60,6 +57,8 @@ public class TaskManagerService implements ITaskManagerService {
 	{
 		AutoTaskExample e = new AutoTaskExample();
 		AutoTaskExample.Criteria c = e.createCriteria();
+
+		c.andInuseEqualTo(InUseType.IN_USE);
 
 		QueryTasksResult rs = new QueryTasksResult();
 		BaseQueryResult<AutoTask> qrs = BaseModel.selectByPage(autoTaskMapper, e, req.getPage());

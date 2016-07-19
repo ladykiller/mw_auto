@@ -521,6 +521,66 @@ public class AutoTaskExample {
             return (Criteria) this;
         }
 
+        public Criteria andInuseIsNull() {
+            addCriterion("inuse is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andInuseIsNotNull() {
+            addCriterion("inuse is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andInuseEqualTo(Byte value) {
+            addCriterion("inuse =", value, "inuse");
+            return (Criteria) this;
+        }
+
+        public Criteria andInuseNotEqualTo(Byte value) {
+            addCriterion("inuse <>", value, "inuse");
+            return (Criteria) this;
+        }
+
+        public Criteria andInuseGreaterThan(Byte value) {
+            addCriterion("inuse >", value, "inuse");
+            return (Criteria) this;
+        }
+
+        public Criteria andInuseGreaterThanOrEqualTo(Byte value) {
+            addCriterion("inuse >=", value, "inuse");
+            return (Criteria) this;
+        }
+
+        public Criteria andInuseLessThan(Byte value) {
+            addCriterion("inuse <", value, "inuse");
+            return (Criteria) this;
+        }
+
+        public Criteria andInuseLessThanOrEqualTo(Byte value) {
+            addCriterion("inuse <=", value, "inuse");
+            return (Criteria) this;
+        }
+
+        public Criteria andInuseIn(List<Byte> values) {
+            addCriterion("inuse in", values, "inuse");
+            return (Criteria) this;
+        }
+
+        public Criteria andInuseNotIn(List<Byte> values) {
+            addCriterion("inuse not in", values, "inuse");
+            return (Criteria) this;
+        }
+
+        public Criteria andInuseBetween(Byte value1, Byte value2) {
+            addCriterion("inuse between", value1, value2, "inuse");
+            return (Criteria) this;
+        }
+
+        public Criteria andInuseNotBetween(Byte value1, Byte value2) {
+            addCriterion("inuse not between", value1, value2, "inuse");
+            return (Criteria) this;
+        }
+
         public Criteria andDescIsNull() {
             addCriterion("`desc` is null");
             return (Criteria) this;

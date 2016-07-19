@@ -35,6 +35,14 @@ public class AutoTask {
     private String params;
 
     /**
+     * 使用中(0:否,1:是)
+     * tasks.inuse
+     *
+     * @mbggenerated
+     */
+    private Byte inuse;
+
+    /**
      * 任务描述
      * tasks.desc
      *
@@ -148,6 +156,30 @@ public class AutoTask {
      */
     public void setParams(String params) {
         this.params = params;
+    }
+
+    /**
+     * 使用中(0:否,1:是)
+     * This method returns the value of the database column tasks.inuse
+     *
+     * @return the value of tasks.inuse
+     *
+     * @mbggenerated
+     */
+    public Byte getInuse() {
+        return inuse;
+    }
+
+    /**
+     * 使用中(0:否,1:是)
+     * This method sets the value of the database column tasks.inuse
+     *
+     * @param inuse the value for tasks.inuse
+     *
+     * @mbggenerated
+     */
+    public void setInuse(Byte inuse) {
+        this.inuse = inuse;
     }
 
     /**

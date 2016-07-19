@@ -42,6 +42,14 @@ public class AutoConsts {
 		public static final Byte PostGroup 		= Byte.MAX_VALUE;
 	}
 
+
+	/** 使用中 */
+	public static class InUseType
+	{
+		public static final Byte IN_USE			= 1;
+		public static final Byte NOT_USE 		= 0;
+	}
+
 	public enum TaskState
 	{
 		INIT,ING,MANUAL,ERROR,TIMER,SUCCESS
