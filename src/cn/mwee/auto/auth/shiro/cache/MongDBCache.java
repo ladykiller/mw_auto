@@ -11,8 +11,6 @@ import java.util.Set;
 import org.apache.shiro.cache.Cache;
 import org.apache.shiro.cache.CacheException;
 
-import cn.mwee.auto.gateway.service.conn.MongoService;
-
 /**
  * @author mengfanyuan
  * 2016年7月1日下午2:31:30

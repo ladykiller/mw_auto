@@ -15,8 +15,6 @@ import org.apache.shiro.util.Initializable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import cn.mwee.auto.gateway.service.conn.MongoService;
-
 /**
  * @author mengfanyuan
  * 2016年7月1日下午2:17:17

@@ -35,7 +35,7 @@ public class UserServiceTest extends AbstractJUnit4SpringContextTests  {
 	 * Test method for {@link cn.mwee.auto.auth.service.user.impl.UserService#addUser(cn.mwee.auto.auth.model.AuthUser)}.
 	 */
 	@Test
-	public void testAddUser() {
+	public void testAddUser() throws Exception {
 		AuthUser user = new AuthUser();
 		user.setUsername("mengfanyuan");
 		user.setPassword("aaa");

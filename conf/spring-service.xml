@@ -9,10 +9,10 @@
 	<bean id="jsonRouter" class="cn.mwee.auto.misc.handler.Router">
 		<property name="mapRouter">
 		    <map>
-		    	<entry key="/biz/{label}" value="cn.mwee.auto.gateway.handler.BizInfoHandler" />
 		    	<entry key="/auth/{label}" value="cn.mwee.auto.auth.handler.AuthHandler" />
 		    	<entry key="/deploy/{label}" value="cn.mwee.auto.deploy.handler.DeployHandler" />
-		    </map>
+				<entry key="/task/{label}" value="cn.mwee.auto.deploy.handler.AutoTaskHandler" />
+			</map>
 		</property>
 	</bean>
 
