@@ -8,6 +8,7 @@ package cn.mwee.auto.deploy.contract.commom;
 
 import javax.validation.constraints.Min;
 
+import cn.mwee.auto.common.db.PageInfo;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.alibaba.fastjson.annotation.JSONType;
 
@@ -25,6 +26,11 @@ public class BaseContract {
 	 */
 	private String token;
 
+	/**
+	 * 分页信息
+	 */
+	private PageInfo pageInfo;
+
 	/** 每页记录，默认20 **/
 	@Min(value=1)
 	private Integer pageSize = 20;
@@ -34,7 +40,7 @@ public class BaseContract {
 	private Integer pageIndex = 1;
 	
 	/** 排序列，默认Id **/
-	private String sortInfo = "id desc";
+	private String sortInfo = "";
 	
 	/** 总页数 **/
 	private Integer pageSum;

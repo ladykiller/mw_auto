@@ -5,8 +5,9 @@ package cn.mwee.auto.auth.service;
 
 import java.util.List;
 
-import com.rabbitmq.client.AMQP.Confirm.Select;
+import cn.mwee.auto.auth.contract.permission.PermissionContract;
 
+import cn.mwee.auto.auth.contract.permission.PermissionQueryContract;
 import cn.mwee.auto.auth.model.AuthPermission;
 
 /**
@@ -27,10 +28,10 @@ public interface IPermissionService {
 	/**
 	 * update authPermission by Id
 	 * 
-	 * @param authPermission
+	 * @param permissionContract
 	 * @return
 	 */
-	boolean update(AuthPermission authPermission);
+	boolean update(PermissionContract permissionContract);
 	
 	/**
 	 * delete authPermission by Id
@@ -38,7 +39,7 @@ public interface IPermissionService {
 	 * @param id
 	 * @return
 	 */
-	boolean del(Integer id);
+	boolean delete(Integer id);
 	
 	/**
 	 * query authPermission by Id
@@ -54,5 +55,12 @@ public interface IPermissionService {
 	 * @param authPermission
 	 * @return
 	 */
-	List<AuthPermission> query(AuthPermission authPermission);
+	List<AuthPermission> query(PermissionQueryContract permissionQuery);
+
+	/**
+	 * 角色赋权
+	 * @return
+     */
+	int updateRoleAuth(Integer roleId,String permissionStr);
+
 }

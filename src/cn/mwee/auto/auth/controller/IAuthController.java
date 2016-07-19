@@ -76,28 +76,62 @@ public interface IAuthController extends IController {
 	 * @param request
 	 * @return
 	 */
-	NormalReturn addMenu(ServiceRequest request);
+	NormalReturn addPermission(ServiceRequest request);
 
 	/**
 	 * 更新菜单
 	 * @param request
 	 * @return
      */
-	NormalReturn updateMenu(ServiceRequest request);
+	NormalReturn updatePermission(ServiceRequest request);
 
 	/**
 	 * 删除菜单
 	 * @param request
 	 * @return
      */
-	NormalReturn delMenu(ServiceRequest request);
+	NormalReturn delPermission(ServiceRequest request);
 
 	/**
 	 * 查询菜单
 	 * @param request
 	 * @return
      */
-	NormalReturn queryMenu(ServiceRequest request);
+	NormalReturn queryPermission(ServiceRequest request);
 
+	/**
+	 * 新增角色
+	 * @param request
+	 * @return
+	 */
+	NormalReturn addRole(ServiceRequest request);
+
+	/**
+	 * 更新角色
+	 * @param request
+	 * @return
+	 */
+	NormalReturn updateRole(ServiceRequest request);
+
+	/**
+	 * 删除角色
+	 * @param request
+	 * @return
+	 */
+	NormalReturn delRole(ServiceRequest request);
+
+	/**
+	 * 查询角色
+	 * @param request
+	 * @return
+	 */
+	NormalReturn queryRole(ServiceRequest request);
+
+	/**
+	 * 角色授权
+	 * @param request
+	 * @return
+	 */
+	NormalReturn roleAuth(ServiceRequest request);
 
 }

@@ -7,6 +7,7 @@ package cn.mwee.auto.auth.service.impl;
 
 import java.util.List;
 
+import cn.mwee.auto.auth.contract.role.RoleQueryContract;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import cn.mwee.auto.auth.dao.AuthRoleMapper;
@@ -50,10 +51,10 @@ public class RoleService implements IRoleService {
 	}
 
 	@Override
-	public List<AuthRole> query(AuthRole authRole) {
+	public List<AuthRole> query(RoleQueryContract roleQueryContract) {
 		// TODO Auto-generated method stub
 		AuthRoleExample example = new AuthRoleExample();
-		example.createCriteria().andRolenameLike(authRole.getRolename());
+		example.createCriteria().andRolenameLike(roleQueryContract.getRoleName());
 		authRoleMapper.selectByExample(example);
 		return null;
 	}

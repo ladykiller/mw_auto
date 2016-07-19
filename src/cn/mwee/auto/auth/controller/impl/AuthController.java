@@ -6,9 +6,21 @@
 package cn.mwee.auto.auth.controller.impl;
 
 import cn.mwee.auto.auth.contract.*;
+import cn.mwee.auto.auth.contract.permission.PermissionAddContract;
+import cn.mwee.auto.auth.contract.permission.PermissionContract;
+import cn.mwee.auto.auth.contract.permission.PermissionQueryContract;
+import cn.mwee.auto.auth.contract.role.RoleAddContract;
+import cn.mwee.auto.auth.contract.role.RoleGrantContract;
+import cn.mwee.auto.auth.contract.role.RoleQueryContract;
+import cn.mwee.auto.auth.contract.role.RoleUpdateContract;
+import cn.mwee.auto.auth.model.AuthPermission;
+import cn.mwee.auto.auth.model.AuthRole;
 import cn.mwee.auto.auth.model.AuthUser;
+import cn.mwee.auto.auth.service.IPermissionService;
+import cn.mwee.auto.auth.service.IRoleService;
 import cn.mwee.auto.auth.service.IUserService;
 import cn.mwee.auto.deploy.contract.commom.BaseContract;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -39,6 +51,11 @@ public class AuthController implements IAuthController {
 	@Autowired
 	private IUserService userService;
 
+    @Autowired
+    private IPermissionService permissionService;
+
+    @Autowired
+    private IRoleService roleService;
 
 	@Override
 	@Contract(LoginReq.class)
@@ -179,22 +196,139 @@ public class AuthController implements IAuthController {
 	}
 
 	@Override
-	public NormalReturn addMenu(ServiceRequest request) {
-		return null;
+	@RequiresPermissions(value = "/auth/addPermission",logical = Logical.OR)
+    @Contract(PermissionAddContract.class)
+	public NormalReturn addPermission(ServiceRequest request) {
+        PermissionAddContract req = request.getContract();
+        try{
+            AuthPermission authPermission = new AuthPermission();
+            authPermission.setParentId(req.getParentId());
+            authPermission.setCode(req.getCode());
+            authPermission.setName(req.getName());
+            authPermission.setType(req.getType());
+            authPermission.setDescription(req.getDescription());
+            permissionService.add(authPermission);
+            return new NormalReturn("200","success","success");
+        } catch (Exception e) {
+            logger.error("",e);
+            return new NormalReturn("500","error",e.getMessage());
+        }
 	}
 
 	@Override
-	public NormalReturn updateMenu(ServiceRequest request) {
-		return null;
+	@RequiresPermissions(value = "/auth/updatePermission",logical = Logical.OR)
+    @Contract(PermissionContract.class)
+	public NormalReturn updatePermission(ServiceRequest request) {
+        PermissionContract req = request.getContract();
+        try {
+            permissionService.update(req);
+            return new NormalReturn("200","success","success");
+        } catch (Exception e) {
+            logger.error("",e);
+            return new NormalReturn("500","error",e.getMessage());
+        }
+    }
+
+	@Override
+	@RequiresPermissions(value = "/auth/delPermission",logical = Logical.OR)
+    @Contract(PermissionContract.class)
+	public NormalReturn delPermission(ServiceRequest request) {
+        PermissionContract req = request.getContract();
+        try {
+            permissionService.delete(req.getId());
+            return new NormalReturn("200","success","success");
+        } catch (Exception e) {
+            logger.error("",e);
+            return new NormalReturn("500","error",e.getMessage());
+        }
 	}
 
 	@Override
-	public NormalReturn delMenu(ServiceRequest request) {
-		return null;
+	@RequiresPermissions(value = "/auth/queryPermission",logical = Logical.OR)
+    @Contract(PermissionQueryContract.class)
+	public NormalReturn queryPermission(ServiceRequest request) {
+        PermissionQueryContract req = request.getContract();
+        try {
+            return new NormalReturn("200","success",permissionService.query(req));
+        } catch (Exception e) {
+            logger.error("",e);
+            return new NormalReturn("500","error",e.getMessage());
+        }
 	}
 
 	@Override
-	public NormalReturn queryMenu(ServiceRequest request) {
-		return null;
-	}
+	@RequiresPermissions(value = "/auth/addRole",logical = Logical.OR)
+    @Contract(RoleAddContract.class)
+	public NormalReturn addRole(ServiceRequest request) {
+        RoleAddContract req = request.getContract();
+        try {
+            AuthRole authRole = new AuthRole();
+            authRole.setRolename(req.getRoleName());
+            authRole.setDescription(req.getDesc());
+            roleService.add(authRole);
+            return new NormalReturn("200","success","success");
+        } catch (Exception e) {
+            logger.error("",e);
+            return new NormalReturn("500","error",e.getMessage());
+        }
+    }
+
+	@Override
+	@RequiresPermissions(value = "/auth/updateRole",logical = Logical.OR)
+    @Contract(RoleUpdateContract.class)
+	public NormalReturn updateRole(ServiceRequest request) {
+		RoleUpdateContract req = request.getContract();
+        try {
+            AuthRole authRole = new AuthRole();
+            authRole.setId(req.getRoleId());
+            if (StringUtils.isNotBlank(req.getRoleName())) authRole.setRolename(req.getRoleName());
+            if (StringUtils.isNotBlank(req.getDesc())) authRole.setDescription(req.getDesc());
+            roleService.update(authRole);
+            return new NormalReturn("200","success","success");
+        } catch (Exception e) {
+            logger.error("",e);
+            return new NormalReturn("500","error",e.getMessage());
+        }
+    }
+
+	@Override
+	@RequiresPermissions(value = "/auth/delRole",logical = Logical.OR)
+    @Contract(RoleUpdateContract.class)
+	public NormalReturn delRole(ServiceRequest request) {
+		RoleUpdateContract req = request.getContract();
+        try {
+            permissionService.delete(req.getRoleId());
+            return new NormalReturn("200","success","success");
+        } catch (Exception e) {
+            logger.error("",e);
+            return new NormalReturn("500","error",e.getMessage());
+        }
+    }
+
+	@Override
+	@RequiresPermissions(value = "/auth/queryRole",logical = Logical.OR)
+    @Contract(RoleQueryContract.class)
+	public NormalReturn queryRole(ServiceRequest request) {
+        RoleQueryContract req = request.getContract();
+        try {
+            return new NormalReturn("200","success",roleService.query(req));
+        } catch (Exception e) {
+            logger.error("",e);
+            return new NormalReturn("500","error",e.getMessage());
+        }
+    }
+
+	@Override
+	@RequiresPermissions(value = "/auth/queryAuth",logical = Logical.OR)
+    @Contract(RoleGrantContract.class)
+	public NormalReturn roleAuth(ServiceRequest request) {
+        RoleGrantContract req = request.getContract();
+        try {
+            permissionService.updateRoleAuth(req.getRoleId(), req.getPermissionStr());
+            return new NormalReturn("200","success","success");
+        } catch (Exception e) {
+            logger.error("",e);
+            return new NormalReturn("500","error",e.getMessage());
+        }
+    }
 }
