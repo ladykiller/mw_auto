@@ -23,7 +23,7 @@ public class SshTest {
          * HOST: IP ADDRESS OF THE SSH SERVER
          **/
         String command = "sh /root/test.sh";
-        String userName = "root";
+        String userName = "root2";
         String password = "";
         String connectionIP = "rabbitmq";
         SSHManager instance = new SSHManager(userName, "/Users/huming/.ssh/id_rsa",connectionIP,null,null,1);
