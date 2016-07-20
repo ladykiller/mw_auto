@@ -1,4 +1,4 @@
-package cn.mwee.auto.auth.contract;
+package cn.mwee.auto.auth.contract.user;
 
 import cn.mwee.auto.deploy.contract.commom.BaseContract;
 import lombok.Data;

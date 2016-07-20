@@ -12,6 +12,9 @@
 		    	<entry key="/auth/{label}" value="cn.mwee.auto.auth.handler.AuthHandler" />
 		    	<entry key="/deploy/{label}" value="cn.mwee.auto.deploy.handler.DeployHandler" />
 				<entry key="/task/{label}" value="cn.mwee.auto.deploy.handler.AutoTaskHandler" />
+				<entry key="/user/{label}" value="cn.mwee.auto.auth.handler.UserHandler" />
+				<entry key="/role/{label}" value="cn.mwee.auto.auth.handler.RoleHandler" />
+				<entry key="/permission/{label}" value="cn.mwee.auto.auth.handler.PermissionHandler" />
 			</map>
 		</property>
 	</bean>

@@ -13,27 +13,34 @@ import cn.mwee.auto.misc.resp.NormalReturn;
  * @author mengfanyuan
  * 2016年6月30日上午9:49:55
  */
-public interface IAuthController extends IController {
-	/**
-	 * 登录
-	 * @param request
-	 * @return
-     */
-	NormalReturn login(ServiceRequest request);
+public interface IPermissionController extends IController {
 
 	/**
-	 * 登出
+	 * 新增菜单
+	 * @param request
+	 * @return
+	 */
+	NormalReturn addPermission(ServiceRequest request);
+
+	/**
+	 * 更新菜单
 	 * @param request
 	 * @return
      */
-	NormalReturn logout(ServiceRequest request);
+	NormalReturn updatePermission(ServiceRequest request);
 
-    /**
-	 * 检查用户是否登录
+	/**
+	 * 删除菜单
 	 * @param request
 	 * @return
      */
-	NormalReturn check(ServiceRequest request);
+	NormalReturn delPermission(ServiceRequest request);
 
+	/**
+	 * 查询菜单
+	 * @param request
+	 * @return
+     */
+	NormalReturn queryPermission(ServiceRequest request);
 
 }

@@ -6,7 +6,9 @@ package cn.mwee.auto.auth.service;
 import java.util.List;
 import java.util.Set;
 
+import cn.mwee.auto.auth.contract.user.UserQueryContract;
 import cn.mwee.auto.auth.model.AuthUser;
+import cn.mwee.auto.common.db.BaseQueryResult;
 import cn.mwee.auto.deploy.contract.commom.BaseContract;
 
 /**
@@ -84,7 +86,7 @@ public interface IUserService {
 	 * 查询用户列表
 	 * @return
      */
-	List<AuthUser> queryUsers(BaseContract contract);
+	BaseQueryResult<AuthUser> queryUsers(UserQueryContract contract);
 
 	/**
 	 * 用户授权角色

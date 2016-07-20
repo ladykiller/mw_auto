@@ -9,6 +9,7 @@ import cn.mwee.auto.auth.contract.permission.PermissionContract;
 
 import cn.mwee.auto.auth.contract.permission.PermissionQueryContract;
 import cn.mwee.auto.auth.model.AuthPermission;
+import cn.mwee.auto.common.db.BaseQueryResult;
 
 /**
  * 权限信息维护服务
@@ -28,10 +29,10 @@ public interface IPermissionService {
 	/**
 	 * update authPermission by Id
 	 * 
-	 * @param permissionContract
+	 * @param authPermission
 	 * @return
 	 */
-	boolean update(PermissionContract permissionContract);
+	boolean update(AuthPermission authPermission);
 	
 	/**
 	 * delete authPermission by Id
@@ -48,19 +49,21 @@ public interface IPermissionService {
 	 * @return
 	 */
 	AuthPermission select(Integer Id);
-	
+
+	/**
+	 * 根据code查找
+	 * @param code
+	 * @return
+     */
+	AuthPermission selectByCode(String code);
+
 	/**
 	 * query authPermission by condition
 	 * 
-	 * @param authPermission
+	 * @param permissionQuery
 	 * @return
 	 */
-	List<AuthPermission> query(PermissionQueryContract permissionQuery);
+	BaseQueryResult<AuthPermission> query(PermissionQueryContract permissionQuery);
 
-	/**
-	 * 角色赋权
-	 * @return
-     */
-	int updateRoleAuth(Integer roleId,String permissionStr);
 
 }

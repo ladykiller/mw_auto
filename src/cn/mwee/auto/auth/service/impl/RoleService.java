@@ -5,15 +5,28 @@
  */
 package cn.mwee.auto.auth.service.impl;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import cn.mwee.auto.auth.contract.role.RoleQueryContract;
+import cn.mwee.auto.auth.dao.AuthRolePermissionExtMapper;
+import cn.mwee.auto.auth.dao.AuthRolePermissionMapper;
+import cn.mwee.auto.auth.model.AuthRolePermission;
+import cn.mwee.auto.auth.model.AuthRolePermissionExample;
+import cn.mwee.auto.auth.util.SqlUtils;
+import cn.mwee.auto.common.db.BaseModel;
+import cn.mwee.auto.common.db.BaseQueryResult;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import cn.mwee.auto.auth.dao.AuthRoleMapper;
 import cn.mwee.auto.auth.model.AuthRole;
 import cn.mwee.auto.auth.model.AuthRoleExample;
 import cn.mwee.auto.auth.service.IRoleService;
+import org.springframework.stereotype.Service;
 
 /**
  * manage role info
@@ -21,42 +34,88 @@ import cn.mwee.auto.auth.service.IRoleService;
  * @author mengfanyuan
  * 2016年6月29日下午1:37:12
  */
+@Service
 public class RoleService implements IRoleService {
 
 	@Autowired
 	private AuthRoleMapper authRoleMapper;
-	
+
+    @Autowired
+    private AuthRolePermissionExtMapper authRolePermissionExtMapper;
+
+    @Autowired
+    private AuthRolePermissionMapper authRolePermissionMapper;
+
 	@Override
 	public boolean add(AuthRole authRole) {
 		// TODO Auto-generated method stub
+		authRole.setCreator(SecurityUtils.getSubject().getPrincipal().toString());
+		authRole.setCreateTime(new Date());
+		authRole.setRolecode(authRole.getRolename());
+		authRole.setStatus(true);
 		return authRoleMapper.insertSelective(authRole) > 0;
 	}
 
 	@Override
 	public boolean update(AuthRole authRole) {
-		// TODO Auto-generated method stub
+		authRole.setStatus(true);
+		authRole.setUpdateTime(new Date());
 		return authRoleMapper.updateByPrimaryKeySelective(authRole) > 0;
 	}
 
 	@Override
 	public boolean del(Integer id) {
-		// TODO Auto-generated method stub
-		return authRoleMapper.deleteByPrimaryKey(id) > 0;
+        return authRoleMapper.deleteByPrimaryKey(id) > 0;
 	}
 
 	@Override
 	public AuthRole select(Integer id) {
-		// TODO Auto-generated method stub
-		return authRoleMapper.selectByPrimaryKey(id);
+        return authRoleMapper.selectByPrimaryKey(id);
 	}
 
-	@Override
-	public List<AuthRole> query(RoleQueryContract roleQueryContract) {
-		// TODO Auto-generated method stub
+    @Override
+    public AuthRole selectByName(String roleName) {
+        AuthRoleExample example = new AuthRoleExample();
+        example.createCriteria().andRolenameEqualTo(roleName);
+        List<AuthRole> roles = authRoleMapper.selectByExample(example);
+        return  CollectionUtils.isNotEmpty(roles) ? roles.get(0) : null;
+    }
+
+    @Override
+	public BaseQueryResult<AuthRole> query(RoleQueryContract roleQueryContract) {
 		AuthRoleExample example = new AuthRoleExample();
-		example.createCriteria().andRolenameLike(roleQueryContract.getRoleName());
-		authRoleMapper.selectByExample(example);
-		return null;
+        if (StringUtils.isNotBlank(roleQueryContract.getRoleName()))
+            example.createCriteria().andRolenameLike(SqlUtils.wrapLike(roleQueryContract.getRoleName()));
+		BaseQueryResult<AuthRole> result = BaseModel.selectByPage(authRoleMapper,example
+                ,roleQueryContract.getPageInfo(),roleQueryContract.getPageInfo()==null);
+		return result;
 	}
 
+    @Override
+    public int updateRoleAuth(Integer roleId, String permissionStr) {
+        String[] permissions =  permissionStr.split(",");
+        List<AuthRolePermission> list = new ArrayList<>(permissions.length);
+        for (String permission : permissions) {
+            if (StringUtils.isEmpty(permission)) continue;
+            AuthRolePermission rolePermission = new AuthRolePermission();
+            rolePermission.setRoleId(roleId);
+            rolePermission.setPermissionId(new Integer(permission));
+            rolePermission.setCreator(SecurityUtils.getSubject().getPrincipal().toString());
+            rolePermission.setCreateTime(new Date());
+            list.add(rolePermission);
+        }
+        AuthRolePermissionExample example = new AuthRolePermissionExample();
+        example.createCriteria().andRoleIdEqualTo(roleId);
+        authRolePermissionMapper.deleteByExample(example);
+        if (CollectionUtils.isNotEmpty(list)) {
+            return authRolePermissionExtMapper.insertBatch(list);
+        } else {
+            return 1;
+        }
+    }
+
+    @Override
+    public List<AuthRolePermission> queryRoleAuths(Integer roleId) {
+        return null;
+    }
 }

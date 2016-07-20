@@ -13,27 +13,41 @@ import cn.mwee.auto.misc.resp.NormalReturn;
  * @author mengfanyuan
  * 2016年6月30日上午9:49:55
  */
-public interface IAuthController extends IController {
-	/**
-	 * 登录
-	 * @param request
-	 * @return
-     */
-	NormalReturn login(ServiceRequest request);
+public interface IUserController extends IController {
 
 	/**
-	 * 登出
+	 * 新增用户
 	 * @param request
 	 * @return
      */
-	NormalReturn logout(ServiceRequest request);
+	NormalReturn userAdd(ServiceRequest request);
 
-    /**
-	 * 检查用户是否登录
+	/**
+	 * 用户列表
 	 * @param request
 	 * @return
-     */
-	NormalReturn check(ServiceRequest request);
+	 */
+	NormalReturn userList(ServiceRequest request);
 
+
+	/**
+	 * 修改密码
+	 * @param request
+	 * @return
+	 */
+	NormalReturn updatePassword(ServiceRequest request);
+
+	/**
+	 * 用户授权
+	 * @param request
+	 * @return
+	 */
+	NormalReturn userGrant(ServiceRequest request);
+	/**
+	 * 删除用户
+	 * @param request
+	 * @return
+	 */
+	NormalReturn userDel(ServiceRequest request);
 
 }

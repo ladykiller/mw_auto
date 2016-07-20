@@ -5,10 +5,16 @@
  */
 package cn.mwee.auto.auth.service.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import cn.mwee.auto.auth.contract.permission.PermissionContract;
 import cn.mwee.auto.auth.contract.permission.PermissionQueryContract;
+import cn.mwee.auto.auth.util.SqlUtils;
+import cn.mwee.auto.common.db.BaseModel;
+import cn.mwee.auto.common.db.BaseQueryResult;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import cn.mwee.auto.auth.dao.AuthPermissionMapper;
@@ -31,40 +37,50 @@ public class PermissionService implements IPermissionService {
 	
 	@Override
 	public boolean add(AuthPermission authPermission) {
-
+        authPermission.setCreateTime(new Date());
+        authPermission.setStatus(true);
 		return authPermissionMapper.insertSelective(authPermission) > 0;
 	}
 
 	@Override
-	public boolean update(PermissionContract permissionContract) {
-		// TODO Auto-generated method stub\
-		AuthPermission authPermission = new AuthPermission();
-		authPermission.setId(permissionContract.getId());
+	public boolean update(AuthPermission authPermission) {
+        authPermission.setUpdateTime(new Date());
 		return authPermissionMapper.updateByPrimaryKeySelective(authPermission) > 0;
 	}
 
 	@Override
 	public boolean delete(Integer id) {
-		// TODO Auto-generated method stub
 		return authPermissionMapper.deleteByPrimaryKey(id) > 0;
 	}
 
 	@Override
 	public AuthPermission select(Integer id) {
-		// TODO Auto-generated method stub
 		return authPermissionMapper.selectByPrimaryKey(id);
 	}
 
-	@Override
-	public List<AuthPermission> query(PermissionQueryContract permissionQuery) {
-		// TODO Auto-generated method stub
+    @Override
+    public AuthPermission selectByCode(String code) {
+        AuthPermissionExample example = new AuthPermissionExample();
+        example.createCriteria().andCodeEqualTo(code);
+        List<AuthPermission> list = authPermissionMapper.selectByExample(example);
+        return CollectionUtils.isNotEmpty(list) ? list.get(0) : null;
+    }
+
+    @Override
+	public BaseQueryResult<AuthPermission> query(PermissionQueryContract permissionQuery) {
 		AuthPermissionExample example = new AuthPermissionExample();
-		example.createCriteria().andNameLike(permissionQuery.getName());
-		return authPermissionMapper.selectByExample(example);
+        AuthPermissionExample.Criteria criteria = example.createCriteria();
+        if (StringUtils.isNotBlank(permissionQuery.getName()))
+            criteria.andNameLike(SqlUtils.wrapLike(permissionQuery.getName()));
+        if (StringUtils.isNotBlank(permissionQuery.getCode()))
+            criteria.andCodeLike(SqlUtils.wrapLike(permissionQuery.getCode()));
+        if (StringUtils.isNotBlank(permissionQuery.getDescription()))
+            criteria.andDescriptionLike(SqlUtils.wrapLike(permissionQuery.getDescription()));
+        if (permissionQuery.getType() != null)
+            criteria.andTypeEqualTo(permissionQuery.getType());
+        BaseQueryResult<AuthPermission> result = BaseModel.selectByPage(authPermissionMapper,example
+                ,permissionQuery.getPageInfo(),permissionQuery.getPageInfo()==null);
+		return result;
 	}
 
-	@Override
-	public int updateRoleAuth(Integer roleId, String permissionStr) {
-		return 0;
-	}
 }

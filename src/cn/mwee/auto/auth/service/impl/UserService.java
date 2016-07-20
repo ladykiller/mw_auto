@@ -7,10 +7,15 @@ import java.util.*;
 
 import javax.annotation.Resource;
 
+import cn.mwee.auto.auth.contract.user.UserQueryContract;
 import cn.mwee.auto.auth.dao.AuthUserRoleMapper;
 import cn.mwee.auto.auth.model.AuthUserRole;
 import cn.mwee.auto.auth.service.IUserRoleService;
+import cn.mwee.auto.auth.util.SqlUtils;
+import cn.mwee.auto.common.db.BaseModel;
+import cn.mwee.auto.common.db.BaseQueryResult;
 import cn.mwee.auto.deploy.contract.commom.BaseContract;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -124,13 +129,15 @@ public class UserService implements IUserService {
 	}
 
 	@Override
-	public List<AuthUser> queryUsers(BaseContract contract) {
-		AuthUserExample example = ctreteExample(contract);
-		example.createCriteria().andStatusEqualTo(true);
-        int count = authUserMapper.countByExample(example);
-        contract.setCount(count);
-        if (count > 0) contract.setData(authUserMapper.selectByExample(example));
-		return (List<AuthUser>) contract.getData();
+	public BaseQueryResult<AuthUser> queryUsers(UserQueryContract userQueryContract) {
+		AuthUserExample example = new AuthUserExample();
+        AuthUserExample.Criteria criteria =  example.createCriteria();
+        criteria.andStatusEqualTo(true);
+        if (StringUtils.isNotBlank(userQueryContract.getUserName()))
+            criteria.andUsernameLike(SqlUtils.wrapLike(userQueryContract.getUserName()));
+        BaseQueryResult<AuthUser> result = BaseModel.selectByPage(authUserMapper,example
+                ,userQueryContract.getPageInfo(),userQueryContract.getPageInfo()==null);
+        return result;
 	}
 
     @Override
@@ -138,8 +145,10 @@ public class UserService implements IUserService {
         String currentUser = SecurityUtils.getSubject().getPrincipal().toString();
         List<AuthUserRole> userRoles = new ArrayList<>();
         String[] roleStrs = roles.split(",");
-        userRoleService.delByUserId(authUser.getId());
         for (String role : roleStrs) {
+			if (StringUtils.isEmpty(role)){
+				continue;
+			}
             AuthUserRole userRole = new AuthUserRole();
             userRole.setUserId(authUser.getId());
             userRole.setRoleId(new Integer(role));
@@ -147,7 +156,14 @@ public class UserService implements IUserService {
             userRole.setCreator(currentUser);
             userRoles.add(userRole);
         }
-       return userRoleService.insertBatch(userRoles);
+		userRoleService.delByUserId(authUser.getId());
+		if (CollectionUtils.isNotEmpty(userRoles)) {
+			return userRoleService.insertBatch(userRoles);
+		} else {
+			return 1;
+		}
+
+
     }
 
 	@Override

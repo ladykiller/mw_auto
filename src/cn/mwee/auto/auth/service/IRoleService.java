@@ -7,6 +7,8 @@ import java.util.List;
 
 import cn.mwee.auto.auth.contract.role.RoleQueryContract;
 import cn.mwee.auto.auth.model.AuthRole;
+import cn.mwee.auto.auth.model.AuthRolePermission;
+import cn.mwee.auto.common.db.BaseQueryResult;
 
 /**
  * 角色信息维护服务
@@ -43,10 +45,30 @@ public interface IRoleService {
      */
 	AuthRole select(Integer id);
 
+    /**
+     * 根据名称查找
+     * @param roleName
+     * @return
+     */
+    AuthRole selectByName(String roleName);
+
 	/**
 	 * 查询（含分页）
 	 * @param roleQueryContract
 	 * @return
      */
-	List<AuthRole> query(RoleQueryContract roleQueryContract);
+	BaseQueryResult<AuthRole> query(RoleQueryContract roleQueryContract);
+
+	/**
+	 * 角色赋权
+	 * @return
+	 */
+	int updateRoleAuth(Integer roleId,String permissionStr);
+
+    /**
+     * 查询角色权限
+     * @param roleId
+     * @return
+     */
+    List<AuthRolePermission> queryRoleAuths(Integer roleId);
 }
