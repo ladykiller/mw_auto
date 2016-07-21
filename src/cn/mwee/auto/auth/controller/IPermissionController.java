@@ -43,4 +43,11 @@ public interface IPermissionController extends IController {
      */
 	NormalReturn queryPermission(ServiceRequest request);
 
+	/**
+	 * 获取菜单
+	 * @param request
+	 * @return
+	 */
+	NormalReturn queryMenu(ServiceRequest request);
+
 }

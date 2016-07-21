@@ -110,6 +110,11 @@ public class AuthController implements IAuthController {
 	}
 
 
+	@RequiresAuthentication
+	@Contract(BaseContract.class)
+	public void getMenu(){
+
+	}
 
 
 

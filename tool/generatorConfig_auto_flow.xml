@@ -55,6 +55,7 @@
 		</table>
 
  -->
+<!--
 
 		<table tableName="flow_task_log" domainObjectName="FlowTaskLog"
 			   enableCountByExample="true"
@@ -64,8 +65,8 @@
 			   selectByExampleQueryId="true">
 			<generatedKey column="ID" sqlStatement="MYSQL" identity="true" />
 		</table>
+-->
 
-<!-- 
 		<table tableName="flow_tasks" domainObjectName="FlowTask"
 			   enableCountByExample="true"
 			   enableUpdateByExample="true"
@@ -74,8 +75,7 @@
 			   selectByExampleQueryId="true">
 			<generatedKey column="ID" sqlStatement="MYSQL" identity="true" />
 		</table>
- -->
- <!-- 
+ <!--
 		<table tableName="flows" domainObjectName="Flow"
 			   enableCountByExample="true"
 			   enableUpdateByExample="true"

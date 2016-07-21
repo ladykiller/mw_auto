@@ -3,18 +3,7 @@ package cn.mwee.auto.deploy.model;
 import java.util.Date;
 
 public class FlowTask {
-	
-	
-	
-    public FlowTask() {}
-    
-    public FlowTask(TemplateTask tt) {
-    	this.taskId = tt.getTaskId();
-    	this.group = tt.getGroup();
-    	this.priority = tt.getPriority();
-    }
-
-	/**
+    /**
      * flow_tasks.id
      *
      * @mbggenerated
@@ -52,6 +41,14 @@ public class FlowTask {
      * @mbggenerated
      */
     private String taskParam;
+
+    /**
+     * 任务类型 [手动，自动，定时]
+     * flow_tasks.task_type
+     *
+     * @mbggenerated
+     */
+    private String taskType;
 
     /**
      * flow_tasks.group
@@ -206,6 +203,30 @@ public class FlowTask {
      */
     public void setTaskParam(String taskParam) {
         this.taskParam = taskParam;
+    }
+
+    /**
+     * 任务类型 [手动，自动，定时]
+     * This method returns the value of the database column flow_tasks.task_type
+     *
+     * @return the value of flow_tasks.task_type
+     *
+     * @mbggenerated
+     */
+    public String getTaskType() {
+        return taskType;
+    }
+
+    /**
+     * 任务类型 [手动，自动，定时]
+     * This method sets the value of the database column flow_tasks.task_type
+     *
+     * @param taskType the value for flow_tasks.task_type
+     *
+     * @mbggenerated
+     */
+    public void setTaskType(String taskType) {
+        this.taskType = taskType;
     }
 
     /**

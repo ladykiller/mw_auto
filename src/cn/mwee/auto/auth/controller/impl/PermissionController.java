@@ -6,11 +6,13 @@ import cn.mwee.auto.auth.contract.permission.PermissionQueryContract;
 import cn.mwee.auto.auth.controller.IPermissionController;
 import cn.mwee.auto.auth.model.AuthPermission;
 import cn.mwee.auto.auth.service.IPermissionService;
+import cn.mwee.auto.deploy.contract.commom.BaseContract;
 import cn.mwee.auto.misc.aspect.contract.Contract;
 import cn.mwee.auto.misc.req.ServiceRequest;
 import cn.mwee.auto.misc.resp.NormalReturn;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.Logical;
+import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -96,5 +98,13 @@ public class PermissionController implements IPermissionController {
             logger.error("",e);
             return new NormalReturn("500","error",e.getMessage());
         }
+    }
+
+    @Override
+    @RequiresAuthentication
+    @Contract(BaseContract.class)
+    public NormalReturn queryMenu(ServiceRequest request) {
+        //TODO
+        return null;
     }
 }

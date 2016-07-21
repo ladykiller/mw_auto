@@ -5,10 +5,15 @@
  */
 package cn.mwee.auto.deploy.service.execute;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
 
+import cn.mwee.auto.deploy.service.IFlowManagerService;
+import cn.mwee.auto.deploy.util.AutoConsts;
 import org.springframework.stereotype.Component;
 
 import cn.mwee.auto.deploy.model.FlowTask;
@@ -24,13 +29,15 @@ public class SimpleTaskMsgSender implements TaskMsgSender {
 
 	@Resource
 	private MQSender appEventMQSender;
+
+	@Resource
+	IFlowManagerService flowManagerService;
 	
 	/* (non-Javadoc)
 	 * @see cn.mwee.auto.deploy.service.execute.TaskMsgSender#sendTasks(java.util.List)
 	 */
 	@Override
 	public void sendTasks(List<FlowTask> flowTasks) {
-		// TODO Auto-generated method stub
 		for (FlowTask flowTask : flowTasks) {
 			sendTask(flowTask);
 		}
@@ -38,9 +45,30 @@ public class SimpleTaskMsgSender implements TaskMsgSender {
 
 	@Override
 	public void sendTask(FlowTask flowTask) {
-		// TODO Auto-generated method stub
+		//只初始化的手动任务修改状态为手动不发送
+		if (AutoConsts.TaskState.INIT.name().equals(flowTask.getState())
+				&& AutoConsts.TaskState.MANUAL.equals(flowTask.getTaskType())) {
+			flowManagerService.updateTaskStatus(flowTask.getId(),AutoConsts.TaskState.MANUAL.name());
+			return;
+		}
+		/*
+		long delay = 0;
+		//定时任务
+		if (AutoConsts.TaskState.TIMER.equals(flowTask.getTaskType())) {
+			flowManagerService.updateTaskStatus(flowTask.getId(),AutoConsts.TaskState.TIMER.name());
+			delay = calcDelayTime(flowTask.getCreateTime());
+		}
+		//延迟消息
+		if (delay>0) {
+
+		}
+		*/
 		AppEvent event = new AppEvent(0, "soa.notify.flow.create", flowTask);
 		appEventMQSender.sendAsync(event.getEventType(), event);
 	}
 
+
+	private long calcDelayTime(Date executeDate) {
+		return executeDate.getTime() - new Date().getTime();
+	}
 }

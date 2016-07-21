@@ -8,8 +8,9 @@ import java.util.*;
 import javax.annotation.Resource;
 
 import cn.mwee.auto.auth.contract.user.UserQueryContract;
+import cn.mwee.auto.auth.dao.AuthUserRoleExtMapper;
 import cn.mwee.auto.auth.dao.AuthUserRoleMapper;
-import cn.mwee.auto.auth.model.AuthUserRole;
+import cn.mwee.auto.auth.model.*;
 import cn.mwee.auto.auth.service.IUserRoleService;
 import cn.mwee.auto.auth.util.SqlUtils;
 import cn.mwee.auto.common.db.BaseModel;
@@ -22,8 +23,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import cn.mwee.auto.auth.dao.AuthUserMapper;
-import cn.mwee.auto.auth.model.AuthUser;
-import cn.mwee.auto.auth.model.AuthUserExample;
 import cn.mwee.auto.auth.model.AuthUserExample.Criteria;
 import cn.mwee.auto.auth.service.IUserService;
 import cn.mwee.auto.auth.util.PasswordHelper;
@@ -39,8 +38,13 @@ public class UserService implements IUserService {
 	
 	@Autowired
 	private AuthUserMapper authUserMapper;
+
+    @Autowired
+    private AuthUserRoleExtMapper authUserRoleExtMapper;
+
 	@Resource
 	private PasswordHelper passwordHelper;
+
     @Autowired
     private IUserRoleService userRoleService;
 
@@ -60,21 +64,18 @@ public class UserService implements IUserService {
 
 	@Override
 	public boolean updateUser(AuthUser authUser) {
-		// TODO Auto-generated method stub
 		int result = authUserMapper.updateByPrimaryKeySelective(authUser);
 		return result > 0;
 	}
 
 	@Override
 	public boolean delUser(Integer authUserId) {
-		// TODO Auto-generated method stub
 		int result = authUserMapper.deleteByPrimaryKey(authUserId);
 		return result > 0;
 	}
 
 	@Override
 	public AuthUser select(Integer authUserId) {
-		// TODO Auto-generated method stub
 		AuthUser authUser = authUserMapper.selectByPrimaryKey(authUserId);
 		if (authUser != null && !authUser.getStatus()) {
 			return  authUser;
@@ -84,7 +85,6 @@ public class UserService implements IUserService {
 
 	@Override
 	public AuthUser queryByUserName(String userName) {
-		// TODO Auto-generated method stub
 		AuthUserExample example = ctreteExample();
 		example.createCriteria()
 				.andUsernameEqualTo(userName)
@@ -95,7 +95,6 @@ public class UserService implements IUserService {
 	
 	@Override
 	public List<AuthUser> query(AuthUser authUser) {
-		// TODO Auto-generated method stub
 		AuthUserExample example = new AuthUserExample();
 		Criteria criteria = example.createCriteria();
 		criteria
@@ -106,14 +105,21 @@ public class UserService implements IUserService {
 
 	@Override
 	public Set<String> queryRoles(String username) {
-		// TODO Auto-generated method stub
+		AuthUser authUser = queryByUserName(username);
+        if (authUser != null) {
+            return authUserRoleExtMapper.queryRoles4User(authUser.getId());
+        }
 		return null;
 	}
 
 	@Override
 	public Set<String> queryPermissions(String username) {
-		// TODO Auto-generated method stub
-		return null;
+        //获取用户
+        AuthUser authUser = queryByUserName(username);
+        if (authUser != null) {
+            return authUserRoleExtMapper.queryPerms4User(authUser.getId());
+        }
+        return null;
 	}
 	
 	@Override

@@ -121,10 +121,14 @@ public class FlowManagerService implements IFlowManagerService {
     	
     	//copy tasks
     	List<FlowTask> fts = new ArrayList<FlowTask>();
-    	for (TemplateTask tt:tts) {
+    	for (TemplateTask tt : tts) {
 			for (String zone:zones ) {
-				if (StringUtils.isBlank(zone)) continue; 
-				FlowTask ft = new FlowTask(tt);
+				if (StringUtils.isBlank(zone)) continue;
+				FlowTask ft = new FlowTask();
+				ft.setGroup(tt.getGroup());
+				ft.setPriority(tt.getPriority());
+				ft.setTaskId(tt.getTaskId());
+				ft.setTaskType(tt.getTaskType());
 				ft.setFlowId(flowId);
 				ft.setZone(zone);
 				ft.setTaskParam(String.valueOf(paramsMap.get(ft.getTaskId()+"")));

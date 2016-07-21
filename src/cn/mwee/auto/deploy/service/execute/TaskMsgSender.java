@@ -13,6 +13,15 @@ import cn.mwee.auto.deploy.model.FlowTask;
  * 2016年7月6日上午11:27:54
  */
 public interface TaskMsgSender {
+	/**
+	 * 发送任务
+	 * @param flowTasks
+     */
 	void sendTasks(List<FlowTask> flowTasks);
+
+	/**
+	 * 发送任务
+	 * @param flowTask
+     */
 	void sendTask(FlowTask flowTask);
 }

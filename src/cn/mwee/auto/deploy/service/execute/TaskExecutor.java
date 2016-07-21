@@ -13,6 +13,16 @@ import cn.mwee.auto.deploy.model.FlowTask;
  * 2016年7月5日下午8:08:58
  */
 public interface TaskExecutor {
+	/**
+	 * 持续执行任务
+	 * @param flowTask
+     */
 	void executeChain(FlowTask flowTask);
+
+	/**
+	 * 执行任务
+	 * @param flowTask
+	 * @return
+     */
 	boolean execute(FlowTask flowTask);
 }
