@@ -3,7 +3,6 @@ package cn.mwee.auto.deploy.controller.impl;
 import cn.mwee.auto.deploy.contract.*;
 import cn.mwee.auto.deploy.controller.IAutoTaskController;
 import cn.mwee.auto.deploy.model.AutoTask;
-import cn.mwee.auto.deploy.service.IFlowTaskLogService;
 import cn.mwee.auto.deploy.service.ITaskManagerService;
 import cn.mwee.auto.misc.aspect.contract.Contract;
 import cn.mwee.auto.misc.aspect.contract.Model;
@@ -50,19 +49,19 @@ public class AutoTaskController implements IAutoTaskController
     }
 
     @Override
-    @Contract(TaskIdQuery.class)
+    @Contract(TaskIdRequest.class)
     public NormalReturn getTask(ServiceRequest request)
     {
-        TaskIdQuery contract = request.getContract();
+        TaskIdRequest contract = request.getContract();
         AutoTask autoTask = taskManagerService.getTask(contract.getTaskId());
         return new NormalReturn(autoTask);
     }
 
     @Override
-    @Contract(TaskIdQuery.class)
+    @Contract(TaskIdRequest.class)
     public NormalReturn deleteTask(ServiceRequest request)
     {
-        TaskIdQuery contract = request.getContract();
+        TaskIdRequest contract = request.getContract();
         boolean delSuccess = taskManagerService.deleteTask(contract.getTaskId());
         if(delSuccess)
         {
@@ -71,6 +70,22 @@ public class AutoTaskController implements IAutoTaskController
         else
         {
             return new NormalReturn("500","delete task error");
+        }
+    }
+
+    @Override
+    @Contract(AutoTask.class)
+    public NormalReturn modifyTask(ServiceRequest request)
+    {
+        AutoTask contract = request.getContract();
+        boolean modifySuccess = taskManagerService.modifyTask(contract);
+        if(modifySuccess)
+        {
+            return new NormalReturn(contract.getId());
+        }
+        else
+        {
+            return new NormalReturn("500","modify task error");
         }
     }
 }

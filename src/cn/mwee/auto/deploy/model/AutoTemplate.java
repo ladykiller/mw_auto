@@ -19,6 +19,30 @@ public class AutoTemplate {
     private String name;
 
     /**
+     * 创建者
+     * templates.creator
+     *
+     * @mbggenerated
+     */
+    private String creator;
+
+    /**
+     * 操作者
+     * templates.operater
+     *
+     * @mbggenerated
+     */
+    private String operater;
+
+    /**
+     * 使用中(0:否,1:是)
+     * templates.inuse
+     *
+     * @mbggenerated
+     */
+    private Byte inuse;
+
+    /**
      * 创建时间
      * templates.create_time
      *
@@ -78,6 +102,78 @@ public class AutoTemplate {
      */
     public void setName(String name) {
         this.name = name;
+    }
+
+    /**
+     * 创建者
+     * This method returns the value of the database column templates.creator
+     *
+     * @return the value of templates.creator
+     *
+     * @mbggenerated
+     */
+    public String getCreator() {
+        return creator;
+    }
+
+    /**
+     * 创建者
+     * This method sets the value of the database column templates.creator
+     *
+     * @param creator the value for templates.creator
+     *
+     * @mbggenerated
+     */
+    public void setCreator(String creator) {
+        this.creator = creator;
+    }
+
+    /**
+     * 操作者
+     * This method returns the value of the database column templates.operater
+     *
+     * @return the value of templates.operater
+     *
+     * @mbggenerated
+     */
+    public String getOperater() {
+        return operater;
+    }
+
+    /**
+     * 操作者
+     * This method sets the value of the database column templates.operater
+     *
+     * @param operater the value for templates.operater
+     *
+     * @mbggenerated
+     */
+    public void setOperater(String operater) {
+        this.operater = operater;
+    }
+
+    /**
+     * 使用中(0:否,1:是)
+     * This method returns the value of the database column templates.inuse
+     *
+     * @return the value of templates.inuse
+     *
+     * @mbggenerated
+     */
+    public Byte getInuse() {
+        return inuse;
+    }
+
+    /**
+     * 使用中(0:否,1:是)
+     * This method sets the value of the database column templates.inuse
+     *
+     * @param inuse the value for templates.inuse
+     *
+     * @mbggenerated
+     */
+    public void setInuse(Byte inuse) {
+        this.inuse = inuse;
     }
 
     /**

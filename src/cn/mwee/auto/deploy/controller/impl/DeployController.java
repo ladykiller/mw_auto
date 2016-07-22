@@ -8,6 +8,7 @@ package cn.mwee.auto.deploy.controller.impl;
 import java.util.Collection;
 import java.util.List;
 
+import cn.mwee.auto.deploy.AutoAbstractController;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.transport.CredentialsProvider;
@@ -38,7 +39,7 @@ import cn.mwee.auto.misc.resp.NormalReturn;
  * 2016年7月6日下午5:43:37
  */
 @Controller
-public class DeployController implements IDeployController {
+public class DeployController extends AutoAbstractController implements IDeployController {
 	private static final Logger logger = LoggerFactory.getLogger(DeployController.class);
 	@Autowired
 	private IFlowManagerService flowManagerService;
@@ -185,17 +186,6 @@ public class DeployController implements IDeployController {
 		ExecuteFlowTaskContract req = request.getContract();
 		try {
 			return new NormalReturn("200","success", flowTaskLogService.getLog4FlowTask(new Integer(req.getFlowTaskId())));
-		} catch (Exception e) {
-			logger.error("startFlow error:", e);
-			return new NormalReturn("500",e.getMessage(), "error");
-		}
-	}
-
-	@Override
-	public NormalReturn getTemplates(ServiceRequest request) {
-		// TODO Auto-generated method stub
-		try {
-			return new NormalReturn("200","success", templateManagerService.getTemplates());
 		} catch (Exception e) {
 			logger.error("startFlow error:", e);
 			return new NormalReturn("500",e.getMessage(), "error");

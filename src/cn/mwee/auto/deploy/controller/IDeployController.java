@@ -69,12 +69,6 @@ public interface IDeployController extends IController {
 	 */
 	NormalReturn getFolwTaskLog(ServiceRequest request);
 	
-	/**模板列表
-	 * @param request
-	 * @return
-	 */
-	NormalReturn getTemplates(ServiceRequest request);
-	
 	/**
 	 * 模板任务列表
 	 * @param request
