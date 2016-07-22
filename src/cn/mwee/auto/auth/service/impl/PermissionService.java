@@ -5,11 +5,14 @@
  */
 package cn.mwee.auto.auth.service.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import cn.mwee.auto.auth.contract.permission.PermissionContract;
 import cn.mwee.auto.auth.contract.permission.PermissionQueryContract;
+import cn.mwee.auto.auth.dao.AuthPermissionExtMapper;
+import cn.mwee.auto.auth.model.AuthMenu;
 import cn.mwee.auto.auth.util.SqlUtils;
 import cn.mwee.auto.common.db.BaseModel;
 import cn.mwee.auto.common.db.BaseQueryResult;
@@ -34,6 +37,9 @@ public class PermissionService implements IPermissionService {
 
 	@Autowired
 	private AuthPermissionMapper authPermissionMapper;
+
+	@Autowired
+	private AuthPermissionExtMapper authPermissionExtMapper;
 	
 	@Override
 	public boolean add(AuthPermission authPermission) {
@@ -83,4 +89,29 @@ public class PermissionService implements IPermissionService {
 		return result;
 	}
 
+	@Override
+	public List<AuthMenu> getLeftMenu(Integer userId) {
+		List<AuthMenu> topMenus = new ArrayList<AuthMenu>();
+		List<AuthMenu> menus = authPermissionExtMapper.selectPrivateMenu(userId);
+		if (CollectionUtils.isEmpty(menus)) {
+			return topMenus;
+		}
+		for (AuthMenu menu : menus) {
+			if (menu.getParentId() == -1) {
+				menu.setChildMenu(getChildMenu(menus, menu));
+			}
+		}
+		return topMenus;
+	}
+
+	private List<AuthMenu> getChildMenu(List<AuthMenu> allMenus, AuthMenu parentMenu){
+		List<AuthMenu> childMenu = new ArrayList<AuthMenu>();
+		for (AuthMenu menu : allMenus) {
+			if (menu.getParentId().intValue() == parentMenu.getParentId()) {
+				childMenu.add(menu);
+				menu.setChildMenu(getChildMenu(allMenus,menu));
+			}
+		}
+		return childMenu;
+	}
 }

@@ -35,5 +35,11 @@ public interface IAuthController extends IController {
      */
 	NormalReturn check(ServiceRequest request);
 
+	/**
+	 * 获取左侧菜单
+	 * @param request
+	 * @return
+	 */
+	NormalReturn leftMenu(ServiceRequest request);
 
 }

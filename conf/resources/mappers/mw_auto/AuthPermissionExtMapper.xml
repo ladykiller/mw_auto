@@ -6,6 +6,12 @@
         <association property="childMenu" column="parent_id" select="selectChildMenu" />
     </resultMap>
 
+    <resultMap id="MenuResultMap" type="cn.mwee.auto.auth.model.AuthMenu"
+               extends="cn.mwee.auto.auth.dao.AuthPermissionMapper.BaseResultMap">
+    </resultMap>
+
+
+
     <select id="selectParentMenu" resultMap="BaseResultMap">
         select
         <include refid="cn.mwee.auto.auth.dao.AuthPermissionMapper.Base_Column_List" />
@@ -21,13 +27,13 @@
         parent_id = #{parentId,jdbcType=INTEGER}
     </select>
 
-    <select id="selectPrivateMenu" parameterType="java.lang.Integer" resultMap="BaseResultMap" >
+    <select id="selectPrivateMenu" parameterType="java.lang.Integer" resultMap="MenuResultMap" >
         SELECT
           p.*
         FROM
           auth_permission p LEFT JOIN auth_role_permission rp on p.id = rp.permission_id
           LEFT JOIN auth_user_role ur ON rp.role_id = ur.role_id
-        WHERE ur.user_id = 21
+        WHERE ur.user_id = #{userId} AND p.type &gt; 0
     </select>
 
 </mapper>

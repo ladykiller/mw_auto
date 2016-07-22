@@ -80,6 +80,6 @@ public interface IDeployController extends IController {
 	 * @param request
 	 * @return
 	 */
-	NormalReturn getTempleteTasks(ServiceRequest request);
+	NormalReturn getTemplateTasks(ServiceRequest request);
 	
 }

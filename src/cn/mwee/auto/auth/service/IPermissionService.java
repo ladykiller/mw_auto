@@ -8,6 +8,7 @@ import java.util.List;
 import cn.mwee.auto.auth.contract.permission.PermissionContract;
 
 import cn.mwee.auto.auth.contract.permission.PermissionQueryContract;
+import cn.mwee.auto.auth.model.AuthMenu;
 import cn.mwee.auto.auth.model.AuthPermission;
 import cn.mwee.auto.common.db.BaseQueryResult;
 
@@ -66,4 +67,10 @@ public interface IPermissionService {
 	BaseQueryResult<AuthPermission> query(PermissionQueryContract permissionQuery);
 
 
+	/**
+	 * 获取当前用户左侧菜单树
+	 * @param userId
+	 * @return
+     */
+	List<AuthMenu> getLeftMenu(Integer userId);
 }

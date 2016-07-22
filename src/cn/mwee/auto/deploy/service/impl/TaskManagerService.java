@@ -18,8 +18,10 @@ import cn.mwee.auto.deploy.dao.AutoTaskMapper;
 import cn.mwee.auto.deploy.model.AutoTask;
 import cn.mwee.auto.deploy.service.ITaskManagerService;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author mengfanyuan
@@ -69,4 +71,11 @@ public class TaskManagerService implements ITaskManagerService {
 		return rs;
 	}
 
+	@Override
+	public List<AutoTask> getAutoTasksByIds (Set<Integer> ids) {
+		List idList = new ArrayList(ids);
+		AutoTaskExample example = new AutoTaskExample();
+		example.createCriteria().andIdIn(idList);
+		return autoTaskMapper.selectByExample(example);
+	}
 }

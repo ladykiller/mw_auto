@@ -47,15 +47,11 @@ import cn.mwee.auto.misc.resp.NormalReturn;
 @Controller("authController")
 public class AuthController implements IAuthController {
 	private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
-
-	@Autowired
-	private IUserService userService;
-
     @Autowired
     private IPermissionService permissionService;
 
     @Autowired
-    private IRoleService roleService;
+    private IUserService userService;
 
 	@Override
 	@Contract(LoginReq.class)
@@ -110,13 +106,21 @@ public class AuthController implements IAuthController {
 	}
 
 
-	@RequiresAuthentication
-	@Contract(BaseContract.class)
-	public void getMenu(){
-
-	}
-
-
-
-
+    @Override
+    @Contract(BaseContract.class)
+    @RequiresAuthentication
+    public NormalReturn leftMenu(ServiceRequest request) {
+        try {
+            String currUser = SecurityUtils.getSubject().getPrincipal().toString();
+            AuthUser authUser = userService.queryByUserName(currUser);
+            if (authUser == null) {
+                SecurityUtils.getSubject().logout();
+                return new NormalReturn("500","error","账号异常");
+            }
+            return new NormalReturn("200","success",permissionService.getLeftMenu(authUser.getId()));
+        } catch (Exception e) {
+            logger.error("",e);
+            return new NormalReturn("500","error",e.getMessage());
+        }
+    }
 }
