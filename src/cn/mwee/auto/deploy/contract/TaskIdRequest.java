@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
  * Created by huming on 16/7/19.
  */
 @Data
-public class TaskIdQuery {
+public class TaskIdRequest {
 
     @Range(min = 1,message = "invalid taskId value")
     private Integer taskId;

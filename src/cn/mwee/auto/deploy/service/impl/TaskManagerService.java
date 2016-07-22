@@ -36,7 +36,7 @@ public class TaskManagerService implements ITaskManagerService {
 	@Override
 	public boolean addTask(AutoTask task)
 	{
-		return autoTaskMapper.insert(task) > 0;
+		return autoTaskMapper.insertSelective(task) > 0;
 	}
 
 	@Override
@@ -50,6 +50,14 @@ public class TaskManagerService implements ITaskManagerService {
 		AutoTask task = new AutoTask();
 		task.setId(taskId);
 		task.setInuse(InUseType.NOT_USE);
+		task.setUpdateTime(new Date());
+		return autoTaskMapper.updateByPrimaryKeySelective(task) > 0;
+	}
+
+	@Override
+	public boolean modifyTask(AutoTask task)
+	{
+		task.setCreateTime(null);
 		task.setUpdateTime(new Date());
 		return autoTaskMapper.updateByPrimaryKeySelective(task) > 0;
 	}

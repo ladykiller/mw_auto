@@ -162,9 +162,27 @@
 			<generatedKey column="ID" sqlStatement="MYSQL" identity="true" />
 		</table>
 
+		<table tableName="tasks" domainObjectName="AutoTask"
+			   enableCountByExample="true"
+			   enableUpdateByExample="true"
+			   enableDeleteByExample="true"
+			   enableSelectByExample="true"
+			   selectByExampleQueryId="true">
+			<generatedKey column="ID" sqlStatement="MYSQL" identity="true" />
+		</table>
+
+		<table tableName="template_tasks" domainObjectName="TemplateTask"
+			   enableCountByExample="true"
+			   enableUpdateByExample="true"
+			   enableDeleteByExample="true"
+			   enableSelectByExample="true"
+			   selectByExampleQueryId="true">
+			<generatedKey column="ID" sqlStatement="MYSQL" identity="true" />
+		</table>
+
  		-->
 
-		<table tableName="tasks" domainObjectName="AutoTask"
+		<table tableName="templates" domainObjectName="AutoTemplate"
 			   enableCountByExample="true"
 			   enableUpdateByExample="true"
 			   enableDeleteByExample="true"

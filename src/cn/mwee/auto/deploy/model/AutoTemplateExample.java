@@ -381,6 +381,206 @@ public class AutoTemplateExample {
             return (Criteria) this;
         }
 
+        public Criteria andCreatorIsNull() {
+            addCriterion("creator is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatorIsNotNull() {
+            addCriterion("creator is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatorEqualTo(String value) {
+            addCriterion("creator =", value, "creator");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatorNotEqualTo(String value) {
+            addCriterion("creator <>", value, "creator");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatorGreaterThan(String value) {
+            addCriterion("creator >", value, "creator");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatorGreaterThanOrEqualTo(String value) {
+            addCriterion("creator >=", value, "creator");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatorLessThan(String value) {
+            addCriterion("creator <", value, "creator");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatorLessThanOrEqualTo(String value) {
+            addCriterion("creator <=", value, "creator");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatorLike(String value) {
+            addCriterion("creator like", value, "creator");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatorNotLike(String value) {
+            addCriterion("creator not like", value, "creator");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatorIn(List<String> values) {
+            addCriterion("creator in", values, "creator");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatorNotIn(List<String> values) {
+            addCriterion("creator not in", values, "creator");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatorBetween(String value1, String value2) {
+            addCriterion("creator between", value1, value2, "creator");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatorNotBetween(String value1, String value2) {
+            addCriterion("creator not between", value1, value2, "creator");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperaterIsNull() {
+            addCriterion("operater is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperaterIsNotNull() {
+            addCriterion("operater is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperaterEqualTo(String value) {
+            addCriterion("operater =", value, "operater");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperaterNotEqualTo(String value) {
+            addCriterion("operater <>", value, "operater");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperaterGreaterThan(String value) {
+            addCriterion("operater >", value, "operater");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperaterGreaterThanOrEqualTo(String value) {
+            addCriterion("operater >=", value, "operater");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperaterLessThan(String value) {
+            addCriterion("operater <", value, "operater");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperaterLessThanOrEqualTo(String value) {
+            addCriterion("operater <=", value, "operater");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperaterLike(String value) {
+            addCriterion("operater like", value, "operater");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperaterNotLike(String value) {
+            addCriterion("operater not like", value, "operater");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperaterIn(List<String> values) {
+            addCriterion("operater in", values, "operater");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperaterNotIn(List<String> values) {
+            addCriterion("operater not in", values, "operater");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperaterBetween(String value1, String value2) {
+            addCriterion("operater between", value1, value2, "operater");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperaterNotBetween(String value1, String value2) {
+            addCriterion("operater not between", value1, value2, "operater");
+            return (Criteria) this;
+        }
+
+        public Criteria andInuseIsNull() {
+            addCriterion("inuse is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andInuseIsNotNull() {
+            addCriterion("inuse is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andInuseEqualTo(Byte value) {
+            addCriterion("inuse =", value, "inuse");
+            return (Criteria) this;
+        }
+
+        public Criteria andInuseNotEqualTo(Byte value) {
+            addCriterion("inuse <>", value, "inuse");
+            return (Criteria) this;
+        }
+
+        public Criteria andInuseGreaterThan(Byte value) {
+            addCriterion("inuse >", value, "inuse");
+            return (Criteria) this;
+        }
+
+        public Criteria andInuseGreaterThanOrEqualTo(Byte value) {
+            addCriterion("inuse >=", value, "inuse");
+            return (Criteria) this;
+        }
+
+        public Criteria andInuseLessThan(Byte value) {
+            addCriterion("inuse <", value, "inuse");
+            return (Criteria) this;
+        }
+
+        public Criteria andInuseLessThanOrEqualTo(Byte value) {
+            addCriterion("inuse <=", value, "inuse");
+            return (Criteria) this;
+        }
+
+        public Criteria andInuseIn(List<Byte> values) {
+            addCriterion("inuse in", values, "inuse");
+            return (Criteria) this;
+        }
+
+        public Criteria andInuseNotIn(List<Byte> values) {
+            addCriterion("inuse not in", values, "inuse");
+            return (Criteria) this;
+        }
+
+        public Criteria andInuseBetween(Byte value1, Byte value2) {
+            addCriterion("inuse between", value1, value2, "inuse");
+            return (Criteria) this;
+        }
+
+        public Criteria andInuseNotBetween(Byte value1, Byte value2) {
+            addCriterion("inuse not between", value1, value2, "inuse");
+            return (Criteria) this;
+        }
+
         public Criteria andCreateTimeIsNull() {
             addCriterion("create_time is null");
             return (Criteria) this;

@@ -5,18 +5,21 @@
  */
 package cn.mwee.auto.deploy.service.impl;
 
+import java.util.Date;
 import java.util.List;
-
+import cn.mwee.auto.common.db.BaseModel;
+import cn.mwee.auto.common.db.BaseQueryResult;
+import cn.mwee.auto.deploy.contract.QueryTasksResult;
+import cn.mwee.auto.deploy.contract.QueryTemplatesRequest;
+import cn.mwee.auto.deploy.contract.QueryTemplatesResult;
+import cn.mwee.auto.deploy.model.*;
+import static cn.mwee.auto.deploy.util.AutoConsts.*;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import cn.mwee.auto.deploy.contract.TemplateTaskContract;
 import cn.mwee.auto.deploy.dao.AutoTemplateMapper;
 import cn.mwee.auto.deploy.dao.TemplateTaskMapper;
-import cn.mwee.auto.deploy.model.AutoTemplate;
-import cn.mwee.auto.deploy.model.AutoTemplateExample;
-import cn.mwee.auto.deploy.model.TemplateTask;
-import cn.mwee.auto.deploy.model.TemplateTaskExample;
 import cn.mwee.auto.deploy.service.ITemplateManagerService;
 
 /**
@@ -31,32 +34,69 @@ public class TemplateManagerService implements ITemplateManagerService {
 	
 	@Autowired
 	TemplateTaskMapper templateTaskMapper;
-	
+
 	@Override
-	public boolean addTask2Template(int templateId, TemplateTask task) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean addTemplate(String templateName)
+	{
+		AutoTemplate template = new AutoTemplate();
+		template.setName(templateName);
+		template.setCreateTime(new Date());
+		template.setCreator(SecurityUtils.getSubject().getPrincipal().toString());
+		return autoTemplateMapper.insertSelective(template) > 0;
 	}
 
 	@Override
-	public boolean removeTemplateTask(int templateId, int templateTaskId) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean addTask2Template(int templateId, TemplateTask task)
+	{
+		task.setTemplateId(templateId);
+		task.setCreateTime(new Date());
+		return templateTaskMapper.insert(task) > 0;
 	}
 
 	@Override
-	public List<AutoTemplate> getTemplates() {
-		// TODO Auto-generated method stub
-		AutoTemplateExample example = new AutoTemplateExample();
-		example.setOrderByClause("id desc");
-		return autoTemplateMapper.selectByExample(example);
+	public boolean removeTemplateTask(int templateTaskId)
+	{
+		TemplateTask task = new TemplateTask();
+		task.setInuse(InUseType.NOT_USE);
+		task.setId(templateTaskId);
+		return templateTaskMapper.updateByPrimaryKeySelective(task) > 0;
 	}
-	
+
 	@Override
-	public List<TemplateTask> getTempleteTasks(TemplateTaskContract reqModel) {
+	public boolean modifyTemplateTask(TemplateTask task)
+	{
+		task.setCreateTime(null);
+		task.setUpdateTime(new Date());
+		return templateTaskMapper.updateByPrimaryKeySelective(task) > 0;
+	}
+
+	@Override
+	public QueryTemplatesResult getTemplates(QueryTemplatesRequest req)
+	{
+		AutoTemplateExample e = new AutoTemplateExample();
+		AutoTemplateExample.Criteria c = e.createCriteria();
+
+		c.andInuseEqualTo(InUseType.IN_USE);
+		e.setOrderByClause("id desc");
+
+		QueryTemplatesResult rs = new QueryTemplatesResult();
+		BaseQueryResult<AutoTask> qrs = BaseModel.selectByPage(templateTaskMapper, e, req.getPage());
+
+		rs.setList(qrs.getList());
+		rs.setPage(qrs.getPage());
+
+		return rs;
+	}
+
+	@Override
+	public List<TemplateTask> getTempleteTasks(TemplateTaskContract reqModel)
+	{
 		TemplateTaskExample example = new TemplateTaskExample();
-		example.createCriteria()
-			.andTemplateIdEqualTo(reqModel.getTemplateId());
+		TemplateTaskExample.Criteria c = example.createCriteria();
+
+		c.andTemplateIdEqualTo(reqModel.getTemplateId());
+		c.andInuseEqualTo(InUseType.IN_USE);
+
 		example.setOrderByClause("`group` ASC,priority ASC");
 		example.setLimitStart(reqModel.getLimitStart());
 		example.setLimitEnd(reqModel.getLimitEnd());
