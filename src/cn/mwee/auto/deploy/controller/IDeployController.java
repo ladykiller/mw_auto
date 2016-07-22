@@ -5,6 +5,8 @@
  */
 package cn.mwee.auto.deploy.controller;
 
+import cn.mwee.auto.deploy.contract.ZoneStateContract;
+import cn.mwee.auto.misc.aspect.contract.Contract;
 import cn.mwee.auto.misc.controller.IController;
 import cn.mwee.auto.misc.req.ServiceRequest;
 import cn.mwee.auto.misc.resp.NormalReturn;
@@ -68,7 +70,10 @@ public interface IDeployController extends IController {
 	 * @return
 	 */
 	NormalReturn getFolwTaskLog(ServiceRequest request);
-	
+
+	@Contract(ZoneStateContract.class)
+	NormalReturn getZoneLogs(ServiceRequest request);
+
 	/**
 	 * 模板任务列表
 	 * @param request

@@ -6,8 +6,11 @@
 package cn.mwee.auto.deploy.controller.impl;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
+import cn.mwee.auto.deploy.service.ITaskManagerService;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.transport.CredentialsProvider;
@@ -48,7 +51,10 @@ public class DeployController implements IDeployController {
 	
 	@Autowired
 	private ITemplateManagerService templateManagerService;
-	
+
+	@Autowired
+	private ITaskManagerService taskManagerService;
+
 	@Override
 	@Contract(FlowAddContract.class)
 	public NormalReturn addFlow(ServiceRequest request) {
@@ -191,6 +197,7 @@ public class DeployController implements IDeployController {
 		}
 	}
 
+	@Override
 	@Contract(ZoneStateContract.class)
 	public NormalReturn getZoneLogs(ServiceRequest request) {
 		ZoneStateContract req = request.getContract();
@@ -204,13 +211,15 @@ public class DeployController implements IDeployController {
 
 	@Override
 	@Contract(TemplateTaskContract.class)
-	public NormalReturn getTempleteTasks(ServiceRequest request) {
+	public NormalReturn getTemplateTasks(ServiceRequest request) {
 		TemplateTaskContract req = request.getContract();
 		try {
 			List<TemplateTask>  list = templateManagerService.getTempleteTasks(req);
-			req.setData(list);
-			req.setCount(1);
-			return new NormalReturn("200","success", req);
+			Set<Integer> taskIdSet = new HashSet<>();
+			for (TemplateTask tt : list) {
+				taskIdSet.add(tt.getTaskId());
+			}
+			return new NormalReturn("200","success", taskManagerService.getAutoTasksByIds(taskIdSet));
 		} catch (Exception e) {
 			logger.error("startFlow error:", e);
 			return new NormalReturn("500",e.getMessage(), "error");
