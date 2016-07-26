@@ -381,6 +381,206 @@ public class AutoTemplateExample {
             return (Criteria) this;
         }
 
+        public Criteria andVcsTypeIsNull() {
+            addCriterion("vcs_type is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andVcsTypeIsNotNull() {
+            addCriterion("vcs_type is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andVcsTypeEqualTo(String value) {
+            addCriterion("vcs_type =", value, "vcsType");
+            return (Criteria) this;
+        }
+
+        public Criteria andVcsTypeNotEqualTo(String value) {
+            addCriterion("vcs_type <>", value, "vcsType");
+            return (Criteria) this;
+        }
+
+        public Criteria andVcsTypeGreaterThan(String value) {
+            addCriterion("vcs_type >", value, "vcsType");
+            return (Criteria) this;
+        }
+
+        public Criteria andVcsTypeGreaterThanOrEqualTo(String value) {
+            addCriterion("vcs_type >=", value, "vcsType");
+            return (Criteria) this;
+        }
+
+        public Criteria andVcsTypeLessThan(String value) {
+            addCriterion("vcs_type <", value, "vcsType");
+            return (Criteria) this;
+        }
+
+        public Criteria andVcsTypeLessThanOrEqualTo(String value) {
+            addCriterion("vcs_type <=", value, "vcsType");
+            return (Criteria) this;
+        }
+
+        public Criteria andVcsTypeLike(String value) {
+            addCriterion("vcs_type like", value, "vcsType");
+            return (Criteria) this;
+        }
+
+        public Criteria andVcsTypeNotLike(String value) {
+            addCriterion("vcs_type not like", value, "vcsType");
+            return (Criteria) this;
+        }
+
+        public Criteria andVcsTypeIn(List<String> values) {
+            addCriterion("vcs_type in", values, "vcsType");
+            return (Criteria) this;
+        }
+
+        public Criteria andVcsTypeNotIn(List<String> values) {
+            addCriterion("vcs_type not in", values, "vcsType");
+            return (Criteria) this;
+        }
+
+        public Criteria andVcsTypeBetween(String value1, String value2) {
+            addCriterion("vcs_type between", value1, value2, "vcsType");
+            return (Criteria) this;
+        }
+
+        public Criteria andVcsTypeNotBetween(String value1, String value2) {
+            addCriterion("vcs_type not between", value1, value2, "vcsType");
+            return (Criteria) this;
+        }
+
+        public Criteria andVcsRepIsNull() {
+            addCriterion("vcs_rep is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andVcsRepIsNotNull() {
+            addCriterion("vcs_rep is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andVcsRepEqualTo(String value) {
+            addCriterion("vcs_rep =", value, "vcsRep");
+            return (Criteria) this;
+        }
+
+        public Criteria andVcsRepNotEqualTo(String value) {
+            addCriterion("vcs_rep <>", value, "vcsRep");
+            return (Criteria) this;
+        }
+
+        public Criteria andVcsRepGreaterThan(String value) {
+            addCriterion("vcs_rep >", value, "vcsRep");
+            return (Criteria) this;
+        }
+
+        public Criteria andVcsRepGreaterThanOrEqualTo(String value) {
+            addCriterion("vcs_rep >=", value, "vcsRep");
+            return (Criteria) this;
+        }
+
+        public Criteria andVcsRepLessThan(String value) {
+            addCriterion("vcs_rep <", value, "vcsRep");
+            return (Criteria) this;
+        }
+
+        public Criteria andVcsRepLessThanOrEqualTo(String value) {
+            addCriterion("vcs_rep <=", value, "vcsRep");
+            return (Criteria) this;
+        }
+
+        public Criteria andVcsRepLike(String value) {
+            addCriterion("vcs_rep like", value, "vcsRep");
+            return (Criteria) this;
+        }
+
+        public Criteria andVcsRepNotLike(String value) {
+            addCriterion("vcs_rep not like", value, "vcsRep");
+            return (Criteria) this;
+        }
+
+        public Criteria andVcsRepIn(List<String> values) {
+            addCriterion("vcs_rep in", values, "vcsRep");
+            return (Criteria) this;
+        }
+
+        public Criteria andVcsRepNotIn(List<String> values) {
+            addCriterion("vcs_rep not in", values, "vcsRep");
+            return (Criteria) this;
+        }
+
+        public Criteria andVcsRepBetween(String value1, String value2) {
+            addCriterion("vcs_rep between", value1, value2, "vcsRep");
+            return (Criteria) this;
+        }
+
+        public Criteria andVcsRepNotBetween(String value1, String value2) {
+            addCriterion("vcs_rep not between", value1, value2, "vcsRep");
+            return (Criteria) this;
+        }
+
+        public Criteria andInuseIsNull() {
+            addCriterion("inuse is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andInuseIsNotNull() {
+            addCriterion("inuse is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andInuseEqualTo(Byte value) {
+            addCriterion("inuse =", value, "inuse");
+            return (Criteria) this;
+        }
+
+        public Criteria andInuseNotEqualTo(Byte value) {
+            addCriterion("inuse <>", value, "inuse");
+            return (Criteria) this;
+        }
+
+        public Criteria andInuseGreaterThan(Byte value) {
+            addCriterion("inuse >", value, "inuse");
+            return (Criteria) this;
+        }
+
+        public Criteria andInuseGreaterThanOrEqualTo(Byte value) {
+            addCriterion("inuse >=", value, "inuse");
+            return (Criteria) this;
+        }
+
+        public Criteria andInuseLessThan(Byte value) {
+            addCriterion("inuse <", value, "inuse");
+            return (Criteria) this;
+        }
+
+        public Criteria andInuseLessThanOrEqualTo(Byte value) {
+            addCriterion("inuse <=", value, "inuse");
+            return (Criteria) this;
+        }
+
+        public Criteria andInuseIn(List<Byte> values) {
+            addCriterion("inuse in", values, "inuse");
+            return (Criteria) this;
+        }
+
+        public Criteria andInuseNotIn(List<Byte> values) {
+            addCriterion("inuse not in", values, "inuse");
+            return (Criteria) this;
+        }
+
+        public Criteria andInuseBetween(Byte value1, Byte value2) {
+            addCriterion("inuse between", value1, value2, "inuse");
+            return (Criteria) this;
+        }
+
+        public Criteria andInuseNotBetween(Byte value1, Byte value2) {
+            addCriterion("inuse not between", value1, value2, "inuse");
+            return (Criteria) this;
+        }
+
         public Criteria andCreatorIsNull() {
             addCriterion("creator is null");
             return (Criteria) this;
@@ -518,66 +718,6 @@ public class AutoTemplateExample {
 
         public Criteria andOperaterNotBetween(String value1, String value2) {
             addCriterion("operater not between", value1, value2, "operater");
-            return (Criteria) this;
-        }
-
-        public Criteria andInuseIsNull() {
-            addCriterion("inuse is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andInuseIsNotNull() {
-            addCriterion("inuse is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andInuseEqualTo(Byte value) {
-            addCriterion("inuse =", value, "inuse");
-            return (Criteria) this;
-        }
-
-        public Criteria andInuseNotEqualTo(Byte value) {
-            addCriterion("inuse <>", value, "inuse");
-            return (Criteria) this;
-        }
-
-        public Criteria andInuseGreaterThan(Byte value) {
-            addCriterion("inuse >", value, "inuse");
-            return (Criteria) this;
-        }
-
-        public Criteria andInuseGreaterThanOrEqualTo(Byte value) {
-            addCriterion("inuse >=", value, "inuse");
-            return (Criteria) this;
-        }
-
-        public Criteria andInuseLessThan(Byte value) {
-            addCriterion("inuse <", value, "inuse");
-            return (Criteria) this;
-        }
-
-        public Criteria andInuseLessThanOrEqualTo(Byte value) {
-            addCriterion("inuse <=", value, "inuse");
-            return (Criteria) this;
-        }
-
-        public Criteria andInuseIn(List<Byte> values) {
-            addCriterion("inuse in", values, "inuse");
-            return (Criteria) this;
-        }
-
-        public Criteria andInuseNotIn(List<Byte> values) {
-            addCriterion("inuse not in", values, "inuse");
-            return (Criteria) this;
-        }
-
-        public Criteria andInuseBetween(Byte value1, Byte value2) {
-            addCriterion("inuse between", value1, value2, "inuse");
-            return (Criteria) this;
-        }
-
-        public Criteria andInuseNotBetween(Byte value1, Byte value2) {
-            addCriterion("inuse not between", value1, value2, "inuse");
             return (Criteria) this;
         }
 

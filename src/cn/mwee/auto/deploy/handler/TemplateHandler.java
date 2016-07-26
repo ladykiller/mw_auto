@@ -6,6 +6,7 @@
 package cn.mwee.auto.deploy.handler;
 
 import cn.mwee.auto.deploy.controller.IDeployController;
+import cn.mwee.auto.deploy.controller.ITemplateController;
 import cn.mwee.auto.misc.controller.IController;
 import cn.mwee.auto.misc.handler.BaseHandler;
 import cn.mwee.auto.misc.server.MyApplicationContext;
@@ -17,6 +18,6 @@ import cn.mwee.auto.misc.server.MyApplicationContext;
 public class TemplateHandler extends BaseHandler {
 	 public TemplateHandler() {
 	        this.adaptorController = (IController) MyApplicationContext.getInstance()
-	                .getBean(IDeployController.class);
+	                .getBean(ITemplateController.class);
 	    }
 }

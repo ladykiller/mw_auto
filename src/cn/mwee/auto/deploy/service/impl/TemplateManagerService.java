@@ -9,15 +9,12 @@ import java.util.Date;
 import java.util.List;
 import cn.mwee.auto.common.db.BaseModel;
 import cn.mwee.auto.common.db.BaseQueryResult;
-import cn.mwee.auto.deploy.contract.QueryTasksResult;
-import cn.mwee.auto.deploy.contract.QueryTemplatesRequest;
-import cn.mwee.auto.deploy.contract.QueryTemplatesResult;
 import cn.mwee.auto.deploy.model.*;
 import static cn.mwee.auto.deploy.util.AutoConsts.*;
-import org.apache.shiro.SecurityUtils;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import cn.mwee.auto.deploy.contract.TemplateTaskContract;
+import cn.mwee.auto.deploy.contract.template.TemplateTaskContract;
 import cn.mwee.auto.deploy.dao.AutoTemplateMapper;
 import cn.mwee.auto.deploy.dao.TemplateTaskMapper;
 import cn.mwee.auto.deploy.service.ITemplateManagerService;
@@ -41,8 +38,26 @@ public class TemplateManagerService implements ITemplateManagerService {
 		AutoTemplate template = new AutoTemplate();
 		template.setName(templateName);
 		template.setCreateTime(new Date());
-		template.setCreator(SecurityUtils.getSubject().getPrincipal().toString());
+		template.setCreator("root");
 		return autoTemplateMapper.insertSelective(template) > 0;
+	}
+
+	@Override
+	public boolean deleteTemplate(int templateId) {
+		AutoTemplate template = new AutoTemplate();
+		template.setUpdateTime(new Date());
+		template.setId(templateId);
+		template.setInuse(InUseType.NOT_USE);
+		template.setOperater("root-del");
+		return autoTemplateMapper.updateByPrimaryKeySelective(template) > 0;
+	}
+
+	@Override
+	public boolean modifyTemplate(AutoTemplate template)
+	{
+		template.setUpdateTime(new Date());
+		template.setOperater("root-update");
+		return autoTemplateMapper.updateByPrimaryKeySelective(template) > 0;
 	}
 
 	@Override
@@ -71,7 +86,7 @@ public class TemplateManagerService implements ITemplateManagerService {
 	}
 
 	@Override
-	public QueryTemplatesResult getTemplates(QueryTemplatesRequest req)
+	public TemplateTaskContract.QueryTemplatesResult getTemplates(TemplateTaskContract.QueryTemplatesRequest req)
 	{
 		AutoTemplateExample e = new AutoTemplateExample();
 		AutoTemplateExample.Criteria c = e.createCriteria();
@@ -79,8 +94,8 @@ public class TemplateManagerService implements ITemplateManagerService {
 		c.andInuseEqualTo(InUseType.IN_USE);
 		e.setOrderByClause("id desc");
 
-		QueryTemplatesResult rs = new QueryTemplatesResult();
-		BaseQueryResult<AutoTask> qrs = BaseModel.selectByPage(templateTaskMapper, e, req.getPage());
+		TemplateTaskContract.QueryTemplatesResult rs = new TemplateTaskContract.QueryTemplatesResult();
+		BaseQueryResult<AutoTask> qrs = BaseModel.selectByPage(autoTemplateMapper, e, req.getPage());
 
 		rs.setList(qrs.getList());
 		rs.setPage(qrs.getPage());

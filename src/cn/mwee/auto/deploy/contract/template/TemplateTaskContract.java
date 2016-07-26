@@ -3,12 +3,15 @@
  * 地址：上海市浦东新区祖冲之路899号 	
  * Copyright © 2013-2016 Puscene,Inc.All Rights Reserved.
  */
-package cn.mwee.auto.deploy.contract;
+package cn.mwee.auto.deploy.contract.template;
 
 import javax.validation.constraints.NotNull;
 
 
+import cn.mwee.auto.common.db.BaseQueryResult;
+import cn.mwee.auto.common.db.PageInfo;
 import cn.mwee.auto.deploy.contract.commom.BaseContract;
+import cn.mwee.auto.deploy.model.AutoTask;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -23,4 +26,21 @@ public class TemplateTaskContract extends BaseContract {
 	/** 模板Id **/
 	@NotNull(message="未指定模板")
 	private Integer templateId;
+
+	/**
+     * Created by huming on 16/7/21.
+     */
+    @Data
+    public static class QueryTemplatesRequest {
+
+        private PageInfo page;
+
+    }
+
+	/**
+     * Created by huming on 16/7/21.
+     */
+    public static class QueryTemplatesResult extends BaseQueryResult<AutoTask> {
+
+    }
 }

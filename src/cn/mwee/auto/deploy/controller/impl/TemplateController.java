@@ -1,15 +1,16 @@
 package cn.mwee.auto.deploy.controller.impl;
 
 import cn.mwee.auto.deploy.AutoAbstractController;
-import cn.mwee.auto.deploy.contract.*;
+import cn.mwee.auto.deploy.contract.template.*;
 import cn.mwee.auto.deploy.controller.ITemplateController;
-import cn.mwee.auto.deploy.model.AutoTask;
+import cn.mwee.auto.deploy.model.AutoTemplate;
 import cn.mwee.auto.deploy.model.TemplateTask;
 import cn.mwee.auto.deploy.service.ITemplateManagerService;
 import cn.mwee.auto.misc.aspect.contract.Contract;
 import cn.mwee.auto.misc.aspect.contract.Model;
 import cn.mwee.auto.misc.req.ServiceRequest;
 import cn.mwee.auto.misc.resp.NormalReturn;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import java.util.List;
@@ -20,14 +21,15 @@ import java.util.List;
 @Controller
 public class TemplateController extends AutoAbstractController implements ITemplateController
 {
+    @Autowired
     private ITemplateManagerService templateManagerService;
 
     @Override
-    @Contract(QueryTemplatesRequest.class)
+    @Contract(TemplateTaskContract.QueryTemplatesRequest.class)
     public NormalReturn queryTemplates(ServiceRequest request)
     {
-        QueryTemplatesRequest req = request.getContract();
-        QueryTemplatesResult result = templateManagerService.getTemplates(req);
+        TemplateTaskContract.QueryTemplatesRequest req = request.getContract();
+        TemplateTaskContract.QueryTemplatesResult result = templateManagerService.getTemplates(req);
         return new NormalReturn(result);
     }
 
@@ -47,20 +49,20 @@ public class TemplateController extends AutoAbstractController implements ITempl
     }
 
     @Override
-    @Contract(TemplateTaskIdQuery.class)
+    @Contract(TemplateIdQuery.class)
     public NormalReturn deleteTemplate(ServiceRequest request)
     {
-        TemplateTaskIdQuery contract = request.getContract();
-        templateManagerService.removeTemplateTask(contract.getTemplateTaskId());
+        TemplateIdQuery contract = request.getContract();
+        templateManagerService.deleteTemplate(contract.getTemplateId());
         return new NormalReturn("success");
     }
 
     @Override
-    @Contract(TemplateTask.class)
+    @Model(contract = ModifyTemplateRequest.class, model = AutoTemplate.class)
     public NormalReturn modifyTemplate(ServiceRequest request)
     {
-        TemplateTask task = request.getContract();
-        templateManagerService.modifyTemplateTask(task);
+        AutoTemplate template = request.getModel();
+        templateManagerService.modifyTemplate(template);
         return new NormalReturn("success");
     }
 

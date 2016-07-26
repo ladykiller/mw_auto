@@ -19,6 +19,30 @@ public class AutoTemplate {
     private String name;
 
     /**
+     * 版本控制系统类型
+     * templates.vcs_type
+     *
+     * @mbggenerated
+     */
+    private String vcsType;
+
+    /**
+     * 版本仓库地址
+     * templates.vcs_rep
+     *
+     * @mbggenerated
+     */
+    private String vcsRep;
+
+    /**
+     * 使用中(0:否,1:是)
+     * templates.inuse
+     *
+     * @mbggenerated
+     */
+    private Byte inuse;
+
+    /**
      * 创建者
      * templates.creator
      *
@@ -33,14 +57,6 @@ public class AutoTemplate {
      * @mbggenerated
      */
     private String operater;
-
-    /**
-     * 使用中(0:否,1:是)
-     * templates.inuse
-     *
-     * @mbggenerated
-     */
-    private Byte inuse;
 
     /**
      * 创建时间
@@ -105,6 +121,78 @@ public class AutoTemplate {
     }
 
     /**
+     * 版本控制系统类型
+     * This method returns the value of the database column templates.vcs_type
+     *
+     * @return the value of templates.vcs_type
+     *
+     * @mbggenerated
+     */
+    public String getVcsType() {
+        return vcsType;
+    }
+
+    /**
+     * 版本控制系统类型
+     * This method sets the value of the database column templates.vcs_type
+     *
+     * @param vcsType the value for templates.vcs_type
+     *
+     * @mbggenerated
+     */
+    public void setVcsType(String vcsType) {
+        this.vcsType = vcsType;
+    }
+
+    /**
+     * 版本仓库地址
+     * This method returns the value of the database column templates.vcs_rep
+     *
+     * @return the value of templates.vcs_rep
+     *
+     * @mbggenerated
+     */
+    public String getVcsRep() {
+        return vcsRep;
+    }
+
+    /**
+     * 版本仓库地址
+     * This method sets the value of the database column templates.vcs_rep
+     *
+     * @param vcsRep the value for templates.vcs_rep
+     *
+     * @mbggenerated
+     */
+    public void setVcsRep(String vcsRep) {
+        this.vcsRep = vcsRep;
+    }
+
+    /**
+     * 使用中(0:否,1:是)
+     * This method returns the value of the database column templates.inuse
+     *
+     * @return the value of templates.inuse
+     *
+     * @mbggenerated
+     */
+    public Byte getInuse() {
+        return inuse;
+    }
+
+    /**
+     * 使用中(0:否,1:是)
+     * This method sets the value of the database column templates.inuse
+     *
+     * @param inuse the value for templates.inuse
+     *
+     * @mbggenerated
+     */
+    public void setInuse(Byte inuse) {
+        this.inuse = inuse;
+    }
+
+    /**
      * 创建者
      * This method returns the value of the database column templates.creator
      *
@@ -150,30 +238,6 @@ public class AutoTemplate {
      */
     public void setOperater(String operater) {
         this.operater = operater;
-    }
-
-    /**
-     * 使用中(0:否,1:是)
-     * This method returns the value of the database column templates.inuse
-     *
-     * @return the value of templates.inuse
-     *
-     * @mbggenerated
-     */
-    public Byte getInuse() {
-        return inuse;
-    }
-
-    /**
-     * 使用中(0:否,1:是)
-     * This method sets the value of the database column templates.inuse
-     *
-     * @param inuse the value for templates.inuse
-     *
-     * @mbggenerated
-     */
-    public void setInuse(Byte inuse) {
-        this.inuse = inuse;
     }
 
     /**
