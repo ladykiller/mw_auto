@@ -9,15 +9,12 @@ import java.util.Date;
 import java.util.List;
 import cn.mwee.auto.common.db.BaseModel;
 import cn.mwee.auto.common.db.BaseQueryResult;
-import cn.mwee.auto.deploy.contract.QueryTasksResult;
-import cn.mwee.auto.deploy.contract.QueryTemplatesRequest;
-import cn.mwee.auto.deploy.contract.QueryTemplatesResult;
 import cn.mwee.auto.deploy.model.*;
 import static cn.mwee.auto.deploy.util.AutoConsts.*;
-import org.apache.shiro.SecurityUtils;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import cn.mwee.auto.deploy.contract.TemplateTaskContract;
+import cn.mwee.auto.deploy.contract.template.TemplateTaskContract;
 import cn.mwee.auto.deploy.dao.AutoTemplateMapper;
 import cn.mwee.auto.deploy.dao.TemplateTaskMapper;
 import cn.mwee.auto.deploy.service.ITemplateManagerService;
@@ -36,13 +33,36 @@ public class TemplateManagerService implements ITemplateManagerService {
 	TemplateTaskMapper templateTaskMapper;
 
 	@Override
+	public AutoTemplate getTemplate(int templateId) {
+		return autoTemplateMapper.selectByPrimaryKey(templateId);
+	}
+
+	@Override
 	public boolean addTemplate(String templateName)
 	{
 		AutoTemplate template = new AutoTemplate();
 		template.setName(templateName);
 		template.setCreateTime(new Date());
-		template.setCreator(SecurityUtils.getSubject().getPrincipal().toString());
+		template.setCreator("root");
 		return autoTemplateMapper.insertSelective(template) > 0;
+	}
+
+	@Override
+	public boolean deleteTemplate(int templateId) {
+		AutoTemplate template = new AutoTemplate();
+		template.setUpdateTime(new Date());
+		template.setId(templateId);
+		template.setInuse(InUseType.NOT_USE);
+		template.setOperater("root-del");
+		return autoTemplateMapper.updateByPrimaryKeySelective(template) > 0;
+	}
+
+	@Override
+	public boolean modifyTemplate(AutoTemplate template)
+	{
+		template.setUpdateTime(new Date());
+		template.setOperater("root-update");
+		return autoTemplateMapper.updateByPrimaryKeySelective(template) > 0;
 	}
 
 	@Override
@@ -50,7 +70,8 @@ public class TemplateManagerService implements ITemplateManagerService {
 	{
 		task.setTemplateId(templateId);
 		task.setCreateTime(new Date());
-		return templateTaskMapper.insert(task) > 0;
+		task.setCreator("root-creator");
+		return templateTaskMapper.insertSelective(task) > 0;
 	}
 
 	@Override
@@ -59,6 +80,7 @@ public class TemplateManagerService implements ITemplateManagerService {
 		TemplateTask task = new TemplateTask();
 		task.setInuse(InUseType.NOT_USE);
 		task.setId(templateTaskId);
+		task.setOperater("root-remove");
 		return templateTaskMapper.updateByPrimaryKeySelective(task) > 0;
 	}
 
@@ -67,11 +89,12 @@ public class TemplateManagerService implements ITemplateManagerService {
 	{
 		task.setCreateTime(null);
 		task.setUpdateTime(new Date());
+		task.setOperater("root-modify");
 		return templateTaskMapper.updateByPrimaryKeySelective(task) > 0;
 	}
 
 	@Override
-	public QueryTemplatesResult getTemplates(QueryTemplatesRequest req)
+	public TemplateTaskContract.QueryTemplatesResult getTemplates(TemplateTaskContract.QueryTemplatesRequest req)
 	{
 		AutoTemplateExample e = new AutoTemplateExample();
 		AutoTemplateExample.Criteria c = e.createCriteria();
@@ -79,8 +102,8 @@ public class TemplateManagerService implements ITemplateManagerService {
 		c.andInuseEqualTo(InUseType.IN_USE);
 		e.setOrderByClause("id desc");
 
-		QueryTemplatesResult rs = new QueryTemplatesResult();
-		BaseQueryResult<AutoTask> qrs = BaseModel.selectByPage(templateTaskMapper, e, req.getPage());
+		TemplateTaskContract.QueryTemplatesResult rs = new TemplateTaskContract.QueryTemplatesResult();
+		BaseQueryResult<AutoTask> qrs = BaseModel.selectByPage(autoTemplateMapper, e, req.getPage());
 
 		rs.setList(qrs.getList());
 		rs.setPage(qrs.getPage());
@@ -89,17 +112,15 @@ public class TemplateManagerService implements ITemplateManagerService {
 	}
 
 	@Override
-	public List<TemplateTask> getTempleteTasks(TemplateTaskContract reqModel)
+	public List<TemplateTask> getTempleteTasks(int templateId)
 	{
 		TemplateTaskExample example = new TemplateTaskExample();
 		TemplateTaskExample.Criteria c = example.createCriteria();
 
-		c.andTemplateIdEqualTo(reqModel.getTemplateId());
+		c.andTemplateIdEqualTo(templateId);
 		c.andInuseEqualTo(InUseType.IN_USE);
 
 		example.setOrderByClause("`group` ASC,priority ASC");
-		example.setLimitStart(reqModel.getLimitStart());
-		example.setLimitEnd(reqModel.getLimitEnd());
 		return templateTaskMapper.selectByExample(example);
 	}
 

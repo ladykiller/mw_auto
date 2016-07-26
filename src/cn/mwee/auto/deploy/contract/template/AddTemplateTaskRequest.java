@@ -1,4 +1,4 @@
-package cn.mwee.auto.deploy.contract;
+package cn.mwee.auto.deploy.contract.template;
 
 import lombok.Data;
 import org.hibernate.validator.constraints.NotBlank;
@@ -26,11 +26,5 @@ public class AddTemplateTaskRequest {
 
     @Min(value = 1, message = "invalid taskId value")
     private Integer taskId;
-
-    @NotBlank(message = "taskType is empty")
-    private String taskType;
-
-    @Range(min = 0, max = 1, message = "invalid inuse value")
-    private Byte inuse;
 
 }

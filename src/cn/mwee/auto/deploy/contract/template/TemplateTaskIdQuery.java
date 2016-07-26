@@ -1,4 +1,4 @@
-package cn.mwee.auto.deploy.contract;
+package cn.mwee.auto.deploy.contract.template;
 
 import lombok.Data;
 import org.hibernate.validator.constraints.Range;

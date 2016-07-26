@@ -1,14 +1,8 @@
 package cn.mwee.auto.deploy.controller;
 
-import cn.mwee.auto.deploy.contract.QueryTemplatesRequest;
-import cn.mwee.auto.deploy.contract.QueryTemplatesResult;
-import cn.mwee.auto.deploy.contract.TemplateTaskContract;
-import cn.mwee.auto.deploy.model.TemplateTask;
 import cn.mwee.auto.misc.controller.IController;
 import cn.mwee.auto.misc.req.ServiceRequest;
 import cn.mwee.auto.misc.resp.NormalReturn;
-
-import java.util.List;
 
 /**
  * Created by huming on 16/7/21.

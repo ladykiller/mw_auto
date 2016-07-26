@@ -24,7 +24,7 @@ import cn.mwee.auto.deploy.contract.ExecuteFlowTaskContract;
 import cn.mwee.auto.deploy.contract.FlowAddContract;
 import cn.mwee.auto.deploy.contract.FlowStartContract;
 import cn.mwee.auto.deploy.contract.GitBrancheContract;
-import cn.mwee.auto.deploy.contract.TemplateTaskContract;
+import cn.mwee.auto.deploy.contract.template.TemplateTaskContract;
 import cn.mwee.auto.deploy.contract.ZoneStateContract;
 import cn.mwee.auto.deploy.controller.IDeployController;
 import cn.mwee.auto.deploy.model.Flow;
@@ -69,7 +69,6 @@ public class DeployController implements IDeployController {
 				return new NormalReturn("500", "error","error");
 			}
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			logger.error("addFlow error:", e);
 			return new NormalReturn("500", "error",e.getMessage());
 		}
@@ -214,7 +213,7 @@ public class DeployController implements IDeployController {
 	public NormalReturn getTemplateTasks(ServiceRequest request) {
 		TemplateTaskContract req = request.getContract();
 		try {
-			List<TemplateTask>  list = templateManagerService.getTempleteTasks(req);
+			List<TemplateTask>  list = templateManagerService.getTempleteTasks(req.getTemplateId());
 			Set<Integer> taskIdSet = new HashSet<>();
 			for (TemplateTask tt : list) {
 				taskIdSet.add(tt.getTaskId());
