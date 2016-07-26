@@ -11,6 +11,8 @@ import cn.mwee.auto.deploy.model.TemplateTask;
  */
 public interface ITemplateManagerService {
 
+    AutoTemplate getTemplate(int templateId);
+
     boolean addTemplate(String templateName);
 
     boolean deleteTemplate(int templateId);
@@ -35,6 +37,6 @@ public interface ITemplateManagerService {
 	 * 获取模板任务信息
 	 * @return
 	 */
-	List<TemplateTask> getTempleteTasks(TemplateTaskContract reqModel);
+	List<TemplateTask> getTempleteTasks(int templateId);
 
 }

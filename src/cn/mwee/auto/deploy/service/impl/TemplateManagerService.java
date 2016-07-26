@@ -33,6 +33,11 @@ public class TemplateManagerService implements ITemplateManagerService {
 	TemplateTaskMapper templateTaskMapper;
 
 	@Override
+	public AutoTemplate getTemplate(int templateId) {
+		return autoTemplateMapper.selectByPrimaryKey(templateId);
+	}
+
+	@Override
 	public boolean addTemplate(String templateName)
 	{
 		AutoTemplate template = new AutoTemplate();
@@ -65,7 +70,8 @@ public class TemplateManagerService implements ITemplateManagerService {
 	{
 		task.setTemplateId(templateId);
 		task.setCreateTime(new Date());
-		return templateTaskMapper.insert(task) > 0;
+		task.setCreator("root-creator");
+		return templateTaskMapper.insertSelective(task) > 0;
 	}
 
 	@Override
@@ -74,6 +80,7 @@ public class TemplateManagerService implements ITemplateManagerService {
 		TemplateTask task = new TemplateTask();
 		task.setInuse(InUseType.NOT_USE);
 		task.setId(templateTaskId);
+		task.setOperater("root-remove");
 		return templateTaskMapper.updateByPrimaryKeySelective(task) > 0;
 	}
 
@@ -82,6 +89,7 @@ public class TemplateManagerService implements ITemplateManagerService {
 	{
 		task.setCreateTime(null);
 		task.setUpdateTime(new Date());
+		task.setOperater("root-modify");
 		return templateTaskMapper.updateByPrimaryKeySelective(task) > 0;
 	}
 
@@ -104,17 +112,15 @@ public class TemplateManagerService implements ITemplateManagerService {
 	}
 
 	@Override
-	public List<TemplateTask> getTempleteTasks(TemplateTaskContract reqModel)
+	public List<TemplateTask> getTempleteTasks(int templateId)
 	{
 		TemplateTaskExample example = new TemplateTaskExample();
 		TemplateTaskExample.Criteria c = example.createCriteria();
 
-		c.andTemplateIdEqualTo(reqModel.getTemplateId());
+		c.andTemplateIdEqualTo(templateId);
 		c.andInuseEqualTo(InUseType.IN_USE);
 
 		example.setOrderByClause("`group` ASC,priority ASC");
-		example.setLimitStart(reqModel.getLimitStart());
-		example.setLimitEnd(reqModel.getLimitEnd());
 		return templateTaskMapper.selectByExample(example);
 	}
 

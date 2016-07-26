@@ -43,9 +43,12 @@ public class TemplateController extends AutoAbstractController implements ITempl
     }
 
     @Override
+    @Contract(TemplateIdQuery.class)
     public NormalReturn getTemplate(ServiceRequest request)
     {
-        return null;
+        TemplateIdQuery contract = request.getContract();
+        AutoTemplate template = templateManagerService.getTemplate(contract.getTemplateId());
+        return new NormalReturn(template);
     }
 
     @Override
@@ -85,11 +88,11 @@ public class TemplateController extends AutoAbstractController implements ITempl
     }
 
     @Override
-    @Contract(TemplateTaskContract.class)
+    @Contract(TemplateIdQuery.class)
     public NormalReturn getTempleteTasks(ServiceRequest request)
     {
-        TemplateTaskContract contract = request.getContract();
-        List<TemplateTask> tasks = templateManagerService.getTempleteTasks(contract);
+        TemplateIdQuery contract = request.getContract();
+        List<TemplateTask> tasks = templateManagerService.getTempleteTasks(contract.getTemplateId());
         return new NormalReturn(tasks);
     }
 }
