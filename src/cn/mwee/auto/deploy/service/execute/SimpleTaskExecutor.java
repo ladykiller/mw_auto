@@ -69,7 +69,6 @@ public class SimpleTaskExecutor implements TaskExecutor {
 				executeChain(nextFlowTask);
 			} else {
 				//当前组任务执行结束
-				System.out.println();
 				if (flowManagerService.checkConcurrentGroupsFinished(flowTask.getId())) {
 					List<FlowTask> nextGroupTasks = flowManagerService.getNextGroupStartFlowTasks(flowTask.getId());
 					flowManagerService.updateFlowStatus(flowTask.getFlowId());

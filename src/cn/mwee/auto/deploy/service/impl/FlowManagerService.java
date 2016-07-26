@@ -46,6 +46,7 @@ import java.util.Map;
 @Service
 public class FlowManagerService implements IFlowManagerService {
 	private static final Logger logger = LoggerFactory.getLogger(SimpleTaskExecutor.class);
+    private static final String localHost = "localhost";
     @Autowired
     private FlowMapper flowMapper;
 
@@ -109,6 +110,7 @@ public class FlowManagerService implements IFlowManagerService {
     	if (flow == null ) {
     		throw new NullPointerException("Cant find flow for id:"+flowId);
     	}
+
     	//get flowTask
     	TemplateTaskExample ttExample = new TemplateTaskExample();
     	ttExample.createCriteria().andTemplateIdEqualTo(flow.getTemplateId());
@@ -120,8 +122,24 @@ public class FlowManagerService implements IFlowManagerService {
     	Map<Object, Object> paramsMap = JSON.parseObject(flow.getParams(), Map.class);
     	
     	//copy tasks
-    	List<FlowTask> fts = new ArrayList<FlowTask>();
+    	List<FlowTask> fts = new ArrayList<>();
     	for (TemplateTask tt : tts) {
+            //准备组
+            if (tt.getGroup().equals(GroupType.PrepareGroup)) {
+                FlowTask ft = new FlowTask();
+                ft.setGroup(tt.getGroup());
+                ft.setPriority(tt.getPriority());
+                ft.setTaskId(tt.getTaskId());
+                ft.setTaskType(tt.getTaskType());
+                ft.setFlowId(flowId);
+                ft.setZone(localHost);
+                ft.setTaskParam(String.valueOf(paramsMap.get(ft.getTaskId()+"")));
+                ft.setState(TaskState.INIT.name());
+                ft.setCreateTime(new Date());
+                fts.add(ft);
+                continue;
+            }
+            //区域普通组
 			for (String zone:zones ) {
 				if (StringUtils.isBlank(zone)) continue;
 				FlowTask ft = new FlowTask();
@@ -178,14 +196,13 @@ public class FlowManagerService implements IFlowManagerService {
     	criteria.andFlowIdEqualTo(flowTask.getFlowId())
     		.andZoneEqualTo(flowTask.getZone())		//区域
     		.andStateNotEqualTo(TaskState.SUCCESS.name());		//不成功
-    	if (flowTask.getGroup() == GroupType.PreGroup) {
-    		criteria.andGroupEqualTo(GroupType.PreGroup);	//前置group
-    	} else if (flowTask.getGroup() == GroupType.PostGroup) {
-    		criteria.andGroupEqualTo(GroupType.PostGroup);	//后置group
-    	} else {
-    		criteria.andGroupNotEqualTo(GroupType.PreGroup)		//非前置group
-    			.andGroupNotEqualTo(GroupType.PostGroup);		//非后置group
-    	}
+
+        if (flowTask.getGroup() > GroupType.PreGroup
+                && flowTask.getGroup() < GroupType.PostGroup) {
+            criteria.andGroupBetween((byte)(GroupType.PreGroup+1),(byte)(GroupType.PostGroup-1));
+        } else {
+            criteria.andGroupEqualTo(flowTask.getGroup()); //准备组
+        }
     	int count = flowTaskExtMapper.countUnFinishedTasks(example);
         return !(count > 0);
     }
@@ -206,19 +223,26 @@ public class FlowManagerService implements IFlowManagerService {
     	//获取当前任务
     	FlowTask currentFlowTask = flowTaskMapper.selectByPrimaryKey(flowTasId);
     	//当前组
-    	byte currentGroup = currentFlowTask.getGroup().byteValue();
+    	byte currentGroup = currentFlowTask.getGroup();
     	//当前组为后置组 返回null
-    	if (currentGroup == GroupType.PostGroup.byteValue() ) {
+    	if (currentGroup == GroupType.PostGroup ) {
     		return null ;
     	}
+        //准备组
+        if (currentGroup == GroupType.PrepareGroup) {
+            list = getZoneStartFlowTask(currentFlowTask.getFlowId());
+            if (CollectionUtils.isNotEmpty(list)) {
+                return list;
+            }
+        }
+
     	FlowTaskExample example = new FlowTaskExample();
     	//当前组为前置组 
-    	if (currentGroup == GroupType.PreGroup.byteValue()) {
+    	if (currentGroup == GroupType.PreGroup) {
     		//获取并发组开始任务
     		example.createCriteria()
 	    		.andFlowIdEqualTo(currentFlowTask.getFlowId())
-	    		.andGroupNotEqualTo(GroupType.PreGroup)
-	    		.andGroupNotEqualTo(GroupType.PostGroup)
+                .andGroupBetween((byte)(GroupType.PreGroup+1),(byte)(GroupType.PostGroup-1))
 	    		.andZoneEqualTo(currentFlowTask.getZone());
     		list = flowTaskExtMapper.getConcurrentGroupStartTasks(example);
     		if (CollectionUtils.isNotEmpty(list)) {
@@ -237,8 +261,8 @@ public class FlowManagerService implements IFlowManagerService {
     		return list;
     	}
     	//当前组为并发
-    	if (currentGroup > GroupType.PreGroup.byteValue() 
-    			&& currentGroup < GroupType.PostGroup.byteValue()) {
+    	if (currentGroup > GroupType.PreGroup
+    			&& currentGroup < GroupType.PostGroup) {
     		example.clear();
     		example.createCriteria()
     			.andFlowIdEqualTo(currentFlowTask.getFlowId())
@@ -255,44 +279,65 @@ public class FlowManagerService implements IFlowManagerService {
     
     @Override
     public List<FlowTask> getStartFlowTask(int flowId){
-    	List<FlowTask> list = null;
-    	//获取前置组初始任务
+    	List<FlowTask> list ;
     	FlowTaskExample example = new FlowTaskExample();
-    	example.createCriteria()
-    		.andFlowIdEqualTo(flowId)
-    		.andGroupEqualTo(GroupType.PreGroup);
-    	list = flowTaskExtMapper.getPreOrPostGroupStartTasks(example);
-    	if (CollectionUtils.isNotEmpty(list)) {
-    		return list;
-    	}
-    	//获取并发组
-    	Flow flow = flowMapper.selectByPrimaryKey(flowId);
-    	String[] zones = flow.getZones().split(",");
-    	for (String zone : zones) {
-    		example.clear();
-    		example.createCriteria().andFlowIdEqualTo(flowId).andZoneEqualTo(zone);
-    		List<FlowTask> tmpList = flowTaskExtMapper.getConcurrentGroupStartTasks(example);
-    		if (CollectionUtils.isNotEmpty(tmpList)) {
-    			list.addAll(tmpList);
-    		}
-    	}
-    	if (CollectionUtils.isNotEmpty(list)) {
-    		return list;
-    	}
-    	//获取后置组
-    	example.clear();
-    	example.createCriteria()
-			.andFlowIdEqualTo(flowId)
-			.andGroupEqualTo(GroupType.PostGroup);
-    	list = flowTaskExtMapper.getPreOrPostGroupStartTasks(example);
-    	return list;
+        //获取准备组初始任务
+        example.clear();
+        example.createCriteria()
+                .andFlowIdEqualTo(flowId)
+                .andGroupEqualTo(GroupType.PrepareGroup);
+        list = flowTaskExtMapper.getPreOrPostGroupStartTasks(example);
+        if (CollectionUtils.isNotEmpty(list)) {
+            return list;
+        }
+        return getZoneStartFlowTask(flowId);
     }
-    
+
+    public List<FlowTask> getZoneStartFlowTask(int flowId){
+        List<FlowTask> list = null;
+        FlowTaskExample example = new FlowTaskExample();
+        //获取前置组初始任务
+        example.clear();
+        example.createCriteria()
+                .andFlowIdEqualTo(flowId)
+                .andGroupEqualTo(GroupType.PreGroup);
+        list = flowTaskExtMapper.getPreOrPostGroupStartTasks(example);
+        if (CollectionUtils.isNotEmpty(list)) {
+            return list;
+        }
+        //获取并发组
+        Flow flow = flowMapper.selectByPrimaryKey(flowId);
+        String[] zones = flow.getZones().split(",");
+        for (String zone : zones) {
+            example.clear();
+            example.createCriteria()
+                    .andFlowIdEqualTo(flowId)
+                    .andZoneEqualTo(zone)
+                    .andGroupBetween((byte)(GroupType.PreGroup+1),(byte)(GroupType.PostGroup-1));
+            List<FlowTask> tmpList = flowTaskExtMapper.getConcurrentGroupStartTasks(example);
+            if (CollectionUtils.isNotEmpty(tmpList)) {
+                list.addAll(tmpList);
+            }
+        }
+        if (CollectionUtils.isNotEmpty(list)) {
+            return list;
+        }
+        //获取后置组
+        example.clear();
+        example.createCriteria()
+                .andFlowIdEqualTo(flowId)
+                .andGroupEqualTo(GroupType.PostGroup);
+        list = flowTaskExtMapper.getPreOrPostGroupStartTasks(example);
+        return list;
+    }
+
+
+
     private boolean startFlow (int flowId) {
     	try {
 			List<FlowTask> flowTasks = getStartFlowTask(flowId);
 			if (CollectionUtils.isEmpty(flowTasks)) {
-				logger.error("StartFlow Error: There task for flow[id={}]", flowId);
+				logger.error("StartFlow Error: none tasks for flow[id={}]", flowId);
 				return false;
 			}
 			taskMsgSender.sendTasks(flowTasks);
