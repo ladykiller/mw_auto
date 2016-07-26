@@ -50,4 +50,10 @@ public interface IPermissionController extends IController {
 	 */
 	NormalReturn queryMenu(ServiceRequest request);
 
+	/**
+	 * 获取菜单
+	 * @param request
+	 * @return
+	 */
+	NormalReturn queryLevelMenu(ServiceRequest request);
 }

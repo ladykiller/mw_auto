@@ -1,6 +1,7 @@
 package cn.mwee.auto.auth.dao;
 
 import cn.mwee.auto.auth.model.AuthMenu;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -26,6 +27,6 @@ public interface AuthPermissionExtMapper {
      * @param userId
      * @return
      */
-    List<AuthMenu> selectPrivateMenu(Integer userId);
+    List<AuthMenu> selectPrivateMenu(@Param("userId") Integer userId);
 
 }

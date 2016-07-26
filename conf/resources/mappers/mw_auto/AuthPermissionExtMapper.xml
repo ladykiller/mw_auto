@@ -33,7 +33,10 @@
         FROM
           auth_permission p LEFT JOIN auth_role_permission rp on p.id = rp.permission_id
           LEFT JOIN auth_user_role ur ON rp.role_id = ur.role_id
-        WHERE ur.user_id = #{userId} AND p.type &gt; 0
+        WHERE  p.type &gt; 0
+        <if test="userId &gt; 0 " >
+            AND ur.user_id = #{userId}
+        </if>
     </select>
 
 </mapper>

@@ -117,7 +117,11 @@ public class AuthController implements IAuthController {
                 SecurityUtils.getSubject().logout();
                 return new NormalReturn("500","error","账号异常");
             }
-            return new NormalReturn("200","success",permissionService.getLeftMenu(authUser.getId()));
+            if ("admin".equals(currUser)) {
+                    return new NormalReturn("200","success",permissionService.getLeftMenu(-1));
+            } else {
+                return new NormalReturn("200","success",permissionService.getLeftMenu(authUser.getId()));
+            }
         } catch (Exception e) {
             logger.error("",e);
             return new NormalReturn("500","error",e.getMessage());

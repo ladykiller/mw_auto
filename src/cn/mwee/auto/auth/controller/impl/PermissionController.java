@@ -1,5 +1,6 @@
 package cn.mwee.auto.auth.controller.impl;
 
+import cn.mwee.auto.auth.contract.permission.PermLevelQueryContract;
 import cn.mwee.auto.auth.contract.permission.PermissionAddContract;
 import cn.mwee.auto.auth.contract.permission.PermissionContract;
 import cn.mwee.auto.auth.contract.permission.PermissionQueryContract;
@@ -39,9 +40,10 @@ public class PermissionController implements IPermissionController {
                 return new NormalReturn("500","error","Code already used");
             }
             AuthPermission authPermission = new AuthPermission();
-            authPermission.setParentId(req.getParentId());
+            authPermission.setParentId(req.getParentId()==null?-1:req.getParentId());
             authPermission.setCode(req.getCode());
             authPermission.setName(req.getName());
+            authPermission.setLevel(req.getLevel());
             authPermission.setType(req.getType());
             authPermission.setDescription(req.getDescription());
             permissionService.add(authPermission);
@@ -106,5 +108,18 @@ public class PermissionController implements IPermissionController {
     public NormalReturn queryMenu(ServiceRequest request) {
         //TODO
         return null;
+    }
+
+    @Override
+    @RequiresAuthentication
+    @Contract(PermLevelQueryContract.class)
+    public NormalReturn queryLevelMenu(ServiceRequest request) {
+        PermLevelQueryContract req = request.getContract();
+        try {
+            return new NormalReturn("200","success",permissionService.queryLevelMenu(req.getType(),req.getLevel()));
+        } catch (Exception e) {
+            logger.error("",e);
+            return new NormalReturn("500","error",e.getMessage());
+        }
     }
 }

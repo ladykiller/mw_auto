@@ -73,4 +73,11 @@ public interface IPermissionService {
 	 * @return
      */
 	List<AuthMenu> getLeftMenu(Integer userId);
+
+	/**
+	 * 根据级别查询菜单
+	 * @param level
+	 * @return
+     */
+	List<AuthPermission> queryLevelMenu(Byte type,Byte level);
 }

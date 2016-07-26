@@ -25,6 +25,11 @@ public class PermissionAddContract extends BaseContract {
     private String code;
 
     /**
+     * 级别
+     */
+    @NotNull(message = "未指定级别")
+    private Byte level;
+    /**
      * 菜单标题
      */
     @NotBlank(message = "未指定title")

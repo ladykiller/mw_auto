@@ -20,7 +20,15 @@ public class AuthPermission {
     private Integer parentId;
 
     /**
-     * 权限编码
+     * 菜单级别:1，一级；2：二级；3，三级；4,只能为按钮
+     * auth_permission.level
+     *
+     * @mbggenerated
+     */
+    private Byte level;
+
+    /**
+     * 权限编码（url）
      * auth_permission.code
      *
      * @mbggenerated
@@ -28,7 +36,7 @@ public class AuthPermission {
     private String code;
 
     /**
-     * 权限名称
+     * 权限名称（title）
      * auth_permission.name
      *
      * @mbggenerated
@@ -36,7 +44,7 @@ public class AuthPermission {
     private String name;
 
     /**
-     * 类型：1，url； 2，button；3，其他
+     * 类型：-1，button； 1，url菜单； 2，无url的菜单（即有子菜单）；
      * auth_permission.type
      *
      * @mbggenerated
@@ -124,7 +132,31 @@ public class AuthPermission {
     }
 
     /**
-     * 权限编码
+     * 菜单级别:1，一级；2：二级；3，三级；4,只能为按钮
+     * This method returns the value of the database column auth_permission.level
+     *
+     * @return the value of auth_permission.level
+     *
+     * @mbggenerated
+     */
+    public Byte getLevel() {
+        return level;
+    }
+
+    /**
+     * 菜单级别:1，一级；2：二级；3，三级；4,只能为按钮
+     * This method sets the value of the database column auth_permission.level
+     *
+     * @param level the value for auth_permission.level
+     *
+     * @mbggenerated
+     */
+    public void setLevel(Byte level) {
+        this.level = level;
+    }
+
+    /**
+     * 权限编码（url）
      * This method returns the value of the database column auth_permission.code
      *
      * @return the value of auth_permission.code
@@ -136,7 +168,7 @@ public class AuthPermission {
     }
 
     /**
-     * 权限编码
+     * 权限编码（url）
      * This method sets the value of the database column auth_permission.code
      *
      * @param code the value for auth_permission.code
@@ -148,7 +180,7 @@ public class AuthPermission {
     }
 
     /**
-     * 权限名称
+     * 权限名称（title）
      * This method returns the value of the database column auth_permission.name
      *
      * @return the value of auth_permission.name
@@ -160,7 +192,7 @@ public class AuthPermission {
     }
 
     /**
-     * 权限名称
+     * 权限名称（title）
      * This method sets the value of the database column auth_permission.name
      *
      * @param name the value for auth_permission.name
@@ -172,7 +204,7 @@ public class AuthPermission {
     }
 
     /**
-     * 类型：1，url； 2，button；3，其他
+     * 类型：-1，button； 1，url菜单； 2，无url的菜单（即有子菜单）；
      * This method returns the value of the database column auth_permission.type
      *
      * @return the value of auth_permission.type
@@ -184,7 +216,7 @@ public class AuthPermission {
     }
 
     /**
-     * 类型：1，url； 2，button；3，其他
+     * 类型：-1，button； 1，url菜单； 2，无url的菜单（即有子菜单）；
      * This method sets the value of the database column auth_permission.type
      *
      * @param type the value for auth_permission.type

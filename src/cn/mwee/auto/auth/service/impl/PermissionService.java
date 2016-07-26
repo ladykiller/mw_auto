@@ -67,7 +67,7 @@ public class PermissionService implements IPermissionService {
     @Override
     public AuthPermission selectByCode(String code) {
         AuthPermissionExample example = new AuthPermissionExample();
-        example.createCriteria().andCodeEqualTo(code);
+        example.createCriteria().andCodeEqualTo(code).andCodeNotEqualTo("#");
         List<AuthPermission> list = authPermissionMapper.selectByExample(example);
         return CollectionUtils.isNotEmpty(list) ? list.get(0) : null;
     }
@@ -98,7 +98,9 @@ public class PermissionService implements IPermissionService {
 		}
 		for (AuthMenu menu : menus) {
 			if (menu.getParentId() == -1) {
+				topMenus.add(menu);
 				menu.setChildMenu(getChildMenu(menus, menu));
+
 			}
 		}
 		return topMenus;
@@ -107,11 +109,22 @@ public class PermissionService implements IPermissionService {
 	private List<AuthMenu> getChildMenu(List<AuthMenu> allMenus, AuthMenu parentMenu){
 		List<AuthMenu> childMenu = new ArrayList<AuthMenu>();
 		for (AuthMenu menu : allMenus) {
-			if (menu.getParentId().intValue() == parentMenu.getParentId()) {
+			if (menu.getParentId().intValue() == parentMenu.getId()) {
 				childMenu.add(menu);
 				menu.setChildMenu(getChildMenu(allMenus,menu));
 			}
 		}
 		return childMenu;
+	}
+
+	@Override
+	public List<AuthPermission> queryLevelMenu(Byte type,Byte level) {
+		AuthPermissionExample example = new AuthPermissionExample();
+        if (type.byteValue() == 1) {
+            example.createCriteria().andLevelEqualTo(--level).andTypeEqualTo((byte)1).andCodeEqualTo("#");
+        } else {
+            example.createCriteria().andLevelEqualTo(level).andTypeEqualTo((byte)1).andCodeNotEqualTo("#");
+        }
+		return authPermissionMapper.selectByExample(example);
 	}
 }
