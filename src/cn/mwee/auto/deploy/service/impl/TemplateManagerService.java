@@ -17,6 +17,7 @@ import cn.mwee.auto.deploy.model.*;
 import static cn.mwee.auto.deploy.util.AutoConsts.*;
 
 import cn.mwee.auto.deploy.service.ITaskManagerService;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -145,6 +146,8 @@ public class TemplateManagerService implements ITemplateManagerService {
         tzs.forEach(item-> {
             zoneIds.add(item.getZoneId());
         });
+
+        if (CollectionUtils.isEmpty(zoneIds)) return new ArrayList<>();
 
         ZoneExample zoneExample = new ZoneExample();
         zoneExample.createCriteria()

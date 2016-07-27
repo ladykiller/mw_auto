@@ -1,18 +1,9 @@
 package cn.mwee.auto.deploy.service.impl;
 
-import cn.mwee.auto.deploy.dao.FlowMapper;
-import cn.mwee.auto.deploy.dao.FlowTaskExtMapper;
-import cn.mwee.auto.deploy.dao.FlowTaskMapper;
-import cn.mwee.auto.deploy.dao.TemplateTaskExtMapper;
-import cn.mwee.auto.deploy.dao.TemplateTaskMapper;
-import cn.mwee.auto.deploy.model.Flow;
-import cn.mwee.auto.deploy.model.FlowExample;
-import cn.mwee.auto.deploy.model.FlowTask;
-import cn.mwee.auto.deploy.model.FlowTaskExample;
-import cn.mwee.auto.deploy.model.MwGroupData;
-import cn.mwee.auto.deploy.model.TemplateTask;
-import cn.mwee.auto.deploy.model.TemplateTaskExample;
+import cn.mwee.auto.deploy.dao.*;
+import cn.mwee.auto.deploy.model.*;
 import cn.mwee.auto.deploy.service.IFlowManagerService;
+import cn.mwee.auto.deploy.service.ITemplateManagerService;
 import cn.mwee.auto.deploy.service.execute.SimpleTaskExecutor;
 import cn.mwee.auto.deploy.service.execute.TaskMsgSender;
 
@@ -61,6 +52,12 @@ public class FlowManagerService implements IFlowManagerService {
     
     @Autowired
     private TemplateTaskMapper templateTaskMapper;
+
+    @Autowired
+    private AutoTaskMapper autoTaskMapper;
+
+    @Resource
+    private ITemplateManagerService templateManagerService;
 
     @Resource
 	private TaskMsgSender taskMsgSender;
@@ -119,7 +116,7 @@ public class FlowManagerService implements IFlowManagerService {
     	String zoneStr = flow.getZones();
     	String[] zones = zoneStr.split(",");
     	//get params
-    	Map<Object, Object> paramsMap = JSON.parseObject(flow.getParams(), Map.class);
+    	Map<String, String> paramsMap = JSON.parseObject(flow.getParams(), Map.class);
     	
     	//copy tasks
     	List<FlowTask> fts = new ArrayList<>();
@@ -133,13 +130,13 @@ public class FlowManagerService implements IFlowManagerService {
                 ft.setTaskType(tt.getTaskType());
                 ft.setFlowId(flowId);
                 ft.setZone(localHost);
-                ft.setTaskParam(String.valueOf(paramsMap.get(ft.getTaskId()+"")));
+                genBuildParam(tt,ft,flow);
                 ft.setState(TaskState.INIT.name());
                 ft.setCreateTime(new Date());
                 fts.add(ft);
                 continue;
             }
-            //区域普通组
+            //区域组
 			for (String zone:zones ) {
 				if (StringUtils.isBlank(zone)) continue;
 				FlowTask ft = new FlowTask();
@@ -149,7 +146,7 @@ public class FlowManagerService implements IFlowManagerService {
 				ft.setTaskType(tt.getTaskType());
 				ft.setFlowId(flowId);
 				ft.setZone(zone);
-				ft.setTaskParam(String.valueOf(paramsMap.get(ft.getTaskId()+"")));
+                replaceParams(ft,paramsMap);
 				ft.setState(TaskState.INIT.name());
 				ft.setCreateTime(new Date());
 				fts.add(ft);
@@ -157,6 +154,44 @@ public class FlowManagerService implements IFlowManagerService {
 		}
     	int result = flowTaskExtMapper.insertBatch(fts);
         return result > 0;
+    }
+
+    /**
+     * 参数替换
+     * @param ft
+     * @param paramMap
+     */
+    private void replaceParams(FlowTask ft,Map<String,String> paramMap){
+
+        AutoTask task = autoTaskMapper.selectByPrimaryKey(ft.getTaskId());
+        if (task !=null && StringUtils.isNotBlank(task.getParams())) {
+            String paramStr = task.getParams();
+            String[] paramKeys = paramStr.split(" ");
+            for (String paramKey: paramKeys ) {
+                String paramValue =  paramMap.get(paramKey.replace("#",""));
+                if (null != paramValue) {
+                    paramStr = paramStr.replace(paramKey, paramValue);
+                }
+            }
+            ft.setTaskParam(paramStr);
+        }
+    }
+
+    /**
+     * 构建任务的参数生成
+     * @param tt
+     * @param ft
+     * @param flow
+     */
+    private void genBuildParam( TemplateTask tt ,FlowTask ft,Flow flow) {
+        AutoTemplate  template = templateManagerService.getTemplate(tt.getTemplateId());
+        if (template != null && StringUtils.isNotBlank(flow.getVcsBranch())) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(" ").append(template.getVcsType())
+                    .append(" ").append(template.getVcsRep())
+                    .append(" ").append(flow.getVcsBranch());
+            ft.setTaskParam(sb.toString());
+        }
     }
 
     @Override
