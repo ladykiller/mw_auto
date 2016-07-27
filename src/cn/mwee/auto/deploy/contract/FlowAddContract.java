@@ -25,6 +25,12 @@ public class FlowAddContract {
 	/** 模板 **/
 	@NotNull(message="未指定模板")
 	private Integer templateId;
+    /**
+     * 项目Id
+     */
+    @NotNull(message="未指定项目Id")
+	private Integer projectId;
+
 	/** 区域 **/
 	@NotBlank(message="未指定区域")
 	private String zones;

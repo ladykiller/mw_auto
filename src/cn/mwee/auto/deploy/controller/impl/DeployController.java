@@ -118,6 +118,7 @@ public class DeployController implements IDeployController {
 		Flow flow = new Flow();
 		flow.setName(req.getName());
 		flow.setTemplateId(req.getTemplateId());
+        flow.setProjectId(req.getProjectId());
 		flow.setZones(req.getZones());
 		return flow;
 	}
