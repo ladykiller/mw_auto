@@ -11,7 +11,7 @@ import org.hibernate.validator.constraints.Range;
 public class AddTemplateRequest {
 
     @NotBlank(message="未指定模板名")
-    private String templateName;
+    private String name;
 
     @Range(min = 0, max = 1, message = "invalid review value")
     private Byte review;
