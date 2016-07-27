@@ -17,7 +17,7 @@ public class ModifyTaskRequest {
 
     private String exec;
 
-    private String execuser;
+    private String execUser;
 
     private String params;
 
