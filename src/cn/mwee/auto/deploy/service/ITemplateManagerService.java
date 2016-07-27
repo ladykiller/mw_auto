@@ -15,7 +15,7 @@ public interface ITemplateManagerService {
 
     AutoTemplate getTemplate(int templateId);
 
-    boolean addTemplate(String templateName);
+    boolean addTemplate(AutoTemplate template);
 
     boolean deleteTemplate(int templateId);
 

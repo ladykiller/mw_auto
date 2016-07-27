@@ -34,11 +34,11 @@ public class TemplateController extends AutoAbstractController implements ITempl
     }
 
     @Override
-    @Contract(AddTemplateRequest.class)
+    @Model(contract = AddTemplateRequest.class, model = AutoTemplate.class)
     public NormalReturn addTemplate(ServiceRequest request)
     {
-        AddTemplateRequest contract = request.getContract();
-        templateManagerService.addTemplate(contract.getTemplateName());
+        AutoTemplate contract = request.getModel();
+        templateManagerService.addTemplate(contract);
         return new NormalReturn("success");
     }
 

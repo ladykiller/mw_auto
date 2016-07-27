@@ -40,12 +40,10 @@ public class TemplateManagerService implements ITemplateManagerService {
 	}
 
 	@Override
-	public boolean addTemplate(String templateName)
+	public boolean addTemplate(AutoTemplate template)
 	{
-		AutoTemplate template = new AutoTemplate();
-		template.setName(templateName);
 		template.setCreateTime(new Date());
-		template.setCreator("root");
+		template.setCreator("root-creator");
 		return autoTemplateMapper.insertSelective(template) > 0;
 	}
 
