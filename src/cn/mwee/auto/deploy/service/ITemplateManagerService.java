@@ -5,10 +5,7 @@ import java.util.List;
 import cn.mwee.auto.deploy.contract.template.QueryTemplatesRequest;
 import cn.mwee.auto.deploy.contract.template.QueryTemplatesResult;
 import cn.mwee.auto.deploy.contract.template.TemplateTaskContract;
-import cn.mwee.auto.deploy.model.AutoTask;
-import cn.mwee.auto.deploy.model.AutoTemplate;
-import cn.mwee.auto.deploy.model.TemplateTask;
-import cn.mwee.auto.deploy.model.TemplateZone;
+import cn.mwee.auto.deploy.model.*;
 
 /**
  * Created by huming on 16/6/24.
@@ -48,7 +45,7 @@ public interface ITemplateManagerService {
      * @param templateId
      * @return
      */
-	List<TemplateZone> getTemplateZones(Integer templateId);
+    List<Zone> getTemplateZones(Integer templateId);
 
     /**
      * 获取模板中的任务

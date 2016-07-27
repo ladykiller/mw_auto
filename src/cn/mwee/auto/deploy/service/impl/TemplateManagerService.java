@@ -12,6 +12,7 @@ import cn.mwee.auto.common.db.BaseQueryResult;
 import cn.mwee.auto.deploy.dao.TemplateZoneMapper;
 import cn.mwee.auto.deploy.contract.template.QueryTemplatesRequest;
 import cn.mwee.auto.deploy.contract.template.QueryTemplatesResult;
+import cn.mwee.auto.deploy.dao.ZoneMapper;
 import cn.mwee.auto.deploy.model.*;
 import static cn.mwee.auto.deploy.util.AutoConsts.*;
 
@@ -42,6 +43,9 @@ public class TemplateManagerService implements ITemplateManagerService {
 
     @Autowired
     private ITaskManagerService taskManagerService;
+
+    @Autowired
+    private ZoneMapper zoneMapper;
 
 	@Override
 	public AutoTemplate getTemplate(int templateId) {
@@ -132,11 +136,20 @@ public class TemplateManagerService implements ITemplateManagerService {
 	}
 
     @Override
-    public List<TemplateZone> getTemplateZones(Integer templateId) {
+    public List<Zone> getTemplateZones(Integer templateId) {
         TemplateZoneExample example = new TemplateZoneExample();
         example.createCriteria()
                 .andTemplateIdEqualTo(templateId);
-        return templateZoneMapper.selectByExample(example);
+        List<TemplateZone> tzs = templateZoneMapper.selectByExample(example);
+        List<Integer> zoneIds = new ArrayList<>();
+        tzs.forEach(item-> {
+            zoneIds.add(item.getZoneId());
+        });
+
+        ZoneExample zoneExample = new ZoneExample();
+        zoneExample.createCriteria()
+                .andIdIn(zoneIds);
+        return zoneMapper.selectByExample(zoneExample);
     }
 
     @Override
