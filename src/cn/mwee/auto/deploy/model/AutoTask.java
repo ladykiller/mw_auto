@@ -28,11 +28,11 @@ public class AutoTask {
 
     /**
      * 执行用户
-     * tasks.execUser
+     * tasks.exec_user
      *
      * @mbggenerated
      */
-    private String execuser;
+    private String execUser;
 
     /**
      * 参数
@@ -144,26 +144,26 @@ public class AutoTask {
 
     /**
      * 执行用户
-     * This method returns the value of the database column tasks.execUser
+     * This method returns the value of the database column tasks.exec_user
      *
-     * @return the value of tasks.execUser
+     * @return the value of tasks.exec_user
      *
      * @mbggenerated
      */
-    public String getExecuser() {
-        return execuser;
+    public String getExecUser() {
+        return execUser;
     }
 
     /**
      * 执行用户
-     * This method sets the value of the database column tasks.execUser
+     * This method sets the value of the database column tasks.exec_user
      *
-     * @param execuser the value for tasks.execUser
+     * @param execUser the value for tasks.exec_user
      *
      * @mbggenerated
      */
-    public void setExecuser(String execuser) {
-        this.execuser = execuser;
+    public void setExecUser(String execUser) {
+        this.execUser = execUser;
     }
 
     /**

@@ -18,6 +18,7 @@ public class AddAutoTaskRequest
     @NotBlank(message="任务描述不能为空")
     private String desc;
 
-    @NotBlank(message="执行用户不能为空")
-    private String execuser;
+    private String execUser;
+
+    private String params;
 }
