@@ -1,4 +1,4 @@
-package cn.mwee.auto.deploy.contract;
+package cn.mwee.auto.deploy.contract.task;
 
 import lombok.Data;
 import org.hibernate.validator.constraints.NotBlank;
@@ -17,4 +17,7 @@ public class AddAutoTaskRequest
 
     @NotBlank(message="任务描述不能为空")
     private String desc;
+
+    @NotBlank(message="执行用户不能为空")
+    private String execuser;
 }

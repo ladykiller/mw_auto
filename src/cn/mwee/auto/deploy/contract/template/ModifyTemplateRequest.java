@@ -19,6 +19,8 @@ public class ModifyTemplateRequest {
     @NotBlank(message="模板名不能为空")
     private String name;
 
+    private Byte review;
+
     /**
      * 版本控制系统类型
      * templates.vcs_type

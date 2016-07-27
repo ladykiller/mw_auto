@@ -2,6 +2,8 @@ package cn.mwee.auto.deploy.service;
 
 import java.util.List;
 
+import cn.mwee.auto.deploy.contract.template.QueryTemplatesRequest;
+import cn.mwee.auto.deploy.contract.template.QueryTemplatesResult;
 import cn.mwee.auto.deploy.contract.template.TemplateTaskContract;
 import cn.mwee.auto.deploy.model.AutoTask;
 import cn.mwee.auto.deploy.model.AutoTemplate;
@@ -15,7 +17,7 @@ public interface ITemplateManagerService {
 
     AutoTemplate getTemplate(int templateId);
 
-    boolean addTemplate(String templateName);
+    boolean addTemplate(AutoTemplate template);
 
     boolean deleteTemplate(int templateId);
 
@@ -25,7 +27,7 @@ public interface ITemplateManagerService {
      * 获取模板
      * @return
      */
-    TemplateTaskContract.QueryTemplatesResult getTemplates(TemplateTaskContract.QueryTemplatesRequest request);
+    QueryTemplatesResult getTemplates(QueryTemplatesRequest request);
 
 
 

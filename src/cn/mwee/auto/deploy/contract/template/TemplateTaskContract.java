@@ -27,20 +27,4 @@ public class TemplateTaskContract extends BaseContract {
 	@NotNull(message="未指定模板")
 	private Integer templateId;
 
-	/**
-     * Created by huming on 16/7/21.
-     */
-    @Data
-    public static class QueryTemplatesRequest {
-
-        private PageInfo page;
-
-    }
-
-	/**
-     * Created by huming on 16/7/21.
-     */
-    public static class QueryTemplatesResult extends BaseQueryResult<AutoTask> {
-
-    }
 }

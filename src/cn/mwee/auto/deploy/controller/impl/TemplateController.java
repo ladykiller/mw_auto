@@ -31,20 +31,20 @@ public class TemplateController extends AutoAbstractController implements ITempl
     private ITemplateManagerService templateManagerService;
 
     @Override
-    @Contract(TemplateTaskContract.QueryTemplatesRequest.class)
+    @Contract(QueryTemplatesRequest.class)
     public NormalReturn queryTemplates(ServiceRequest request)
     {
-        TemplateTaskContract.QueryTemplatesRequest req = request.getContract();
-        TemplateTaskContract.QueryTemplatesResult result = templateManagerService.getTemplates(req);
+        QueryTemplatesRequest req = request.getContract();
+        QueryTemplatesResult result = templateManagerService.getTemplates(req);
         return new NormalReturn(result);
     }
 
     @Override
-    @Contract(AddTemplateRequest.class)
+    @Model(contract = AddTemplateRequest.class, model = AutoTemplate.class)
     public NormalReturn addTemplate(ServiceRequest request)
     {
-        AddTemplateRequest contract = request.getContract();
-        templateManagerService.addTemplate(contract.getTemplateName());
+        AutoTemplate contract = request.getModel();
+        templateManagerService.addTemplate(contract);
         return new NormalReturn("success");
     }
 

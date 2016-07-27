@@ -1,4 +1,4 @@
-package cn.mwee.auto.deploy.contract;
+package cn.mwee.auto.deploy.contract.task;
 
 import cn.mwee.auto.common.db.PageInfo;
 import lombok.Data;
