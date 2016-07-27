@@ -9,6 +9,8 @@ import java.util.Date;
 import java.util.List;
 import cn.mwee.auto.common.db.BaseModel;
 import cn.mwee.auto.common.db.BaseQueryResult;
+import cn.mwee.auto.deploy.contract.template.QueryTemplatesRequest;
+import cn.mwee.auto.deploy.contract.template.QueryTemplatesResult;
 import cn.mwee.auto.deploy.model.*;
 import static cn.mwee.auto.deploy.util.AutoConsts.*;
 
@@ -94,7 +96,7 @@ public class TemplateManagerService implements ITemplateManagerService {
 	}
 
 	@Override
-	public TemplateTaskContract.QueryTemplatesResult getTemplates(TemplateTaskContract.QueryTemplatesRequest req)
+	public QueryTemplatesResult getTemplates(QueryTemplatesRequest req)
 	{
 		AutoTemplateExample e = new AutoTemplateExample();
 		AutoTemplateExample.Criteria c = e.createCriteria();
@@ -102,7 +104,7 @@ public class TemplateManagerService implements ITemplateManagerService {
 		c.andInuseEqualTo(InUseType.IN_USE);
 		e.setOrderByClause("id desc");
 
-		TemplateTaskContract.QueryTemplatesResult rs = new TemplateTaskContract.QueryTemplatesResult();
+		QueryTemplatesResult rs = new QueryTemplatesResult();
 		BaseQueryResult<AutoTask> qrs = BaseModel.selectByPage(autoTemplateMapper, e, req.getPage());
 
 		rs.setList(qrs.getList());

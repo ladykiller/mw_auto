@@ -1,7 +1,7 @@
 package cn.mwee.auto.deploy.service;
 
-import cn.mwee.auto.deploy.contract.QueryTasksRequest;
-import cn.mwee.auto.deploy.contract.QueryTasksResult;
+import cn.mwee.auto.deploy.contract.task.QueryTasksRequest;
+import cn.mwee.auto.deploy.contract.task.QueryTasksResult;
 import cn.mwee.auto.deploy.model.AutoTask;
 
 import java.util.List;

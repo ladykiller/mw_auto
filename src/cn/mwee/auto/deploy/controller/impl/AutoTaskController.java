@@ -1,6 +1,6 @@
 package cn.mwee.auto.deploy.controller.impl;
 
-import cn.mwee.auto.deploy.contract.*;
+import cn.mwee.auto.deploy.contract.task.*;
 import cn.mwee.auto.deploy.controller.IAutoTaskController;
 import cn.mwee.auto.deploy.model.AutoTask;
 import cn.mwee.auto.deploy.service.ITaskManagerService;
@@ -74,10 +74,10 @@ public class AutoTaskController implements IAutoTaskController
     }
 
     @Override
-    @Contract(AutoTask.class)
+    @Model(contract = ModifyTaskRequest.class, model = AutoTask.class)
     public NormalReturn modifyTask(ServiceRequest request)
     {
-        AutoTask contract = request.getContract();
+        AutoTask contract = request.getModel();
         boolean modifySuccess = taskManagerService.modifyTask(contract);
         if(modifySuccess)
         {

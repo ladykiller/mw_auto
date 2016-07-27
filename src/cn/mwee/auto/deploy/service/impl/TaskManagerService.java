@@ -7,8 +7,8 @@ package cn.mwee.auto.deploy.service.impl;
 
 import cn.mwee.auto.common.db.BaseModel;
 import cn.mwee.auto.common.db.BaseQueryResult;
-import cn.mwee.auto.deploy.contract.QueryTasksRequest;
-import cn.mwee.auto.deploy.contract.QueryTasksResult;
+import cn.mwee.auto.deploy.contract.task.QueryTasksRequest;
+import cn.mwee.auto.deploy.contract.task.QueryTasksResult;
 import cn.mwee.auto.deploy.model.AutoTaskExample;
 import static cn.mwee.auto.deploy.util.AutoConsts.*;
 import org.springframework.beans.factory.annotation.Autowired;

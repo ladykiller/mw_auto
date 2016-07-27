@@ -1,4 +1,4 @@
-package cn.mwee.auto.deploy.contract;
+package cn.mwee.auto.deploy.contract.task;
 
 import cn.mwee.auto.common.db.BaseQueryResult;
 import cn.mwee.auto.deploy.model.AutoTask;
