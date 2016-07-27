@@ -35,6 +35,14 @@ public class AutoTemplate {
     private String vcsRep;
 
     /**
+     * 审核(0:否,1:是)
+     * templates.review
+     *
+     * @mbggenerated
+     */
+    private Byte review;
+
+    /**
      * 使用中(0:否,1:是)
      * templates.inuse
      *
@@ -166,6 +174,30 @@ public class AutoTemplate {
      */
     public void setVcsRep(String vcsRep) {
         this.vcsRep = vcsRep;
+    }
+
+    /**
+     * 审核(0:否,1:是)
+     * This method returns the value of the database column templates.review
+     *
+     * @return the value of templates.review
+     *
+     * @mbggenerated
+     */
+    public Byte getReview() {
+        return review;
+    }
+
+    /**
+     * 审核(0:否,1:是)
+     * This method sets the value of the database column templates.review
+     *
+     * @param review the value for templates.review
+     *
+     * @mbggenerated
+     */
+    public void setReview(Byte review) {
+        this.review = review;
     }
 
     /**

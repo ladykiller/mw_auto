@@ -40,7 +40,7 @@ public class PermissionController implements IPermissionController {
                 return new NormalReturn("500","error","Code already used");
             }
             AuthPermission authPermission = new AuthPermission();
-            authPermission.setParentId(req.getParentId()==null?-1:req.getParentId());
+            authPermission.setParentId(req.getParentId()==null ? -1 : req.getParentId());
             authPermission.setCode(req.getCode());
             authPermission.setName(req.getName());
             authPermission.setLevel(req.getLevel());

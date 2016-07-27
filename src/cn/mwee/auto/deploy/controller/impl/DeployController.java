@@ -213,11 +213,11 @@ public class DeployController implements IDeployController {
 	public NormalReturn getTemplateTasks(ServiceRequest request) {
 		TemplateTaskContract req = request.getContract();
 		try {
-			List<TemplateTask>  list = templateManagerService.getTempleteTasks(req.getTemplateId());
-			Set<Integer> taskIdSet = new HashSet<>();
-			for (TemplateTask tt : list) {
-				taskIdSet.add(tt.getTaskId());
-			}
+			List<TemplateTask>  list = templateManagerService.getTemplateTasks(req.getTemplateId());
+            Set<Integer> taskIdSet = new HashSet<>();
+            for (TemplateTask tt : list) {
+                taskIdSet.add(tt.getTaskId());
+            }
 			return new NormalReturn("200","success", taskManagerService.getAutoTasksByIds(taskIdSet));
 		} catch (Exception e) {
 			logger.error("startFlow error:", e);

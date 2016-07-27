@@ -5,13 +5,16 @@
  */
 package cn.mwee.auto.deploy.service.impl;
 
-import java.util.Date;
-import java.util.List;
+import java.util.*;
+
 import cn.mwee.auto.common.db.BaseModel;
 import cn.mwee.auto.common.db.BaseQueryResult;
+import cn.mwee.auto.deploy.dao.TemplateZoneMapper;
 import cn.mwee.auto.deploy.model.*;
 import static cn.mwee.auto.deploy.util.AutoConsts.*;
 
+import cn.mwee.auto.deploy.service.ITaskManagerService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import cn.mwee.auto.deploy.contract.template.TemplateTaskContract;
@@ -31,6 +34,12 @@ public class TemplateManagerService implements ITemplateManagerService {
 	
 	@Autowired
 	TemplateTaskMapper templateTaskMapper;
+
+    @Autowired
+    private TemplateZoneMapper templateZoneMapper;
+
+    @Autowired
+    private ITaskManagerService taskManagerService;
 
 	@Override
 	public AutoTemplate getTemplate(int templateId) {
@@ -112,16 +121,49 @@ public class TemplateManagerService implements ITemplateManagerService {
 	}
 
 	@Override
-	public List<TemplateTask> getTempleteTasks(int templateId)
+	public List<TemplateTask> getTemplateTasks(int templateId)
 	{
 		TemplateTaskExample example = new TemplateTaskExample();
 		TemplateTaskExample.Criteria c = example.createCriteria();
-
 		c.andTemplateIdEqualTo(templateId);
 		c.andInuseEqualTo(InUseType.IN_USE);
-
 		example.setOrderByClause("`group` ASC,priority ASC");
 		return templateTaskMapper.selectByExample(example);
 	}
 
+    @Override
+    public List<TemplateZone> getTemplateZones(Integer templateId) {
+        TemplateZoneExample example = new TemplateZoneExample();
+        example.createCriteria()
+                .andTemplateIdEqualTo(templateId);
+        return templateZoneMapper.selectByExample(example);
+    }
+
+    @Override
+    public List<AutoTask> getTemplateSimpleTasks(Integer templateId) {
+        List<TemplateTask>  list = getTemplateTasks(templateId);
+        Set<Integer> taskIdSet = new HashSet<>();
+        for (TemplateTask tt : list) {
+            taskIdSet.add(tt.getTaskId());
+        }
+        return taskManagerService.getAutoTasksByIds(taskIdSet);
+    }
+
+    @Override
+    public List<String> getTemplateTaskParamKeys(Integer templateId) {
+        List<AutoTask> tasks = getTemplateSimpleTasks(templateId);
+        Set<String> paramKeySet = new HashSet<>();
+        for (AutoTask task:tasks) {
+            String paramStr = task.getParams();
+            if (StringUtils.isEmpty(paramStr)) continue;
+            String[] params = paramStr.split(" ");
+            for (String param : params) {
+                if (StringUtils.isEmpty(param)) continue;
+                paramKeySet.add(param.replace("#",""));
+            }
+        }
+        List<String> paramKeys = new ArrayList<>();
+        paramKeys.addAll(paramKeySet);
+        return paramKeys;
+    }
 }

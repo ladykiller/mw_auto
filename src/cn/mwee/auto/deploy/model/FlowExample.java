@@ -441,6 +441,66 @@ public class FlowExample {
             return (Criteria) this;
         }
 
+        public Criteria andProjectIdIsNull() {
+            addCriterion("project_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andProjectIdIsNotNull() {
+            addCriterion("project_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andProjectIdEqualTo(Integer value) {
+            addCriterion("project_id =", value, "projectId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProjectIdNotEqualTo(Integer value) {
+            addCriterion("project_id <>", value, "projectId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProjectIdGreaterThan(Integer value) {
+            addCriterion("project_id >", value, "projectId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProjectIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("project_id >=", value, "projectId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProjectIdLessThan(Integer value) {
+            addCriterion("project_id <", value, "projectId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProjectIdLessThanOrEqualTo(Integer value) {
+            addCriterion("project_id <=", value, "projectId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProjectIdIn(List<Integer> values) {
+            addCriterion("project_id in", values, "projectId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProjectIdNotIn(List<Integer> values) {
+            addCriterion("project_id not in", values, "projectId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProjectIdBetween(Integer value1, Integer value2) {
+            addCriterion("project_id between", value1, value2, "projectId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProjectIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("project_id not between", value1, value2, "projectId");
+            return (Criteria) this;
+        }
+
         public Criteria andZonesIsNull() {
             addCriterion("zones is null");
             return (Criteria) this;
@@ -578,6 +638,76 @@ public class FlowExample {
 
         public Criteria andParamsNotBetween(String value1, String value2) {
             addCriterion("params not between", value1, value2, "params");
+            return (Criteria) this;
+        }
+
+        public Criteria andVcsBranchIsNull() {
+            addCriterion("vcs_branch is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andVcsBranchIsNotNull() {
+            addCriterion("vcs_branch is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andVcsBranchEqualTo(String value) {
+            addCriterion("vcs_branch =", value, "vcsBranch");
+            return (Criteria) this;
+        }
+
+        public Criteria andVcsBranchNotEqualTo(String value) {
+            addCriterion("vcs_branch <>", value, "vcsBranch");
+            return (Criteria) this;
+        }
+
+        public Criteria andVcsBranchGreaterThan(String value) {
+            addCriterion("vcs_branch >", value, "vcsBranch");
+            return (Criteria) this;
+        }
+
+        public Criteria andVcsBranchGreaterThanOrEqualTo(String value) {
+            addCriterion("vcs_branch >=", value, "vcsBranch");
+            return (Criteria) this;
+        }
+
+        public Criteria andVcsBranchLessThan(String value) {
+            addCriterion("vcs_branch <", value, "vcsBranch");
+            return (Criteria) this;
+        }
+
+        public Criteria andVcsBranchLessThanOrEqualTo(String value) {
+            addCriterion("vcs_branch <=", value, "vcsBranch");
+            return (Criteria) this;
+        }
+
+        public Criteria andVcsBranchLike(String value) {
+            addCriterion("vcs_branch like", value, "vcsBranch");
+            return (Criteria) this;
+        }
+
+        public Criteria andVcsBranchNotLike(String value) {
+            addCriterion("vcs_branch not like", value, "vcsBranch");
+            return (Criteria) this;
+        }
+
+        public Criteria andVcsBranchIn(List<String> values) {
+            addCriterion("vcs_branch in", values, "vcsBranch");
+            return (Criteria) this;
+        }
+
+        public Criteria andVcsBranchNotIn(List<String> values) {
+            addCriterion("vcs_branch not in", values, "vcsBranch");
+            return (Criteria) this;
+        }
+
+        public Criteria andVcsBranchBetween(String value1, String value2) {
+            addCriterion("vcs_branch between", value1, value2, "vcsBranch");
+            return (Criteria) this;
+        }
+
+        public Criteria andVcsBranchNotBetween(String value1, String value2) {
+            addCriterion("vcs_branch not between", value1, value2, "vcsBranch");
             return (Criteria) this;
         }
 

@@ -66,7 +66,7 @@
 			<generatedKey column="ID" sqlStatement="MYSQL" identity="true" />
 		</table>
 -->
-
+<!--
 		<table tableName="flow_tasks" domainObjectName="FlowTask"
 			   enableCountByExample="true"
 			   enableUpdateByExample="true"
@@ -75,7 +75,8 @@
 			   selectByExampleQueryId="true">
 			<generatedKey column="ID" sqlStatement="MYSQL" identity="true" />
 		</table>
- <!--
+		-->
+
 		<table tableName="flows" domainObjectName="Flow"
 			   enableCountByExample="true"
 			   enableUpdateByExample="true"
@@ -84,8 +85,6 @@
 			   selectByExampleQueryId="true">
 			<generatedKey column="ID" sqlStatement="MYSQL" identity="true" />
 		</table>
- -->		
-<!-- 
 		<table tableName="templates" domainObjectName="AutoTemplate"
 			   enableCountByExample="true"
 			   enableUpdateByExample="true"
@@ -94,8 +93,7 @@
 			   selectByExampleQueryId="true">
 			<generatedKey column="ID" sqlStatement="MYSQL" identity="true" />
 		</table>
- -->
-<!-- 
+<!--
 		<table tableName="template_zones" domainObjectName="TemplateZone"
 			   enableCountByExample="true"
 			   enableUpdateByExample="true"

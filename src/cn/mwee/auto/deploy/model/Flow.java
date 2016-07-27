@@ -27,6 +27,14 @@ public class Flow {
     private Integer templateId;
 
     /**
+     * 项目Id
+     * flows.project_id
+     *
+     * @mbggenerated
+     */
+    private Integer projectId;
+
+    /**
      * 区域Ip或host信息
      * flows.zones
      *
@@ -41,6 +49,14 @@ public class Flow {
      * @mbggenerated
      */
     private String params;
+
+    /**
+     * 版本控制系统分支
+     * flows.vcs_branch
+     *
+     * @mbggenerated
+     */
+    private String vcsBranch;
 
     /**
      * 状态 [新建,运行中,手动,定时,失败,成功]
@@ -151,6 +167,30 @@ public class Flow {
     }
 
     /**
+     * 项目Id
+     * This method returns the value of the database column flows.project_id
+     *
+     * @return the value of flows.project_id
+     *
+     * @mbggenerated
+     */
+    public Integer getProjectId() {
+        return projectId;
+    }
+
+    /**
+     * 项目Id
+     * This method sets the value of the database column flows.project_id
+     *
+     * @param projectId the value for flows.project_id
+     *
+     * @mbggenerated
+     */
+    public void setProjectId(Integer projectId) {
+        this.projectId = projectId;
+    }
+
+    /**
      * 区域Ip或host信息
      * This method returns the value of the database column flows.zones
      *
@@ -196,6 +236,30 @@ public class Flow {
      */
     public void setParams(String params) {
         this.params = params;
+    }
+
+    /**
+     * 版本控制系统分支
+     * This method returns the value of the database column flows.vcs_branch
+     *
+     * @return the value of flows.vcs_branch
+     *
+     * @mbggenerated
+     */
+    public String getVcsBranch() {
+        return vcsBranch;
+    }
+
+    /**
+     * 版本控制系统分支
+     * This method sets the value of the database column flows.vcs_branch
+     *
+     * @param vcsBranch the value for flows.vcs_branch
+     *
+     * @mbggenerated
+     */
+    public void setVcsBranch(String vcsBranch) {
+        this.vcsBranch = vcsBranch;
     }
 
     /**

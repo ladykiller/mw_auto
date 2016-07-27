@@ -10,10 +10,14 @@ import cn.mwee.auto.misc.aspect.contract.Contract;
 import cn.mwee.auto.misc.aspect.contract.Model;
 import cn.mwee.auto.misc.req.ServiceRequest;
 import cn.mwee.auto.misc.resp.NormalReturn;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by huming on 16/7/21.
@@ -21,6 +25,8 @@ import java.util.List;
 @Controller
 public class TemplateController extends AutoAbstractController implements ITemplateController
 {
+    private static final Logger logger = LoggerFactory.getLogger(TemplateController.class);
+
     @Autowired
     private ITemplateManagerService templateManagerService;
 
@@ -89,10 +95,31 @@ public class TemplateController extends AutoAbstractController implements ITempl
 
     @Override
     @Contract(TemplateIdQuery.class)
-    public NormalReturn getTempleteTasks(ServiceRequest request)
+    public NormalReturn getTemplateTasks(ServiceRequest request)
     {
         TemplateIdQuery contract = request.getContract();
-        List<TemplateTask> tasks = templateManagerService.getTempleteTasks(contract.getTemplateId());
+        List<TemplateTask> tasks = templateManagerService.getTemplateTasks(contract.getTemplateId());
         return new NormalReturn(tasks);
+    }
+
+    @Override
+    @Contract(TemplateIdQuery.class)
+    public NormalReturn getTemplateInfo(ServiceRequest request) {
+        TemplateIdQuery req = request.getContract();
+        try {
+            Map<String,Object> result = new HashMap<>();
+            //基础信息
+            result.put("baseInfo",templateManagerService.getTemplate(req.getTemplateId()));
+            //区域信息
+            result.put("zones", templateManagerService.getTemplateZones(req.getTemplateId()));
+            //任务信息
+//            result.put("tasks", templateManagerService.getTemplateSimpleTasks(req.getTemplateId()));
+            //任务参数key
+            result.put("taskParamKeys", templateManagerService.getTemplateTaskParamKeys(req.getTemplateId()));
+            return new NormalReturn("200","success",result);
+        } catch (Exception e) {
+            logger.error("",e);
+            return new NormalReturn("500","error",e.getMessage());
+        }
     }
 }
