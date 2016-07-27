@@ -451,6 +451,76 @@ public class AutoTaskExample {
             return (Criteria) this;
         }
 
+        public Criteria andExecuserIsNull() {
+            addCriterion("execUser is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andExecuserIsNotNull() {
+            addCriterion("execUser is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andExecuserEqualTo(String value) {
+            addCriterion("execUser =", value, "execuser");
+            return (Criteria) this;
+        }
+
+        public Criteria andExecuserNotEqualTo(String value) {
+            addCriterion("execUser <>", value, "execuser");
+            return (Criteria) this;
+        }
+
+        public Criteria andExecuserGreaterThan(String value) {
+            addCriterion("execUser >", value, "execuser");
+            return (Criteria) this;
+        }
+
+        public Criteria andExecuserGreaterThanOrEqualTo(String value) {
+            addCriterion("execUser >=", value, "execuser");
+            return (Criteria) this;
+        }
+
+        public Criteria andExecuserLessThan(String value) {
+            addCriterion("execUser <", value, "execuser");
+            return (Criteria) this;
+        }
+
+        public Criteria andExecuserLessThanOrEqualTo(String value) {
+            addCriterion("execUser <=", value, "execuser");
+            return (Criteria) this;
+        }
+
+        public Criteria andExecuserLike(String value) {
+            addCriterion("execUser like", value, "execuser");
+            return (Criteria) this;
+        }
+
+        public Criteria andExecuserNotLike(String value) {
+            addCriterion("execUser not like", value, "execuser");
+            return (Criteria) this;
+        }
+
+        public Criteria andExecuserIn(List<String> values) {
+            addCriterion("execUser in", values, "execuser");
+            return (Criteria) this;
+        }
+
+        public Criteria andExecuserNotIn(List<String> values) {
+            addCriterion("execUser not in", values, "execuser");
+            return (Criteria) this;
+        }
+
+        public Criteria andExecuserBetween(String value1, String value2) {
+            addCriterion("execUser between", value1, value2, "execuser");
+            return (Criteria) this;
+        }
+
+        public Criteria andExecuserNotBetween(String value1, String value2) {
+            addCriterion("execUser not between", value1, value2, "execuser");
+            return (Criteria) this;
+        }
+
         public Criteria andParamsIsNull() {
             addCriterion("params is null");
             return (Criteria) this;

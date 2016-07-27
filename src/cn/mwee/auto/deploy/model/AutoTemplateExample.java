@@ -521,6 +521,66 @@ public class AutoTemplateExample {
             return (Criteria) this;
         }
 
+        public Criteria andReviewIsNull() {
+            addCriterion("review is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andReviewIsNotNull() {
+            addCriterion("review is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andReviewEqualTo(Byte value) {
+            addCriterion("review =", value, "review");
+            return (Criteria) this;
+        }
+
+        public Criteria andReviewNotEqualTo(Byte value) {
+            addCriterion("review <>", value, "review");
+            return (Criteria) this;
+        }
+
+        public Criteria andReviewGreaterThan(Byte value) {
+            addCriterion("review >", value, "review");
+            return (Criteria) this;
+        }
+
+        public Criteria andReviewGreaterThanOrEqualTo(Byte value) {
+            addCriterion("review >=", value, "review");
+            return (Criteria) this;
+        }
+
+        public Criteria andReviewLessThan(Byte value) {
+            addCriterion("review <", value, "review");
+            return (Criteria) this;
+        }
+
+        public Criteria andReviewLessThanOrEqualTo(Byte value) {
+            addCriterion("review <=", value, "review");
+            return (Criteria) this;
+        }
+
+        public Criteria andReviewIn(List<Byte> values) {
+            addCriterion("review in", values, "review");
+            return (Criteria) this;
+        }
+
+        public Criteria andReviewNotIn(List<Byte> values) {
+            addCriterion("review not in", values, "review");
+            return (Criteria) this;
+        }
+
+        public Criteria andReviewBetween(Byte value1, Byte value2) {
+            addCriterion("review between", value1, value2, "review");
+            return (Criteria) this;
+        }
+
+        public Criteria andReviewNotBetween(Byte value1, Byte value2) {
+            addCriterion("review not between", value1, value2, "review");
+            return (Criteria) this;
+        }
+
         public Criteria andInuseIsNull() {
             addCriterion("inuse is null");
             return (Criteria) this;

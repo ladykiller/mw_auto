@@ -27,6 +27,14 @@ public class AutoTask {
     private String exec;
 
     /**
+     * 执行用户
+     * tasks.execUser
+     *
+     * @mbggenerated
+     */
+    private String execuser;
+
+    /**
      * 参数
      * tasks.params
      *
@@ -132,6 +140,30 @@ public class AutoTask {
      */
     public void setExec(String exec) {
         this.exec = exec;
+    }
+
+    /**
+     * 执行用户
+     * This method returns the value of the database column tasks.execUser
+     *
+     * @return the value of tasks.execUser
+     *
+     * @mbggenerated
+     */
+    public String getExecuser() {
+        return execuser;
+    }
+
+    /**
+     * 执行用户
+     * This method sets the value of the database column tasks.execUser
+     *
+     * @param execuser the value for tasks.execUser
+     *
+     * @mbggenerated
+     */
+    public void setExecuser(String execuser) {
+        this.execuser = execuser;
     }
 
     /**
