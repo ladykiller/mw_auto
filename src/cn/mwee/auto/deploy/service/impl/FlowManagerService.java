@@ -130,7 +130,8 @@ public class FlowManagerService implements IFlowManagerService {
                 ft.setTaskType(tt.getTaskType());
                 ft.setFlowId(flowId);
                 ft.setZone(localHost);
-                genBuildParam(tt,ft,flow);
+//                genBuildParam(tt,ft,flow);
+                replaceParams(ft,paramsMap);
                 ft.setState(TaskState.INIT.name());
                 ft.setCreateTime(new Date());
                 fts.add(ft);

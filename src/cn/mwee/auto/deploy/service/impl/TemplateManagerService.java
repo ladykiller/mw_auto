@@ -175,7 +175,9 @@ public class TemplateManagerService implements ITemplateManagerService {
             String[] params = paramStr.split(" ");
             for (String param : params) {
                 if (StringUtils.isEmpty(param)) continue;
-                paramKeySet.add(param.replace("#",""));
+                if (param.startsWith("#") && param.endsWith("#")) {
+                    paramKeySet.add(param.replace("#",""));
+                }
             }
         }
         List<String> paramKeys = new ArrayList<>();
