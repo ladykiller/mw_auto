@@ -3,7 +3,7 @@
 
 #10.0.21.135 G3
 
-TARGET_IPS="139.224.29.153";
+TARGET_IPS="10.0.21.135";
 
 TARGET_DIR="/opt/service/";
 
