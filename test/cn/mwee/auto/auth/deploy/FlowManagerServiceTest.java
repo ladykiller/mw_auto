@@ -76,7 +76,7 @@ public class FlowManagerServiceTest extends AbstractJUnit4SpringContextTests {
 	
 	
 	@Test
-	public void testCreateFlow() {
+	public void testCreateFlow() throws Exception {
 		Flow flow = new Flow();
 		flow.setName("测试流程");
 		flow.setTemplateId(1);
@@ -88,7 +88,7 @@ public class FlowManagerServiceTest extends AbstractJUnit4SpringContextTests {
 	}
 	
 	@Test
-	public void testExecuteFlow(){
+	public void testExecuteFlow() throws Exception {
 		boolean flag = flowManagerService.executeFlow(11);
 		try {
 			Thread.currentThread().sleep(10*60*60*1000);

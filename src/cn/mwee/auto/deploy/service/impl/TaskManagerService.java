@@ -69,6 +69,7 @@ public class TaskManagerService implements ITaskManagerService {
 		AutoTaskExample.Criteria c = e.createCriteria();
 
 		c.andInuseEqualTo(InUseType.IN_USE);
+		e.setOrderByClause("id DESC");
 
 		QueryTasksResult rs = new QueryTasksResult();
 		BaseQueryResult<AutoTask> qrs = BaseModel.selectByPage(autoTaskMapper, e, req.getPage());
