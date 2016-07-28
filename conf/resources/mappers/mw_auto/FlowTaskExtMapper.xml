@@ -32,13 +32,14 @@
 	      SELECT LAST_INSERT_ID()
 	    </selectKey>
 		insert into 
-		flow_tasks(flow_id, `zone`,task_id,`task_param`,`group`,priority,`state`,create_time) 
+		flow_tasks(flow_id, `zone`,task_id,`task_param`,task_type,`group`,priority,`state`,create_time)
 		values
 		<foreach collection="list" item="element" index="index" open="(" separator="),("  close=")">
             #{element.flowId},
             #{element.zone},
             #{element.taskId},
             #{element.taskParam},
+			#{element.taskType},
             #{element.group},
             #{element.priority},
             #{element.state},
