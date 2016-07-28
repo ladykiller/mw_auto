@@ -87,7 +87,7 @@ public class FlowManagerService implements IFlowManagerService {
         if (template == null) {
             throw new NullPointerException("未找到相应模板");
         }
-        flow.setIsreview(template.getInuse() == 1 ? FlowReviewType.Unreviewed : FlowReviewType.Ignore);
+        flow.setIsreview(template.getReview() == 1 ? FlowReviewType.Unreviewed : FlowReviewType.Ignore);
         flow.setCreateTime(new Date());
         flow.setCreator(SecurityUtils.getSubject().getPrincipal() == null ? "system" : SecurityUtils.getSubject().getPrincipal().toString());
         flow.setOperater(flow.getCreator());
