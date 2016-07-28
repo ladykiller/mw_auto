@@ -50,6 +50,7 @@ pullcode() {
     git checkout $branch
     git pull -f
     echo "end pull code \n"
+    echo "MW_SUCCESS"
 }
 
 while getopts "b:v:u:p:" arg
