@@ -32,7 +32,7 @@ import cn.mwee.auto.deploy.util.AutoConsts.TaskState;
 
 /**
  * @author mengfanyuan
- * 2016年7月5日下午8:13:34
+ *         2016年7月5日下午8:13:34
  */
 @Component
 public class SimpleTaskExecutor implements TaskExecutor {
@@ -56,7 +56,7 @@ public class SimpleTaskExecutor implements TaskExecutor {
     @Value("${auto.ssh.auths}")
     private String sshAuthStrs;
 
-    private Map<String,String> sshAuthMap = new HashMap<>();
+    private Map<String, String> sshAuthMap = new HashMap<>();
 
     @PostConstruct
     public void init() {
@@ -64,7 +64,7 @@ public class SimpleTaskExecutor implements TaskExecutor {
         for (String sshAuth : sshAuths) {
             if (StringUtils.isEmpty(sshAuth)) continue;
             String[] sshAuthInfo = sshAuth.split(":");
-            sshAuthMap.put(sshAuthInfo[0],sshAuthInfo[1]);
+            sshAuthMap.put(sshAuthInfo[0], sshAuthInfo[1]);
         }
     }
 
@@ -80,7 +80,7 @@ public class SimpleTaskExecutor implements TaskExecutor {
             FlowTask nextFlowTask = flowManagerService.getCurrentGroupNextTask(flowTask.getId());
             if (nextFlowTask != null) {
                 //执行下一任务
-                executeChain(nextFlowTask);
+                taskMsgSender.sendTask(nextFlowTask);
             } else {
                 //当前组任务执行结束
                 if (flowManagerService.checkConcurrentGroupsFinished(flowTask.getId())) {
@@ -121,13 +121,15 @@ public class SimpleTaskExecutor implements TaskExecutor {
 
         Integer logId = flowTaskLogService.addLog(flowTask, task);
         try {
-            String command = task.getExec() + " " + flowTask.getTaskParam();
+            String shell = StringUtils.isNotBlank(task.getExec()) ? task.getExec() : "";
+            String taskParam = StringUtils.isNotBlank(flowTask.getTaskParam()) ? flowTask.getTaskParam() : "";
+            String command = shell + " " + taskParam;
 
             //获取脚步执行用户
             String sshShellUser = task.getExecUser();
             String sshPriAddr = sshAuthMap.get(sshShellUser);
             if (StringUtils.isEmpty(sshPriAddr)) {
-                throw new Exception("找不到用户["+sshShellUser+"]的秘钥地址，请检查是否配置");
+                throw new Exception("找不到用户[" + sshShellUser + "]的秘钥地址，请检查是否配置");
             }
 
             instance = new SSHManager(sshShellUser, sshPriAddr, flowTask.getZone(), flowTaskLogService, springTaskExecutor, logId);

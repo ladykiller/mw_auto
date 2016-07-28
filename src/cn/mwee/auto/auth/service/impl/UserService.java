@@ -49,7 +49,7 @@ public class UserService implements IUserService {
     private IUserRoleService userRoleService;
 
 	@Override
-	public boolean addUser(AuthUser authUser) throws Exception {
+	public Integer addUser(AuthUser authUser) throws Exception {
 		//不能增加超级用户
 		if ("admin".equals(authUser.getUsername())) throw new Exception("You can not add admin user");
 		//用户已存在
@@ -59,7 +59,7 @@ public class UserService implements IUserService {
 		authUser.setCreateTime(new Date());
 		authUser.setCreator(SecurityUtils.getSubject().getPrincipal().toString());
 		int result = authUserMapper.insertSelective(authUser);
-		return result > 0;
+		return result > 0 ? authUser.getId() : null;
 	}
 
 	@Override
@@ -173,12 +173,13 @@ public class UserService implements IUserService {
     }
 
 	@Override
-	public int delUserLogic(Integer authUserId) {
+	public int delUserLogic(String username) {
 		AuthUser authUser = new AuthUser();
-		authUser.setId(authUserId);
 		authUser.setUpdateTime(new Date());
 		authUser.setStatus(false);
-		return authUserMapper.updateByPrimaryKeySelective(authUser);
+        AuthUserExample example = new AuthUserExample();
+        example.createCriteria().andUsernameEqualTo(username);
+        return authUserMapper.updateByExampleSelective(authUser,example);
 	}
 
 	/**

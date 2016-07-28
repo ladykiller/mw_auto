@@ -15,5 +15,5 @@ public class UserDelContract extends BaseContract {
      * 用户Id
      */
     @NotNull(message = "未指定用户")
-    private Integer userId;
+    private String userName;
 }

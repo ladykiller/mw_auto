@@ -13,12 +13,6 @@ public class UserAddContract extends BaseContract {
     /**
      * 用户名
      */
-    @Email(message = "非邮箱")
+    @NotBlank(message = "用户名不能为空")
     private String userName;
-
-    /**
-     * 密码
-     */
-    @NotBlank(message = "密码不能为空")
-    private String password;
 }

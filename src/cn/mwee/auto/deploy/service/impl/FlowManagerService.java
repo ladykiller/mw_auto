@@ -223,6 +223,7 @@ public class FlowManagerService implements IFlowManagerService {
                     break;
                 case 3:
                     ft.setTaskParam(deployShell);
+                    setDeployShell(template,flow,ft);
                     break;
             }
             ft.setState(TaskState.INIT.name());
@@ -243,12 +244,28 @@ public class FlowManagerService implements IFlowManagerService {
         String repUrl = template.getVcsRep();
         if (StringUtils.isNotBlank(repUrl)
                 && StringUtils.isNotBlank(flow.getVcsBranch())) {
-            StringBuilder sb = new StringBuilder(ft.getTaskParam());
+            String vcsType = template.getVcsType();
+            String vcsRep = template.getVcsRep();
+            String vcsBranch =flow.getVcsBranch();
+            String projectName = repUrl.substring(repUrl.lastIndexOf('/')+1,repUrl.lastIndexOf('.'));
+            String.format(updateShell,vcsType,vcsRep,vcsBranch,projectName);
+            /*StringBuilder sb = new StringBuilder(ft.getTaskParam());
             sb.append(" -v ").append(template.getVcsType())
                     .append(" -u ").append(template.getVcsRep())
                     .append(" -b ").append(flow.getVcsBranch())
-                    .append(" -p ").append(repUrl.substring(repUrl.lastIndexOf('/')+1,repUrl.lastIndexOf('.')));
-            ft.setTaskParam(sb.toString());
+                    .append(" -p ").append(repUrl.substring(repUrl.lastIndexOf('/')+1,repUrl.lastIndexOf('.')));*/
+            ft.setTaskParam(String.format(updateShell,vcsType,vcsRep,vcsBranch,projectName));
+        }
+    }
+
+    private void setDeployShell(AutoTemplate template,Flow flow, FlowTask ft) {
+        String repUrl = template.getVcsRep();
+        if (StringUtils.isNotBlank(repUrl)
+                && StringUtils.isNotBlank(flow.getVcsBranch())) {
+            String projectName = repUrl.substring(repUrl.lastIndexOf('/')+1,repUrl.lastIndexOf('.'));
+            String zones = flow.getZones();
+            String.format(deployShell,projectName,zones);
+            ft.setTaskParam(String.format(deployShell,projectName,zones));
         }
     }
 
@@ -579,5 +596,9 @@ public class FlowManagerService implements IFlowManagerService {
         flow.setReviewdate(new Date());
         flow.setReviewer(SecurityUtils.getSubject().getPrincipal().toString());
         return flowMapper.updateByPrimaryKeySelective(flow) > 0;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(String.format("sh /opt/auto/local/pullcode.sh -v %s -u %s -b %s -p","s222","s333","b","p"));
     }
 }

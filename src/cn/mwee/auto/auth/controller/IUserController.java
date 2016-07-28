@@ -50,4 +50,10 @@ public interface IUserController extends IController {
 	 */
 	NormalReturn userDel(ServiceRequest request);
 
+	/**
+	 * 重置密码
+	 * @param request
+	 * @return
+	 */
+	NormalReturn resetPassword(ServiceRequest request);
 }

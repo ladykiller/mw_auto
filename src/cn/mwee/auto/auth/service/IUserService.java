@@ -45,7 +45,7 @@ public interface IUserService {
 	 * @param authUser
 	 * @return
 	 */
-	boolean addUser(AuthUser authUser) throws Exception;
+	Integer addUser(AuthUser authUser) throws Exception;
 	
 	/**
 	 * update user by userId
@@ -97,8 +97,8 @@ public interface IUserService {
 
 	/**
 	 * 逻辑删除用户
-	 * @param authUserId
+	 * @param username
 	 * @return
      */
-	int delUserLogic(Integer authUserId);
+	int delUserLogic(String username);
 }
