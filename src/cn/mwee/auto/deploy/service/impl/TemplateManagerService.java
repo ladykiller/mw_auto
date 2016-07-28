@@ -19,7 +19,13 @@ import static cn.mwee.auto.deploy.util.AutoConsts.*;
 import cn.mwee.auto.deploy.service.ITaskManagerService;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.api.errors.GitAPIException;
+import org.eclipse.jgit.lib.Ref;
+import org.eclipse.jgit.transport.CredentialsProvider;
+import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import cn.mwee.auto.deploy.contract.template.TemplateTaskContract;
 import cn.mwee.auto.deploy.dao.AutoTemplateMapper;
@@ -47,6 +53,11 @@ public class TemplateManagerService implements ITemplateManagerService {
 
     @Autowired
     private ZoneMapper zoneMapper;
+
+    @Value(value = "${git.username}")
+    private String gitUserName;
+    @Value(value = "${git.password}")
+    private String gitPassword;
 
 	@Override
 	public AutoTemplate getTemplate(int templateId) {
@@ -183,5 +194,35 @@ public class TemplateManagerService implements ITemplateManagerService {
         List<String> paramKeys = new ArrayList<>();
         paramKeys.addAll(paramKeySet);
         return paramKeys;
+    }
+
+    @Override
+    public VcsModel getGitRepInfo(AutoTemplate template) throws GitAPIException {
+        String gitRepUrl = template.getVcsRep();
+        VcsModel vcsModel = new VcsModel();
+        if (StringUtils.isEmpty(gitRepUrl)) return vcsModel;
+
+        List<String> gitBranches = new ArrayList<>();
+        CredentialsProvider credentialsProvider = new UsernamePasswordCredentialsProvider(gitUserName,gitPassword);
+        Collection<Ref> refs = Git.lsRemoteRepository()
+                .setHeads(true)
+                .setTags(true)
+                .setRemote(gitRepUrl)
+                .setCredentialsProvider(credentialsProvider)
+                .call();
+        for (Ref ref : refs ) {
+            String refName = ref.getName();
+            gitBranches.add(refName.substring(refName.lastIndexOf('/')+1));
+        }
+        vcsModel.setType(template.getVcsType());
+        vcsModel.setRepUrl(gitRepUrl);
+        vcsModel.setBrachesNames(gitBranches);
+        vcsModel.setProjectName(gitRepUrl.substring(gitRepUrl.lastIndexOf('/')+1,gitRepUrl.lastIndexOf('.')));
+        return vcsModel;
+    }
+
+    public static void main(String[] args) {
+        String url = "http://git.9now.net:10080/devops/mw_auto.git";
+        System.out.println(url.substring(url.lastIndexOf('/')+1,url.lastIndexOf('.')));
     }
 }

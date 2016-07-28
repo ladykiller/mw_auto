@@ -107,6 +107,11 @@ public class TemplateController extends AutoAbstractController implements ITempl
     public NormalReturn getTemplateInfo(ServiceRequest request) {
         TemplateIdQuery req = request.getContract();
         try {
+            AutoTemplate template = templateManagerService.getTemplate(req.getTemplateId());
+            if (template == null) {
+                return new NormalReturn("500","error","模板不存在");
+            }
+
             Map<String,Object> result = new HashMap<>();
             //基础信息
             result.put("baseInfo",templateManagerService.getTemplate(req.getTemplateId()));
@@ -116,6 +121,7 @@ public class TemplateController extends AutoAbstractController implements ITempl
 //            result.put("tasks", templateManagerService.getTemplateSimpleTasks(req.getTemplateId()));
             //任务参数key
             result.put("taskParamKeys", templateManagerService.getTemplateTaskParamKeys(req.getTemplateId()));
+            result.put("vcsInfo", templateManagerService.getGitRepInfo(template));
             return new NormalReturn("200","success",result);
         } catch (Exception e) {
             logger.error("",e);

@@ -10,6 +10,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import cn.mwee.auto.deploy.model.AutoTemplate;
 import cn.mwee.auto.deploy.service.ITaskManagerService;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.lib.Ref;
@@ -99,14 +100,10 @@ public class DeployController implements IDeployController {
 		// TODO Auto-generated method stub
 		GitBrancheContract req = request.getContract();
 		try {
-			CredentialsProvider credentialsProvider = new UsernamePasswordCredentialsProvider("mengfanyuan","wt19892414");
-			Collection<Ref> refs = Git.lsRemoteRepository()
-					.setHeads(true)
-                    .setTags(true)
-                    .setRemote(req.getGitRepUrl())
-					.setCredentialsProvider(credentialsProvider)
-                    .call();
-			return new NormalReturn("200","success", refs);
+            AutoTemplate template = new AutoTemplate();
+            template.setVcsType("git");
+            template.setVcsRep(req.getGitRepUrl());
+			return new NormalReturn("200","success", templateManagerService.getGitRepInfo(template));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			logger.error("startFlow error:", e);

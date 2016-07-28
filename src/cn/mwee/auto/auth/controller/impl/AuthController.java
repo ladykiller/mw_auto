@@ -33,6 +33,7 @@ import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 
 import cn.mwee.auto.auth.controller.IAuthController;
@@ -53,6 +54,9 @@ public class AuthController implements IAuthController {
     @Autowired
     private IUserService userService;
 
+	@Value(value = "${shiro.session.timeout}")
+	private long sessionTimeout;
+
 	@Override
 	@Contract(LoginReq.class)
 	public NormalReturn login(ServiceRequest request) {
@@ -62,7 +66,7 @@ public class AuthController implements IAuthController {
 			UsernamePasswordToken token = new UsernamePasswordToken(req.getUserName(), req.getPassword());
 			subject.login(token);
 			Session session = subject.getSession(false);
-			session.setTimeout(24*60*60*1000L);
+			session.setTimeout(sessionTimeout);
 			session.setAttribute("subject", subject);
 			LoginResp resp = new LoginResp();
 			resp.setToken(subject.getSession().getId().toString());
