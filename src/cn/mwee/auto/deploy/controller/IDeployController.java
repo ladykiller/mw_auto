@@ -71,6 +71,11 @@ public interface IDeployController extends IController {
 	 */
 	NormalReturn getFolwTaskLog(ServiceRequest request);
 
+    /**
+     * 区域日志
+     * @param request
+     * @return
+     */
 	@Contract(ZoneStateContract.class)
 	NormalReturn getZoneLogs(ServiceRequest request);
 

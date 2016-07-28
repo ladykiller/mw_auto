@@ -59,15 +59,17 @@ public class DeployController implements IDeployController {
 		try {
 			
 			int flowId = flowManagerService.createFlow(createFlowTask(req), req.getParams());
-			
 			if (flowId > 0) {
+                if (req.getExeNow() == 1) {
+                    flowManagerService.executeFlow(flowId);
+                }
 				return new NormalReturn("200", "success",flowId);
 			} else {
 				return new NormalReturn("500", "error","error");
 			}
 		} catch (Exception e) {
 			logger.error("addFlow error:", e);
-			return new NormalReturn("500", "error",e.getMessage());
+			return new NormalReturn("500", e.getMessage(),"error");
 		}
 	}
 

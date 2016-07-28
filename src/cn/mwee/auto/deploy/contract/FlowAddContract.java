@@ -53,6 +53,11 @@ public class FlowAddContract {
     @Range(min = 0,max = 1,message = "参数不合法")
     private Byte needBuild;
 
+    /**
+     * 是否立即执行（0，否；1，是）
+     */
+    private byte exeNow;
+
 	/**
      *  执行参数
      */
