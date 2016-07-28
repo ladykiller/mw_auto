@@ -19,6 +19,7 @@ import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSON;
@@ -61,6 +62,15 @@ public class FlowManagerService implements IFlowManagerService {
 
     @Resource
     private TaskMsgSender taskMsgSender;
+
+    @Value(value = "${prepare.update.shell}")
+    private String updateShell;
+
+    @Value(value = "${prepare.build.shell}")
+    private String buildShell;
+
+    @Value(value = "${prepare.deploy.shell}")
+    private String deployShell;
 
     @Override
     public int createFlow(Flow flow, Map<String, Object> params) throws Exception {
@@ -108,42 +118,42 @@ public class FlowManagerService implements IFlowManagerService {
 
     @Override
     public boolean initFlowTasks(int flowId) {
-        //copy tasks from template_tasks to flow_tasks
+        /*
+         * copy tasks from template_tasks to flow_tasks
+         */
+
         //get flow
         Flow flow = flowMapper.selectByPrimaryKey(flowId);
         if (flow == null) {
             throw new NullPointerException("Cant find flow for id:" + flowId);
+        }
+        //get template
+        AutoTemplate template = templateManagerService.getTemplate(flow.getTemplateId());
+        if (template == null) {
+            throw new NullPointerException("Cant find template for id:" + flow.getTemplateId());
         }
 
         //get flowTask
         TemplateTaskExample ttExample = new TemplateTaskExample();
         ttExample.createCriteria().andTemplateIdEqualTo(flow.getTemplateId());
         List<TemplateTask> tts = templateTaskMapper.selectByExample(ttExample);
-        //get zones
+        //parse zones
         String zoneStr = flow.getZones();
         String[] zones = zoneStr.split(",");
-        //get params
-        Map<String, String> paramsMap = JSON.parseObject(flow.getParams(), Map.class);
+        //parse Task EXE params
+        Map<String, String> paramsMap = new HashMap<>();
+        String paramStr = flow.getParams();
+        if (StringUtils.isNotBlank(paramStr)) {
+            paramsMap = JSON.parseObject(flow.getParams(), Map.class);
+        }
 
-        //copy tasks
         List<FlowTask> fts = new ArrayList<>();
+        //prepare组(根据模板中是否有配置git仓库添加prepare组)
+        if (StringUtils.isNotBlank(template.getVcsRep())) {
+            fts.addAll(buildPrepareTasks(flow,template));
+        }
+        //copy tasks
         for (TemplateTask tt : tts) {
-            //准备组
-            if (tt.getGroup().equals(GroupType.PrepareGroup)) {
-                FlowTask ft = new FlowTask();
-                ft.setGroup(tt.getGroup());
-                ft.setPriority(tt.getPriority());
-                ft.setTaskId(tt.getTaskId());
-                ft.setTaskType(tt.getTaskType());
-                ft.setFlowId(flowId);
-                ft.setZone(localHost);
-//                genBuildParam(tt,ft,flow);
-                replaceParams(ft, paramsMap);
-                ft.setState(TaskState.INIT.name());
-                ft.setCreateTime(new Date());
-                fts.add(ft);
-                continue;
-            }
             //区域组
             for (String zone : zones) {
                 if (StringUtils.isBlank(zone)) continue;
@@ -187,19 +197,57 @@ public class FlowManagerService implements IFlowManagerService {
     }
 
     /**
+     * 构建prepare组的任务
+     * @param flow
+     * @param template
+     * @return
+     */
+    private List<FlowTask> buildPrepareTasks(Flow flow, AutoTemplate template) {
+        List<FlowTask> list = new ArrayList<>();
+        for (short i = 1; i< 4; i++) {
+            if (i == 2 && flow.getNeedbuild() == 0) continue;
+            FlowTask ft = new FlowTask();
+            ft.setGroup(GroupType.PrepareGroup);
+            ft.setPriority(i);
+            ft.setTaskId(0);
+            ft.setTaskType(TaskType.AUTO.name());
+            ft.setFlowId(flow.getId());
+            ft.setZone(localHost);
+            switch (i) {
+                case 1:
+                    ft.setTaskParam(updateShell);
+                    setBuildParam(template,flow,ft);
+                    break;
+                case 2:
+                    ft.setTaskParam(buildShell);
+                    break;
+                case 3:
+                    ft.setTaskParam(deployShell);
+                    break;
+            }
+            ft.setState(TaskState.INIT.name());
+            ft.setCreateTime(new Date());
+            list.add(ft);
+        }
+        return list;
+    }
+
+    /**
      * 构建任务的参数生成
      *
-     * @param tt
-     * @param ft
+     * @param template
      * @param flow
+     * @param ft
      */
-    private void genBuildParam(TemplateTask tt, FlowTask ft, Flow flow) {
-        AutoTemplate template = templateManagerService.getTemplate(tt.getTemplateId());
-        if (template != null && StringUtils.isNotBlank(flow.getVcsBranch())) {
-            StringBuilder sb = new StringBuilder();
-            sb.append(" ").append(template.getVcsType())
-                    .append(" ").append(template.getVcsRep())
-                    .append(" ").append(flow.getVcsBranch());
+    private void setBuildParam(AutoTemplate template,Flow flow, FlowTask ft) {
+        String repUrl = template.getVcsRep();
+        if (StringUtils.isNotBlank(repUrl)
+                && StringUtils.isNotBlank(flow.getVcsBranch())) {
+            StringBuilder sb = new StringBuilder(ft.getTaskParam());
+            sb.append(" -v ").append(template.getVcsType())
+                    .append(" -u ").append(template.getVcsRep())
+                    .append(" -b ").append(flow.getVcsBranch())
+                    .append(" -p ").append(repUrl.substring(repUrl.lastIndexOf('/')+1,repUrl.lastIndexOf('.')));
             ft.setTaskParam(sb.toString());
         }
     }
