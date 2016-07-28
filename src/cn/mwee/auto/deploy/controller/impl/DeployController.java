@@ -10,6 +10,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import cn.mwee.auto.deploy.contract.*;
 import cn.mwee.auto.deploy.model.AutoTemplate;
 import cn.mwee.auto.deploy.service.ITaskManagerService;
 import org.eclipse.jgit.api.Git;
@@ -21,12 +22,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
-import cn.mwee.auto.deploy.contract.ExecuteFlowTaskContract;
-import cn.mwee.auto.deploy.contract.FlowAddContract;
-import cn.mwee.auto.deploy.contract.FlowStartContract;
-import cn.mwee.auto.deploy.contract.GitBrancheContract;
 import cn.mwee.auto.deploy.contract.template.TemplateTaskContract;
-import cn.mwee.auto.deploy.contract.ZoneStateContract;
 import cn.mwee.auto.deploy.controller.IDeployController;
 import cn.mwee.auto.deploy.model.Flow;
 import cn.mwee.auto.deploy.model.TemplateTask;
@@ -117,6 +113,8 @@ public class DeployController implements IDeployController {
 		flow.setTemplateId(req.getTemplateId());
         flow.setProjectId(req.getProjectId());
 		flow.setZones(req.getZones());
+        flow.setVcsBranch(req.getVcsBranch());
+        flow.setNeedbuild(req.getNeedBuild());
 		return flow;
 	}
 
@@ -222,5 +220,17 @@ public class DeployController implements IDeployController {
 			return new NormalReturn("500",e.getMessage(), "error");
 		}
 	}
-	
+
+    @Override
+    @Contract(FlowReviewContract.class)
+    public NormalReturn reviewFlow(ServiceRequest request) {
+        FlowReviewContract req = request.getContract();
+        try {
+            flowManagerService.reviewFlow(req.getFlowId(),req.getIsReview());
+            return new NormalReturn("200","success", "success");
+        } catch (Exception e) {
+            logger.error("startFlow error:", e);
+            return new NormalReturn("500",e.getMessage(), "error");
+        }
+    }
 }

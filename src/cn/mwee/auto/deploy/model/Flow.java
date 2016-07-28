@@ -51,6 +51,14 @@ public class Flow {
     private String params;
 
     /**
+     * 是否需要构建：0，不需要；1，需要
+     * flows.needbuild
+     *
+     * @mbggenerated
+     */
+    private Byte needbuild;
+
+    /**
      * 版本控制系统分支
      * flows.vcs_branch
      *
@@ -65,6 +73,28 @@ public class Flow {
      * @mbggenerated
      */
     private String state;
+
+    /**
+     * 审核状态：0，无需审核；1，未审核；2，审核通过；3审核不通过
+     * flows.isreview
+     *
+     * @mbggenerated
+     */
+    private Byte isreview;
+
+    /**
+     * flows.reviewer
+     *
+     * @mbggenerated
+     */
+    private String reviewer;
+
+    /**
+     * flows.reviewdate
+     *
+     * @mbggenerated
+     */
+    private Date reviewdate;
 
     /**
      * 创建者
@@ -239,6 +269,30 @@ public class Flow {
     }
 
     /**
+     * 是否需要构建：0，不需要；1，需要
+     * This method returns the value of the database column flows.needbuild
+     *
+     * @return the value of flows.needbuild
+     *
+     * @mbggenerated
+     */
+    public Byte getNeedbuild() {
+        return needbuild;
+    }
+
+    /**
+     * 是否需要构建：0，不需要；1，需要
+     * This method sets the value of the database column flows.needbuild
+     *
+     * @param needbuild the value for flows.needbuild
+     *
+     * @mbggenerated
+     */
+    public void setNeedbuild(Byte needbuild) {
+        this.needbuild = needbuild;
+    }
+
+    /**
      * 版本控制系统分支
      * This method returns the value of the database column flows.vcs_branch
      *
@@ -284,6 +338,74 @@ public class Flow {
      */
     public void setState(String state) {
         this.state = state;
+    }
+
+    /**
+     * 审核状态：0，无需审核；1，未审核；2，审核通过；3审核不通过
+     * This method returns the value of the database column flows.isreview
+     *
+     * @return the value of flows.isreview
+     *
+     * @mbggenerated
+     */
+    public Byte getIsreview() {
+        return isreview;
+    }
+
+    /**
+     * 审核状态：0，无需审核；1，未审核；2，审核通过；3审核不通过
+     * This method sets the value of the database column flows.isreview
+     *
+     * @param isreview the value for flows.isreview
+     *
+     * @mbggenerated
+     */
+    public void setIsreview(Byte isreview) {
+        this.isreview = isreview;
+    }
+
+    /**
+     * This method returns the value of the database column flows.reviewer
+     *
+     * @return the value of flows.reviewer
+     *
+     * @mbggenerated
+     */
+    public String getReviewer() {
+        return reviewer;
+    }
+
+    /**
+     * This method sets the value of the database column flows.reviewer
+     *
+     * @param reviewer the value for flows.reviewer
+     *
+     * @mbggenerated
+     */
+    public void setReviewer(String reviewer) {
+        this.reviewer = reviewer;
+    }
+
+    /**
+     * This method returns the value of the database column flows.reviewdate
+     *
+     * @return the value of flows.reviewdate
+     *
+     * @mbggenerated
+     */
+    public Date getReviewdate() {
+        return reviewdate;
+    }
+
+    /**
+     * This method sets the value of the database column flows.reviewdate
+     *
+     * @param reviewdate the value for flows.reviewdate
+     *
+     * @mbggenerated
+     */
+    public void setReviewdate(Date reviewdate) {
+        this.reviewdate = reviewdate;
     }
 
     /**

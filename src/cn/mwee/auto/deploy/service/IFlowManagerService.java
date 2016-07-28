@@ -20,7 +20,7 @@ public interface IFlowManagerService {
      * @param params
      * @return
      */
-    int createFlow(Flow flow,Map<String,Object> params);
+    int createFlow(Flow flow,Map<String,Object> params) throws Exception;
 
     /**
      * 执行任务流
@@ -29,7 +29,7 @@ public interface IFlowManagerService {
      * @param operater
      * @return
      */
-    boolean executeFlow(int flowId);
+    boolean executeFlow(int flowId) throws Exception;
 
     /**
      * 初始化流程任务
@@ -120,7 +120,12 @@ public interface IFlowManagerService {
 	 */
 	List<Flow> getFlows();
 
-	
+    /**
+     * 审核流程
+     * @param flowId
+     * @return
+     */
+	boolean reviewFlow(Integer flowId,Byte isReview);
 
 	
 }

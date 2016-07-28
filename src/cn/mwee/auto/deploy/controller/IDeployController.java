@@ -80,5 +80,13 @@ public interface IDeployController extends IController {
 	 * @return
 	 */
 	NormalReturn getTemplateTasks(ServiceRequest request);
-	
+
+    /**
+     * 流程审核
+     * @param request
+     * @return
+     */
+    NormalReturn reviewFlow(ServiceRequest request);
+
+
 }

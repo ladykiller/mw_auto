@@ -641,6 +641,66 @@ public class FlowExample {
             return (Criteria) this;
         }
 
+        public Criteria andNeedbuildIsNull() {
+            addCriterion("needbuild is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andNeedbuildIsNotNull() {
+            addCriterion("needbuild is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andNeedbuildEqualTo(Byte value) {
+            addCriterion("needbuild =", value, "needbuild");
+            return (Criteria) this;
+        }
+
+        public Criteria andNeedbuildNotEqualTo(Byte value) {
+            addCriterion("needbuild <>", value, "needbuild");
+            return (Criteria) this;
+        }
+
+        public Criteria andNeedbuildGreaterThan(Byte value) {
+            addCriterion("needbuild >", value, "needbuild");
+            return (Criteria) this;
+        }
+
+        public Criteria andNeedbuildGreaterThanOrEqualTo(Byte value) {
+            addCriterion("needbuild >=", value, "needbuild");
+            return (Criteria) this;
+        }
+
+        public Criteria andNeedbuildLessThan(Byte value) {
+            addCriterion("needbuild <", value, "needbuild");
+            return (Criteria) this;
+        }
+
+        public Criteria andNeedbuildLessThanOrEqualTo(Byte value) {
+            addCriterion("needbuild <=", value, "needbuild");
+            return (Criteria) this;
+        }
+
+        public Criteria andNeedbuildIn(List<Byte> values) {
+            addCriterion("needbuild in", values, "needbuild");
+            return (Criteria) this;
+        }
+
+        public Criteria andNeedbuildNotIn(List<Byte> values) {
+            addCriterion("needbuild not in", values, "needbuild");
+            return (Criteria) this;
+        }
+
+        public Criteria andNeedbuildBetween(Byte value1, Byte value2) {
+            addCriterion("needbuild between", value1, value2, "needbuild");
+            return (Criteria) this;
+        }
+
+        public Criteria andNeedbuildNotBetween(Byte value1, Byte value2) {
+            addCriterion("needbuild not between", value1, value2, "needbuild");
+            return (Criteria) this;
+        }
+
         public Criteria andVcsBranchIsNull() {
             addCriterion("vcs_branch is null");
             return (Criteria) this;
@@ -778,6 +838,196 @@ public class FlowExample {
 
         public Criteria andStateNotBetween(String value1, String value2) {
             addCriterion("`state` not between", value1, value2, "state");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsreviewIsNull() {
+            addCriterion("isreview is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsreviewIsNotNull() {
+            addCriterion("isreview is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsreviewEqualTo(Byte value) {
+            addCriterion("isreview =", value, "isreview");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsreviewNotEqualTo(Byte value) {
+            addCriterion("isreview <>", value, "isreview");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsreviewGreaterThan(Byte value) {
+            addCriterion("isreview >", value, "isreview");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsreviewGreaterThanOrEqualTo(Byte value) {
+            addCriterion("isreview >=", value, "isreview");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsreviewLessThan(Byte value) {
+            addCriterion("isreview <", value, "isreview");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsreviewLessThanOrEqualTo(Byte value) {
+            addCriterion("isreview <=", value, "isreview");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsreviewIn(List<Byte> values) {
+            addCriterion("isreview in", values, "isreview");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsreviewNotIn(List<Byte> values) {
+            addCriterion("isreview not in", values, "isreview");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsreviewBetween(Byte value1, Byte value2) {
+            addCriterion("isreview between", value1, value2, "isreview");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsreviewNotBetween(Byte value1, Byte value2) {
+            addCriterion("isreview not between", value1, value2, "isreview");
+            return (Criteria) this;
+        }
+
+        public Criteria andReviewerIsNull() {
+            addCriterion("reviewer is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andReviewerIsNotNull() {
+            addCriterion("reviewer is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andReviewerEqualTo(String value) {
+            addCriterion("reviewer =", value, "reviewer");
+            return (Criteria) this;
+        }
+
+        public Criteria andReviewerNotEqualTo(String value) {
+            addCriterion("reviewer <>", value, "reviewer");
+            return (Criteria) this;
+        }
+
+        public Criteria andReviewerGreaterThan(String value) {
+            addCriterion("reviewer >", value, "reviewer");
+            return (Criteria) this;
+        }
+
+        public Criteria andReviewerGreaterThanOrEqualTo(String value) {
+            addCriterion("reviewer >=", value, "reviewer");
+            return (Criteria) this;
+        }
+
+        public Criteria andReviewerLessThan(String value) {
+            addCriterion("reviewer <", value, "reviewer");
+            return (Criteria) this;
+        }
+
+        public Criteria andReviewerLessThanOrEqualTo(String value) {
+            addCriterion("reviewer <=", value, "reviewer");
+            return (Criteria) this;
+        }
+
+        public Criteria andReviewerLike(String value) {
+            addCriterion("reviewer like", value, "reviewer");
+            return (Criteria) this;
+        }
+
+        public Criteria andReviewerNotLike(String value) {
+            addCriterion("reviewer not like", value, "reviewer");
+            return (Criteria) this;
+        }
+
+        public Criteria andReviewerIn(List<String> values) {
+            addCriterion("reviewer in", values, "reviewer");
+            return (Criteria) this;
+        }
+
+        public Criteria andReviewerNotIn(List<String> values) {
+            addCriterion("reviewer not in", values, "reviewer");
+            return (Criteria) this;
+        }
+
+        public Criteria andReviewerBetween(String value1, String value2) {
+            addCriterion("reviewer between", value1, value2, "reviewer");
+            return (Criteria) this;
+        }
+
+        public Criteria andReviewerNotBetween(String value1, String value2) {
+            addCriterion("reviewer not between", value1, value2, "reviewer");
+            return (Criteria) this;
+        }
+
+        public Criteria andReviewdateIsNull() {
+            addCriterion("reviewdate is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andReviewdateIsNotNull() {
+            addCriterion("reviewdate is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andReviewdateEqualTo(Date value) {
+            addCriterion("reviewdate =", value, "reviewdate");
+            return (Criteria) this;
+        }
+
+        public Criteria andReviewdateNotEqualTo(Date value) {
+            addCriterion("reviewdate <>", value, "reviewdate");
+            return (Criteria) this;
+        }
+
+        public Criteria andReviewdateGreaterThan(Date value) {
+            addCriterion("reviewdate >", value, "reviewdate");
+            return (Criteria) this;
+        }
+
+        public Criteria andReviewdateGreaterThanOrEqualTo(Date value) {
+            addCriterion("reviewdate >=", value, "reviewdate");
+            return (Criteria) this;
+        }
+
+        public Criteria andReviewdateLessThan(Date value) {
+            addCriterion("reviewdate <", value, "reviewdate");
+            return (Criteria) this;
+        }
+
+        public Criteria andReviewdateLessThanOrEqualTo(Date value) {
+            addCriterion("reviewdate <=", value, "reviewdate");
+            return (Criteria) this;
+        }
+
+        public Criteria andReviewdateIn(List<Date> values) {
+            addCriterion("reviewdate in", values, "reviewdate");
+            return (Criteria) this;
+        }
+
+        public Criteria andReviewdateNotIn(List<Date> values) {
+            addCriterion("reviewdate not in", values, "reviewdate");
+            return (Criteria) this;
+        }
+
+        public Criteria andReviewdateBetween(Date value1, Date value2) {
+            addCriterion("reviewdate between", value1, value2, "reviewdate");
+            return (Criteria) this;
+        }
+
+        public Criteria andReviewdateNotBetween(Date value1, Date value2) {
+            addCriterion("reviewdate not between", value1, value2, "reviewdate");
             return (Criteria) this;
         }
 

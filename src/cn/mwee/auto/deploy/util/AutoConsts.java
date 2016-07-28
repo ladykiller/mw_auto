@@ -43,6 +43,12 @@ public class AutoConsts {
 		public static final Byte PostGroup 		= Byte.MAX_VALUE;
 	}
 
+    public static class FlowReviewType {
+        public static final Byte Ignore         = 0;    //无需审核
+        public static final Byte Unreviewed     = 1;    //未审核
+        public static final Byte Approved       = 2;    //审核通过
+        public static final Byte Unapproved     = 3;    //审核不通过
+    }
 
 	/** 使用中 */
 	public static class InUseType
