@@ -1,5 +1,7 @@
 package cn.mwee.auto.deploy.service;
 
+import cn.mwee.auto.common.db.BaseQueryResult;
+import cn.mwee.auto.deploy.contract.flow.FlowQueryContract;
 import cn.mwee.auto.deploy.model.Flow;
 import cn.mwee.auto.deploy.model.FlowTask;
 
@@ -106,7 +108,15 @@ public interface IFlowManagerService {
 	 * @return
 	 */
 	Map<String, String> getZonesState (Integer flowId);
-	
+
+    /**
+     * 获取区域状态
+     * @param flowId
+     * @param zone
+     * @return
+     */
+    String getZoneState (Integer flowId,String zone);
+
 	/**
 	 * 手动执行任务
 	 * @param flowTaskId
@@ -118,7 +128,14 @@ public interface IFlowManagerService {
 	 * 获取流程列表
 	 * @return
 	 */
-	List<Flow> getFlows();
+    BaseQueryResult<Flow> getFlows(FlowQueryContract req, Flow flow);
+
+    /**
+     * 获取流程
+     * @param flowId
+     * @return
+     */
+    Flow getFlow(Integer flowId);
 
     /**
      * 审核流程

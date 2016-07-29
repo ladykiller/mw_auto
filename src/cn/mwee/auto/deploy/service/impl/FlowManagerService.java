@@ -1,5 +1,9 @@
 package cn.mwee.auto.deploy.service.impl;
 
+import cn.mwee.auto.auth.util.AuthUtils;
+import cn.mwee.auto.common.db.BaseModel;
+import cn.mwee.auto.common.db.BaseQueryResult;
+import cn.mwee.auto.deploy.contract.flow.FlowQueryContract;
 import cn.mwee.auto.deploy.dao.*;
 import cn.mwee.auto.deploy.model.*;
 import cn.mwee.auto.deploy.service.IFlowManagerService;
@@ -532,6 +536,16 @@ public class FlowManagerService implements IFlowManagerService {
         return returnMap;
     }
 
+    @Override
+    public String getZoneState(Integer flowId, String zone) {
+        FlowTaskExample example = new FlowTaskExample();
+        example.createCriteria()
+                .andFlowIdEqualTo(flowId)
+                .andZoneEqualTo(zone);
+        List<Map<String, Object>> list = flowTaskExtMapper.countState(example);
+        return calcFlowStatus(list);
+    }
+
     public void executeFlowTask(Integer flowTaskId) {
         FlowTask flowTask = flowTaskMapper.selectByPrimaryKey(flowTaskId);
         taskMsgSender.sendTask(flowTask);
@@ -579,12 +593,20 @@ public class FlowManagerService implements IFlowManagerService {
     }
 
     @Override
-    public List<Flow> getFlows() {
+    public BaseQueryResult<Flow> getFlows(FlowQueryContract req,Flow flow) {
         FlowExample example = new FlowExample();
         example.setOrderByClause("id desc");
         example.setLimitStart(0);
         example.setLimitEnd(20);
-        return flowMapper.selectByExample(example);
+        example.createCriteria()
+                .andTemplateIdEqualTo(req.getTemplateId())
+                .andProjectIdEqualTo(req.getProjectId());
+        return BaseModel.selectByPage(flowMapper,example,req.getPageInfo(),req.getPageInfo() == null);
+    }
+
+    @Override
+    public Flow getFlow(Integer flowId) {
+        return  flowMapper.selectByPrimaryKey(flowId);
     }
 
     @Override
@@ -594,7 +616,7 @@ public class FlowManagerService implements IFlowManagerService {
         flow.setUpdateTime(new Date());
         flow.setIsreview(isReview);
         flow.setReviewdate(new Date());
-        flow.setReviewer(SecurityUtils.getSubject().getPrincipal().toString());
+        flow.setReviewer(AuthUtils.getCurrUserName());
         return flowMapper.updateByPrimaryKeySelective(flow) > 0;
     }
 

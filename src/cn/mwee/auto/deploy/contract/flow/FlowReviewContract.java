@@ -1,4 +1,4 @@
-package cn.mwee.auto.deploy.contract;
+package cn.mwee.auto.deploy.contract.flow;
 
 import cn.mwee.auto.deploy.contract.commom.BaseContract;
 import lombok.Data;

@@ -22,8 +22,8 @@
 	<select id="countState" parameterType="cn.mwee.auto.deploy.model.FlowTaskExample" resultType="java.util.HashMap">
 		SELECT COUNT(1) as count,state FROM flow_tasks
 		<if test="_parameter != null">
-	      <include refid="cn.mwee.auto.deploy.dao.FlowTaskMapper.Example_Where_Clause" />
-	    </if> 
+			<include refid="cn.mwee.auto.deploy.dao.FlowTaskMapper.Example_Where_Clause" />
+		</if>
 		GROUP BY state
 	</select>
 	

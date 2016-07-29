@@ -33,7 +33,7 @@ import org.springframework.stereotype.Component;
 @Order(0)
 @Component
 public class AuthManager {
-	@Pointcut("@annotation(cn.mwee.auto.misc.aspect.contract.Contract)")
+	@Pointcut("@annotation(cn.mwee.auto.misc.aspect.contract.Contract)||@annotation(cn.mwee.auto.misc.aspect.contract.Model)")
 	public void auth(){}
 
 	@Around("auth()")

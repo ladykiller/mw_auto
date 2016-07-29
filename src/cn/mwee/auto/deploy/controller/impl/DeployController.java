@@ -5,18 +5,14 @@
  */
 package cn.mwee.auto.deploy.controller.impl;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import cn.mwee.auto.deploy.contract.*;
+import cn.mwee.auto.deploy.contract.flow.*;
 import cn.mwee.auto.deploy.model.AutoTemplate;
+import cn.mwee.auto.deploy.model.FlowTaskLog;
 import cn.mwee.auto.deploy.service.ITaskManagerService;
-import org.eclipse.jgit.api.Git;
-import org.eclipse.jgit.lib.Ref;
-import org.eclipse.jgit.transport.CredentialsProvider;
-import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
+import cn.mwee.auto.misc.aspect.contract.Model;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -86,7 +82,7 @@ public class DeployController implements IDeployController {
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			logger.error("startFlow error:", e);
+			logger.error("", e);
 			return new NormalReturn("500",e.getMessage(), "error");
 		}
 		
@@ -104,7 +100,7 @@ public class DeployController implements IDeployController {
 			return new NormalReturn("200","success", templateManagerService.getGitRepInfo(template));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			logger.error("startFlow error:", e);
+			logger.error("", e);
 			return new NormalReturn("500",e.getMessage(), "error");
 		}
 	}
@@ -128,7 +124,7 @@ public class DeployController implements IDeployController {
 			return new NormalReturn("200","success", flowManagerService.getZonesState(req.getFlowId()));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			logger.error("startFlow error:", e);
+			logger.error("", e);
 			return new NormalReturn("500",e.getMessage(), "error");
 		}
 	}
@@ -141,7 +137,7 @@ public class DeployController implements IDeployController {
 			return new NormalReturn("200","success", flowManagerService.getZoneFlowTaskInfo(req.getFlowId(), req.getZone()));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			logger.error("startFlow error:", e);
+			logger.error("", e);
 			return new NormalReturn("500",e.getMessage(), "error");
 		}
 	}
@@ -154,7 +150,7 @@ public class DeployController implements IDeployController {
 			return new NormalReturn("200","success", flowManagerService.getZoneFlowTaskInfoSimple(req.getFlowId(), req.getZone()));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			logger.error("startFlow error:", e);
+			logger.error("", e);
 			return new NormalReturn("500",e.getMessage(), "error");
 		}
 	}
@@ -167,17 +163,20 @@ public class DeployController implements IDeployController {
 			flowManagerService.executeFlowTask(new Integer(req.getFlowTaskId()));
 			return new NormalReturn("200","success", "success");
 		} catch (Exception e) {
-			logger.error("startFlow error:", e);
+			logger.error("", e);
 			return new NormalReturn("500",e.getMessage(), "error");
 		}
 	}
 
 	@Override
+    @Model(contract = FlowQueryContract.class, model = Flow.class)
 	public NormalReturn getFlows(ServiceRequest request) {
+        FlowQueryContract req = request.getContract();
+        Flow model = request.getModel();
 		try {
-			return new NormalReturn("200","success", flowManagerService.getFlows());
+			return new NormalReturn("200","success", flowManagerService.getFlows(req,model));
 		} catch (Exception e) {
-			logger.error("startFlow error:", e);
+			logger.error("", e);
 			return new NormalReturn("200",e.getMessage(), "error");
 		}
 	}
@@ -189,7 +188,7 @@ public class DeployController implements IDeployController {
 		try {
 			return new NormalReturn("200","success", flowTaskLogService.getLog4FlowTask(new Integer(req.getFlowTaskId())));
 		} catch (Exception e) {
-			logger.error("startFlow error:", e);
+			logger.error("", e);
 			return new NormalReturn("500",e.getMessage(), "error");
 		}
 	}
@@ -199,9 +198,14 @@ public class DeployController implements IDeployController {
 	public NormalReturn getZoneLogs(ServiceRequest request) {
 		ZoneStateContract req = request.getContract();
 		try {
-			return new NormalReturn("200","success", flowTaskLogService.getZoneLogs(req.getFlowId(), req.getZone()));
+            List<FlowTaskLog> logs = flowTaskLogService.getZoneLogs(req.getFlowId(), req.getZone());
+            String state = flowManagerService.getZoneState(req.getFlowId(), req.getZone());
+            Map<String,Object> result = new HashMap<>();
+            result.put("state",state);
+            result.put("logs",logs);
+			return new NormalReturn("200","success", result);
 		} catch (Exception e) {
-			logger.error("startFlow error:", e);
+			logger.error("", e);
 			return new NormalReturn("500",e.getMessage(), "error");
 		}
 	}
@@ -218,7 +222,7 @@ public class DeployController implements IDeployController {
             }
 			return new NormalReturn("200","success", taskManagerService.getAutoTasksByIds(taskIdSet));
 		} catch (Exception e) {
-			logger.error("startFlow error:", e);
+			logger.error("", e);
 			return new NormalReturn("500",e.getMessage(), "error");
 		}
 	}
@@ -231,8 +235,25 @@ public class DeployController implements IDeployController {
             flowManagerService.reviewFlow(req.getFlowId(),req.getIsReview());
             return new NormalReturn("200","success", "success");
         } catch (Exception e) {
-            logger.error("startFlow error:", e);
+            logger.error("", e);
             return new NormalReturn("500",e.getMessage(), "error");
+        }
+    }
+
+    @Override
+    @Contract(FlowStartContract.class)
+    public NormalReturn getFlowInfo(ServiceRequest request) {
+        FlowStartContract req = request.getContract();
+        try {
+            Flow flow = flowManagerService.getFlow(req.getFlowId());
+            if (flow != null) {
+                return new NormalReturn("200","success",flow);
+            } else {
+                return new NormalReturn("500","flow not exists for id["+req.getFlowId()+"]");
+            }
+        } catch (Exception e) {
+            logger.error("", e);
+            return new NormalReturn("500",e.getMessage());
         }
     }
 }
