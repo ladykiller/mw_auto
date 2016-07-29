@@ -1,10 +1,16 @@
 #!/bin/sh
 echo "counter started"
-for i in `seq -w 30 -1 1`
+time=30
+
+if [ $# -ne 0 ]; then
+   time=$1
+fi
+for i in `seq -w $time -1 1`
 do
     echo  "$i";
     sleep 1;
 done
 
 echo "counter end"
+
 echo "MW_SUCCESS"
