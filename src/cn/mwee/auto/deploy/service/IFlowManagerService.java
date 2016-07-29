@@ -65,6 +65,13 @@ public interface IFlowManagerService {
     boolean checkConcurrentGroupsFinished(int flowTaskId);
 
     /**
+     * 更新流程任务状态(不更新时间)
+     * @param flowTaskId
+     * @param state
+     * @return
+     */
+    boolean updateTaskStatusWithouTime(int flowTaskId,String state);
+    /**
      * 更新流程任务状态
      * @return
      */

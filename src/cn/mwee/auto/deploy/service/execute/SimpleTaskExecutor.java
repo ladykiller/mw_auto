@@ -72,7 +72,7 @@ public class SimpleTaskExecutor implements TaskExecutor {
     public void executeChain(FlowTask flowTask) {
         // TODO Auto-generated method stub
         try {
-            if (!flowManagerService.updateTaskStatus(flowTask.getId(), TaskState.ING.name())) {
+            if (!flowManagerService.updateTaskStatusWithouTime(flowTask.getId(), TaskState.ING.name())) {
                 return;
             }
             if (!execute(flowTask)) {

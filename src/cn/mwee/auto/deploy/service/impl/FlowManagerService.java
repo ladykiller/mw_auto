@@ -337,13 +337,21 @@ public class FlowManagerService implements IFlowManagerService {
     }
 
     @Override
+    public boolean updateTaskStatusWithouTime(int flowTaskId, String state) {
+        FlowTask flowTask = new FlowTask();
+        flowTask.setId(flowTaskId);
+        flowTask.setState(state);
+        int result = flowTaskMapper.updateByPrimaryKeySelective(flowTask);
+        return result > 0;
+    }
+
+    @Override
     public boolean updateTaskStatus(int flowTaskId, String state) {
         FlowTask flowTask = new FlowTask();
         flowTask.setId(flowTaskId);
         flowTask.setState(state);
         flowTask.setUpdateTime(new Date());
-        int result = flowTaskMapper.updateByPrimaryKeySelective(flowTask);
-        return result > 0;
+        return flowTaskMapper.updateByPrimaryKeySelective(flowTask) > 0;
     }
 
     @Override
