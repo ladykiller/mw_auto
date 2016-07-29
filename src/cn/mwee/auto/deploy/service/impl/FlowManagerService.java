@@ -267,8 +267,7 @@ public class FlowManagerService implements IFlowManagerService {
         String repUrl = template.getVcsRep();
         if (StringUtils.isNotBlank(repUrl)) {
             String projectName = repUrl.substring(repUrl.lastIndexOf('/')+1,repUrl.lastIndexOf('.'));
-            String.format(buildShell,projectName);
-            ft.setTaskParam(String.format(deployShell,projectName));
+            ft.setTaskParam(String.format(buildShell,projectName));
         }
     }
 
