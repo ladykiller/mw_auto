@@ -7,3 +7,4 @@ do
 done
 
 echo "counter end"
+echo "MW_SUCCESS"
