@@ -112,7 +112,7 @@ public class SimpleTaskExecutor implements TaskExecutor {
             task.setId(0);
             task.setExec("");
             task.setName("prepare_group_task");
-            task.setExec("root");
+            task.setExecUser("root");
         } else {
             task = taskManagerService.getTask(flowTask.getTaskId());
         }
