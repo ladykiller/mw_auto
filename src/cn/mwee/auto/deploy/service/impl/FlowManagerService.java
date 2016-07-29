@@ -42,7 +42,6 @@ import java.util.Map;
 @Service
 public class FlowManagerService implements IFlowManagerService {
     private static final Logger logger = LoggerFactory.getLogger(SimpleTaskExecutor.class);
-    private static final String localHost = "localhost";
     @Autowired
     private FlowMapper flowMapper;
 
@@ -75,6 +74,9 @@ public class FlowManagerService implements IFlowManagerService {
 
     @Value(value = "${prepare.deploy.shell}")
     private String deployShell;
+
+    @Value("${localhost.name}")
+    private String localHost = "127.0.0.1";
 
     @Override
     public int createFlow(Flow flow, Map<String, Object> params) throws Exception {
@@ -534,8 +536,8 @@ public class FlowManagerService implements IFlowManagerService {
             String flowState = calcFlowStatus(list);
             returnMap.put(zone, flowState);
         }
-        String localZoneState = getZoneState(flowId,"localhost");
-        if (StringUtils.isNotBlank(localZoneState)) returnMap.put("localhost",localZoneState);
+        String localZoneState = getZoneState(flowId,localHost);
+        if (StringUtils.isNotBlank(localZoneState)) returnMap.put(localHost,localZoneState);
         return returnMap;
     }
 
