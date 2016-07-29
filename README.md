@@ -28,8 +28,3 @@ Test Overview, Unit Test/Mockito/AssertJ
 Eclipse/Idea, Gradle, Git
 
 --------
-DEV ENV ADD HOST:
-
-#dev env
-139.224.29.153 dbhost
-139.224.29.153 rabbitmq
