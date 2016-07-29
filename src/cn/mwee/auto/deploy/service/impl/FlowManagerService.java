@@ -530,9 +530,12 @@ public class FlowManagerService implements IFlowManagerService {
                     .andFlowIdEqualTo(flowId)
                     .andZoneEqualTo(zone);
             List<Map<String, Object>> list = flowTaskExtMapper.countState(example);
+            if (CollectionUtils.isEmpty(list)) continue;
             String flowState = calcFlowStatus(list);
             returnMap.put(zone, flowState);
         }
+        String localZoneState = getZoneState(flowId,"localhost");
+        if (StringUtils.isNotBlank(localZoneState)) returnMap.put("localhost",localZoneState);
         return returnMap;
     }
 
@@ -543,6 +546,7 @@ public class FlowManagerService implements IFlowManagerService {
                 .andFlowIdEqualTo(flowId)
                 .andZoneEqualTo(zone);
         List<Map<String, Object>> list = flowTaskExtMapper.countState(example);
+        if (CollectionUtils.isEmpty(list)) return null;
         return calcFlowStatus(list);
     }
 
