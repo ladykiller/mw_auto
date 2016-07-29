@@ -46,8 +46,8 @@ public class SimpleTaskMsgSender implements TaskMsgSender {
 	@Override
 	public void sendTask(FlowTask flowTask) {
 		//只初始化的手动任务修改状态为手动不发送
-		if (AutoConsts.TaskState.INIT.name().equals(flowTask.getState())
-				&& AutoConsts.TaskState.MANUAL.equals(flowTask.getTaskType())) {
+        if (AutoConsts.TaskState.INIT.name().equals(flowTask.getState())
+				&& AutoConsts.TaskState.MANUAL.name().equals(flowTask.getTaskType())) {
 			flowManagerService.updateTaskStatus(flowTask.getId(),AutoConsts.TaskState.MANUAL.name());
 			return;
 		}
