@@ -10,7 +10,7 @@
 
 	<!-- flow task -->
 
-	<rabbit:listener-container connection-factory="autoConnectionFactory" acknowledge="auto" message-converter="jsonMessageConvertor">
+	<rabbit:listener-container connection-factory="autoConnectionFactory" acknowledge="auto" message-converter="jsonMessageConvertor" prefetch="1" concurrency="20">
 		<rabbit:listener queue-names="queue.flow.task" ref="flowTaskListener" method="replyMessage"/>
 	</rabbit:listener-container>
 	
