@@ -41,7 +41,7 @@ public class UserServiceTest extends AbstractJUnit4SpringContextTests  {
 		user.setPassword("aaa");
 		user.setCreateTime(new Date());
 		user.setSalt("123");
-		boolean result = userService.addUser(user);
+		boolean result = userService.addUser(user) > 0;
 		if (result) {
 			System.out.println("user:"+user.getUsername() +",success");
 		}
