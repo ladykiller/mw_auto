@@ -14,8 +14,6 @@ import cn.mwee.auto.deploy.service.execute.TaskMsgSender;
 import static cn.mwee.auto.deploy.util.AutoConsts.*;
 
 import cn.mwee.auto.deploy.util.AutoUtils;
-import cn.mwee.auto.misc.common.exception.ServiceException;
-import cn.mwee.auto.misc.mq.MQSender;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -222,10 +220,11 @@ public class FlowManagerService implements IFlowManagerService {
             switch (i) {
                 case 1:
                     ft.setTaskParam(updateShell);
-                    setBuildParam(template,flow,ft);
+                    setPullShell(template,flow,ft);
                     break;
                 case 2:
                     ft.setTaskParam(buildShell);
+                    setBuildShell(template,ft);
                     break;
                 case 3:
                     ft.setTaskParam(deployShell);
@@ -240,13 +239,13 @@ public class FlowManagerService implements IFlowManagerService {
     }
 
     /**
-     * 构建任务的参数生成
+     * 代码更新脚本
      *
      * @param template
      * @param flow
      * @param ft
      */
-    private void setBuildParam(AutoTemplate template,Flow flow, FlowTask ft) {
+    private void setPullShell(AutoTemplate template, Flow flow, FlowTask ft) {
         String repUrl = template.getVcsRep();
         if (StringUtils.isNotBlank(repUrl)
                 && StringUtils.isNotBlank(flow.getVcsBranch())) {
@@ -255,25 +254,40 @@ public class FlowManagerService implements IFlowManagerService {
             String vcsBranch =flow.getVcsBranch();
             String projectName = repUrl.substring(repUrl.lastIndexOf('/')+1,repUrl.lastIndexOf('.'));
             String.format(updateShell,vcsType,vcsRep,vcsBranch,projectName);
-            /*StringBuilder sb = new StringBuilder(ft.getTaskParam());
-            sb.append(" -v ").append(template.getVcsType())
-                    .append(" -u ").append(template.getVcsRep())
-                    .append(" -b ").append(flow.getVcsBranch())
-                    .append(" -p ").append(repUrl.substring(repUrl.lastIndexOf('/')+1,repUrl.lastIndexOf('.')));*/
             ft.setTaskParam(String.format(updateShell,vcsType,vcsRep,vcsBranch,projectName));
         }
     }
 
+    /**
+     * 构建脚本
+     * @param template
+     * @param ft
+     */
+    private void setBuildShell(AutoTemplate template, FlowTask ft){
+        String repUrl = template.getVcsRep();
+        if (StringUtils.isNotBlank(repUrl)) {
+            String projectName = repUrl.substring(repUrl.lastIndexOf('/')+1,repUrl.lastIndexOf('.'));
+            String.format(buildShell,projectName);
+            ft.setTaskParam(String.format(deployShell,projectName));
+        }
+    }
+
+    /**
+     * 部署脚本
+     * @param template
+     * @param flow
+     * @param ft
+     */
     private void setDeployShell(AutoTemplate template,Flow flow, FlowTask ft) {
         String repUrl = template.getVcsRep();
         if (StringUtils.isNotBlank(repUrl)
                 && StringUtils.isNotBlank(flow.getVcsBranch())) {
             String projectName = repUrl.substring(repUrl.lastIndexOf('/')+1,repUrl.lastIndexOf('.'));
             String zones = flow.getZones();
-            String.format(deployShell,projectName,zones);
-            ft.setTaskParam(String.format(deployShell,projectName,zones));
+            ft.setTaskParam(String.format(deployShell,projectName,projectName,zones));
         }
     }
+    
 
     @Override
     public boolean updateFlowStatus(int flowId) {
