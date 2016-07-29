@@ -7,6 +7,7 @@ if [ $# -ne 0 ]; then
 fi
 for i in `seq -w $time -1 1`
 do
+    date "+%Y-%m-%d %H:%M:%S"
     echo  "$i";
     sleep 1;
 done
