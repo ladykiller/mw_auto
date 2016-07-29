@@ -599,7 +599,6 @@ public class FlowManagerService implements IFlowManagerService {
         example.setLimitStart(0);
         example.setLimitEnd(20);
         example.createCriteria()
-                .andTemplateIdEqualTo(req.getTemplateId())
                 .andProjectIdEqualTo(req.getProjectId());
         return BaseModel.selectByPage(flowMapper,example,req.getPageInfo(),req.getPageInfo() == null);
     }

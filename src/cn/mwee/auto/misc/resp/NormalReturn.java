@@ -12,7 +12,7 @@ public class NormalReturn implements Serializable {
 
 	private String statusCode="200";
 
-	private String msg="ok";
+	private String msg="success";
 	
 	@JSONField(name = "result")
 	private Object result;	

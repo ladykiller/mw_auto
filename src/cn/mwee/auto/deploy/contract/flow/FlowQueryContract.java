@@ -12,12 +12,6 @@ import javax.validation.constraints.NotNull;
 public class FlowQueryContract extends BaseContract {
 
     /**
-     * 模板Id
-     */
-    @NotNull(message = "未指定模板Id")
-    private Integer templateId;
-
-    /**
      * 项目Id
      */
     @NotNull(message = "未指定项目Id")
