@@ -29,7 +29,7 @@
 
     <select id="selectPrivateMenu" parameterType="java.lang.Integer" resultMap="MenuResultMap" >
         SELECT
-          p.*
+          DISTINCT p.id,p.*
         FROM
           auth_permission p LEFT JOIN auth_role_permission rp on p.id = rp.permission_id
           LEFT JOIN auth_user_role ur ON rp.role_id = ur.role_id
