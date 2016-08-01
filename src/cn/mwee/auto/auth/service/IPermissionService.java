@@ -80,4 +80,11 @@ public interface IPermissionService {
 	 * @return
      */
 	List<AuthPermission> queryLevelMenu(Byte type,Byte level);
+
+    /**
+     * 获取权限树
+     * @return
+     */
+	List<AuthMenu> queryPermTree() ;
+
 }

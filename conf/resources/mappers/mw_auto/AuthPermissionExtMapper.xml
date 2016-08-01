@@ -3,7 +3,7 @@
 <mapper namespace="cn.mwee.auto.auth.dao.AuthPermissionExtMapper">
     <resultMap id="BaseResultMap" type="cn.mwee.auto.auth.model.AuthMenu"
                            extends="cn.mwee.auto.auth.dao.AuthPermissionMapper.BaseResultMap">
-        <association property="childMenu" column="parent_id" select="selectChildMenu" />
+        <association property="childMenu" column="id" select="selectChildMenu" />
     </resultMap>
 
     <resultMap id="MenuResultMap" type="cn.mwee.auto.auth.model.AuthMenu"
@@ -12,11 +12,11 @@
 
 
 
-    <select id="selectParentMenu" resultMap="BaseResultMap">
+    <select id="selectPermTree" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
         <include refid="cn.mwee.auto.auth.dao.AuthPermissionMapper.Base_Column_List" />
         from auth_permission
-        where parent_id = -1
+        where parent_id = #{parentId,jdbcType=INTEGER}
     </select>
 
     <select id="selectChildMenu" parameterType="java.lang.Integer"  resultMap="BaseResultMap" >

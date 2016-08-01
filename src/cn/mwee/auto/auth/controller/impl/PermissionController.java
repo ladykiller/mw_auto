@@ -103,11 +103,15 @@ public class PermissionController implements IPermissionController {
     }
 
     @Override
-    @RequiresAuthentication
+//    @RequiresAuthentication
     @Contract(BaseContract.class)
-    public NormalReturn queryMenu(ServiceRequest request) {
-        //TODO
-        return null;
+    public NormalReturn queryPermTree(ServiceRequest request) {
+        try {
+            return new NormalReturn("200","success",permissionService.queryPermTree());
+        } catch (Exception e) {
+            logger.error("",e);
+            return new NormalReturn("500","error",e.getMessage());
+        }
     }
 
     @Override

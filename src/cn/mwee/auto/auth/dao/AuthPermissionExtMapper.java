@@ -13,7 +13,7 @@ public interface AuthPermissionExtMapper {
      * 获取所有菜单权限
      * @return
      */
-    List<AuthMenu> selectParentMenu();
+    List<AuthMenu> selectPermTree(Integer parentId);
 
     /**
      * 获取子菜单权限

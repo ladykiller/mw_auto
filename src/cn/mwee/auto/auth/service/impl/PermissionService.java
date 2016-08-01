@@ -127,4 +127,10 @@ public class PermissionService implements IPermissionService {
         }
 		return authPermissionMapper.selectByExample(example);
 	}
+
+    @Override
+    public List<AuthMenu> queryPermTree() {
+        List<AuthMenu> list = authPermissionExtMapper.selectPermTree(-1);
+        return list;
+    }
 }
