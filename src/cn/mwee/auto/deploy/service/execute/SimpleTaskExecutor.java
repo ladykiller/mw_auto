@@ -133,8 +133,10 @@ public class SimpleTaskExecutor implements TaskExecutor {
             if (StringUtils.isEmpty(sshPriAddr)) {
                 throw new Exception("找不到用户[" + sshShellUser + "]的秘钥地址，请检查是否配置");
             }
-
-            instance = new SSHManager(sshShellUser, sshPriAddr, flowTask.getZone(), flowTaskLogService, springTaskExecutor, logId);
+            String exeTargetHost = AutoConsts.DEFAULT_EXEC_ZONE.equals(flowTask.getExecZone()) ?
+                    flowTask.getZone() : flowTask.getExecZone();
+            instance = new SSHManager(sshShellUser, sshPriAddr, exeTargetHost,
+                    flowTaskLogService, springTaskExecutor, logId);
 
             String errorMessage = instance.connect();
 

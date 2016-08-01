@@ -66,6 +66,14 @@ public class FlowTask {
     private Short priority;
 
     /**
+     * 任务脚本执行目标主机（为空时取zone字段）
+     * flow_tasks.exec_zone
+     *
+     * @mbggenerated
+     */
+    private String execZone;
+
+    /**
      * 状态[新建,运行中,手动,定时,失败,成功]
      * flow_tasks.state
      *
@@ -273,6 +281,30 @@ public class FlowTask {
      */
     public void setPriority(Short priority) {
         this.priority = priority;
+    }
+
+    /**
+     * 任务脚本执行目标主机（为空时取zone字段）
+     * This method returns the value of the database column flow_tasks.exec_zone
+     *
+     * @return the value of flow_tasks.exec_zone
+     *
+     * @mbggenerated
+     */
+    public String getExecZone() {
+        return execZone;
+    }
+
+    /**
+     * 任务脚本执行目标主机（为空时取zone字段）
+     * This method sets the value of the database column flow_tasks.exec_zone
+     *
+     * @param execZone the value for flow_tasks.exec_zone
+     *
+     * @mbggenerated
+     */
+    public void setExecZone(String execZone) {
+        this.execZone = execZone;
     }
 
     /**

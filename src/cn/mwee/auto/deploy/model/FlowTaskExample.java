@@ -761,6 +761,76 @@ public class FlowTaskExample {
             return (Criteria) this;
         }
 
+        public Criteria andExecZoneIsNull() {
+            addCriterion("exec_zone is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andExecZoneIsNotNull() {
+            addCriterion("exec_zone is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andExecZoneEqualTo(String value) {
+            addCriterion("exec_zone =", value, "execZone");
+            return (Criteria) this;
+        }
+
+        public Criteria andExecZoneNotEqualTo(String value) {
+            addCriterion("exec_zone <>", value, "execZone");
+            return (Criteria) this;
+        }
+
+        public Criteria andExecZoneGreaterThan(String value) {
+            addCriterion("exec_zone >", value, "execZone");
+            return (Criteria) this;
+        }
+
+        public Criteria andExecZoneGreaterThanOrEqualTo(String value) {
+            addCriterion("exec_zone >=", value, "execZone");
+            return (Criteria) this;
+        }
+
+        public Criteria andExecZoneLessThan(String value) {
+            addCriterion("exec_zone <", value, "execZone");
+            return (Criteria) this;
+        }
+
+        public Criteria andExecZoneLessThanOrEqualTo(String value) {
+            addCriterion("exec_zone <=", value, "execZone");
+            return (Criteria) this;
+        }
+
+        public Criteria andExecZoneLike(String value) {
+            addCriterion("exec_zone like", value, "execZone");
+            return (Criteria) this;
+        }
+
+        public Criteria andExecZoneNotLike(String value) {
+            addCriterion("exec_zone not like", value, "execZone");
+            return (Criteria) this;
+        }
+
+        public Criteria andExecZoneIn(List<String> values) {
+            addCriterion("exec_zone in", values, "execZone");
+            return (Criteria) this;
+        }
+
+        public Criteria andExecZoneNotIn(List<String> values) {
+            addCriterion("exec_zone not in", values, "execZone");
+            return (Criteria) this;
+        }
+
+        public Criteria andExecZoneBetween(String value1, String value2) {
+            addCriterion("exec_zone between", value1, value2, "execZone");
+            return (Criteria) this;
+        }
+
+        public Criteria andExecZoneNotBetween(String value1, String value2) {
+            addCriterion("exec_zone not between", value1, value2, "execZone");
+            return (Criteria) this;
+        }
+
         public Criteria andStateIsNull() {
             addCriterion("`state` is null");
             return (Criteria) this;

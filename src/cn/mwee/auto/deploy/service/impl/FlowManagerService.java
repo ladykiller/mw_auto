@@ -28,11 +28,7 @@ import com.alibaba.fastjson.JSON;
 
 import javax.annotation.Resource;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by huming on 16/6/24.
@@ -150,11 +146,11 @@ public class FlowManagerService implements IFlowManagerService {
         if (StringUtils.isNotBlank(paramStr)) {
             paramsMap = JSON.parseObject(flow.getParams(), Map.class);
         }
-
+        Map<String,String> flowParamMap =initFlowParams(template,flow);
         List<FlowTask> fts = new ArrayList<>();
         //prepare组(根据模板中是否有配置git仓库添加prepare组)
         if (StringUtils.isNotBlank(template.getVcsRep())) {
-            fts.addAll(buildPrepareTasks(flow,template));
+            fts.addAll(buildPrepareTasks(flow, template));
         }
         //copy tasks
         for (TemplateTask tt : tts) {
@@ -164,11 +160,14 @@ public class FlowManagerService implements IFlowManagerService {
                 FlowTask ft = new FlowTask();
                 ft.setGroup(tt.getGroup());
                 ft.setPriority(tt.getPriority());
+                ft.setExecZone(tt.getExecZone());
                 ft.setTaskId(tt.getTaskId());
                 ft.setTaskType(tt.getTaskType());
                 ft.setFlowId(flowId);
                 ft.setZone(zone);
-                replaceParams(ft, paramsMap);
+                flowParamMap.put("%zone%",zone);
+                replaceFlowParams(ft,flowParamMap);
+                replaceUserParams(ft, paramsMap);
                 ft.setState(TaskState.INIT.name());
                 ft.setCreateTime(new Date());
                 fts.add(ft);
@@ -184,17 +183,16 @@ public class FlowManagerService implements IFlowManagerService {
      * @param ft
      * @param paramMap
      */
-    private void replaceParams(FlowTask ft, Map<String, String> paramMap) {
+    private void replaceUserParams(FlowTask ft, Map<String, String> paramMap) {
 
         AutoTask task = autoTaskMapper.selectByPrimaryKey(ft.getTaskId());
         if (task != null && StringUtils.isNotBlank(task.getParams())) {
             String paramStr = task.getParams();
-            String[] paramKeys = paramStr.split(" ");
-            for (String paramKey : paramKeys) {
-                String paramValue = paramMap.get(paramKey.replace("#", ""));
-                if (null != paramValue) {
-                    paramStr = paramStr.replace(paramKey, paramValue);
-                }
+            if (paramStr.indexOf('#') < 0) return;
+            Set<String> keySet = paramMap.keySet();
+            for (String key : keySet) {
+                String paramKey = "#"+key+"#";
+                paramStr = paramStr.replaceAll(paramKey,paramMap.get(key));
             }
             ft.setTaskParam(paramStr);
         }
@@ -202,13 +200,14 @@ public class FlowManagerService implements IFlowManagerService {
 
     /**
      * 构建prepare组的任务
+     *
      * @param flow
      * @param template
      * @return
      */
     private List<FlowTask> buildPrepareTasks(Flow flow, AutoTemplate template) {
         List<FlowTask> list = new ArrayList<>();
-        for (short i = 1; i< 4; i++) {
+        for (short i = 1; i < 3; i++) {
             if (i == 2 && flow.getNeedbuild() == 0) continue;
             FlowTask ft = new FlowTask();
             ft.setGroup(GroupType.PrepareGroup);
@@ -220,17 +219,18 @@ public class FlowManagerService implements IFlowManagerService {
             switch (i) {
                 case 1:
                     ft.setTaskParam(updateShell);
-                    setPullShell(template,flow,ft);
+                    setPullShell(template, flow, ft);
                     break;
                 case 2:
                     ft.setTaskParam(buildShell);
-                    setBuildShell(template,ft);
+                    setBuildShell(template, ft);
                     break;
-                case 3:
+                /*case 3:
                     ft.setTaskParam(deployShell);
                     setDeployShell(template,flow,ft);
-                    break;
+                    break;*/
             }
+            ft.setExecZone(localHost);
             ft.setState(TaskState.INIT.name());
             ft.setCreateTime(new Date());
             list.add(ft);
@@ -251,42 +251,69 @@ public class FlowManagerService implements IFlowManagerService {
                 && StringUtils.isNotBlank(flow.getVcsBranch())) {
             String vcsType = template.getVcsType();
             String vcsRep = template.getVcsRep();
-            String vcsBranch =flow.getVcsBranch();
-            String projectName = repUrl.substring(repUrl.lastIndexOf('/')+1,repUrl.lastIndexOf('.'));
-            String.format(updateShell,vcsType,vcsRep,vcsBranch,projectName);
-            ft.setTaskParam(String.format(updateShell,vcsType,vcsRep,vcsBranch,projectName));
+            String vcsBranch = flow.getVcsBranch();
+            String projectName = repUrl.substring(repUrl.lastIndexOf('/') + 1, repUrl.lastIndexOf('.'));
+            ft.setTaskParam(String.format(updateShell, vcsType, vcsRep, vcsBranch, projectName));
         }
     }
 
     /**
      * 构建脚本
+     *
      * @param template
      * @param ft
      */
-    private void setBuildShell(AutoTemplate template, FlowTask ft){
+    private void setBuildShell(AutoTemplate template, FlowTask ft) {
         String repUrl = template.getVcsRep();
         if (StringUtils.isNotBlank(repUrl)) {
-            String projectName = repUrl.substring(repUrl.lastIndexOf('/')+1,repUrl.lastIndexOf('.'));
-            ft.setTaskParam(String.format(buildShell,projectName));
+            String projectName = repUrl.substring(repUrl.lastIndexOf('/') + 1, repUrl.lastIndexOf('.'));
+            ft.setTaskParam(String.format(buildShell, projectName));
         }
     }
 
     /**
      * 部署脚本
+     *
      * @param template
      * @param flow
      * @param ft
      */
-    private void setDeployShell(AutoTemplate template,Flow flow, FlowTask ft) {
+    private void setDeployShell(AutoTemplate template, Flow flow, FlowTask ft) {
         String repUrl = template.getVcsRep();
         if (StringUtils.isNotBlank(repUrl)
                 && StringUtils.isNotBlank(flow.getVcsBranch())) {
-            String projectName = repUrl.substring(repUrl.lastIndexOf('/')+1,repUrl.lastIndexOf('.'));
+            String projectName = repUrl.substring(repUrl.lastIndexOf('/') + 1, repUrl.lastIndexOf('.'));
             String zones = flow.getZones();
-            ft.setTaskParam(String.format(deployShell,projectName,projectName,zones));
+            ft.setTaskParam(String.format(deployShell, projectName, projectName, zones));
         }
     }
-    
+
+    private Map<String, String> initFlowParams(AutoTemplate template, Flow flow) {
+        Map<String, String> flowParamMap = new HashMap<>();
+        String repUrl = template.getVcsRep();
+        if (StringUtils.isNotBlank(repUrl)
+                && StringUtils.isNotBlank(flow.getVcsBranch())) {
+            flowParamMap.put("%vcsType%", template.getVcsType());
+            flowParamMap.put("%vcsRep%", template.getVcsRep());
+            flowParamMap.put("%vcsBranch%", flow.getVcsBranch());
+            flowParamMap.put("%projectName%", repUrl.substring(repUrl.lastIndexOf('/') + 1, repUrl.lastIndexOf('.')));
+        }
+        return flowParamMap;
+    }
+
+    private void replaceFlowParams(FlowTask ft, Map<String, String> flowParamMap) {
+        AutoTask task = autoTaskMapper.selectByPrimaryKey(ft.getTaskId());
+        if (task != null && StringUtils.isNotBlank(task.getParams())) {
+            String paramStr = task.getParams();
+            if (paramStr.indexOf('%') < 0 ) return;
+            Set<String> keySet = flowParamMap.keySet();
+            for (String key : keySet) {
+                paramStr = paramStr.replaceAll(key, flowParamMap.get(key));
+            }
+            ft.setTaskParam(paramStr);
+        }
+    }
+
 
     @Override
     public boolean updateFlowStatus(int flowId) {
@@ -557,8 +584,8 @@ public class FlowManagerService implements IFlowManagerService {
             String flowState = calcFlowStatus(list);
             returnMap.put(zone, flowState);
         }
-        String localZoneState = getZoneState(flowId,localHost);
-        if (StringUtils.isNotBlank(localZoneState)) returnMap.put(localHost,localZoneState);
+        String localZoneState = getZoneState(flowId, localHost);
+        if (StringUtils.isNotBlank(localZoneState)) returnMap.put(localHost, localZoneState);
         return returnMap;
     }
 
@@ -620,19 +647,19 @@ public class FlowManagerService implements IFlowManagerService {
     }
 
     @Override
-    public BaseQueryResult<Flow> getFlows(FlowQueryContract req,Flow flow) {
+    public BaseQueryResult<Flow> getFlows(FlowQueryContract req, Flow flow) {
         FlowExample example = new FlowExample();
         example.setOrderByClause("id desc");
         example.setLimitStart(0);
         example.setLimitEnd(20);
         example.createCriteria()
                 .andProjectIdEqualTo(req.getProjectId());
-        return BaseModel.selectByPage(flowMapper,example,req.getPageInfo(),req.getPageInfo() == null);
+        return BaseModel.selectByPage(flowMapper, example, req.getPageInfo(), req.getPageInfo() == null);
     }
 
     @Override
     public Flow getFlow(Integer flowId) {
-        return  flowMapper.selectByPrimaryKey(flowId);
+        return flowMapper.selectByPrimaryKey(flowId);
     }
 
     @Override
@@ -647,6 +674,20 @@ public class FlowManagerService implements IFlowManagerService {
     }
 
     public static void main(String[] args) {
-        System.out.println(String.format("sh /opt/auto/local/pullcode.sh -v %s -u %s -b %s -p","s222","s333","b","p"));
+        String str = "i am /#p#/#p#";
+        Map<String ,String> paramMap = new HashMap<>();
+        paramMap.put("#p#","tmp");
+        paramMap.put("#vcs#","tmp");
+
+
+        Set<String> keySet = paramMap.keySet();
+        for (String key : keySet) {
+            str = str.replaceAll(key, paramMap.get(key));
+        }
+        System.out.println(str);
+
+
+
+        System.out.println(String.format("sh /opt/auto/local/pullcode.sh -v %s -u %s -b %s -p", "s222", "s333", "b", "p"));
     }
 }
