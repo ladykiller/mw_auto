@@ -11,6 +11,12 @@ import org.hibernate.validator.constraints.NotBlank;
 public class PassWordContract extends BaseContract {
 
     /**
+     * 旧密码
+     */
+    @NotBlank(message = "原密码不能为空")
+    private String oldPassword;
+
+    /**
      * 新密码
      */
     @NotBlank(message = "密码不能为空")

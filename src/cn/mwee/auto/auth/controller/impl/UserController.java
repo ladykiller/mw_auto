@@ -4,6 +4,7 @@ import cn.mwee.auto.auth.contract.user.*;
 import cn.mwee.auto.auth.controller.IUserController;
 import cn.mwee.auto.auth.model.AuthUser;
 import cn.mwee.auto.auth.service.IUserService;
+import cn.mwee.auto.auth.util.AuthUtils;
 import cn.mwee.auto.deploy.contract.commom.BaseContract;
 import cn.mwee.auto.misc.aspect.contract.Contract;
 import cn.mwee.auto.misc.req.ServiceRequest;
@@ -70,11 +71,7 @@ public class UserController implements IUserController {
     public NormalReturn updatePassword(ServiceRequest request) {
         PassWordContract req = request.getContract();
         try {
-            String currentUserName = SecurityUtils.getSubject().getPrincipal().toString();
-            AuthUser authUser = new AuthUser();
-            authUser.setUsername(currentUserName);
-            authUser.setPassword(req.getNewPassword());
-            if (userService.updatePassword(authUser)) {
+            if (userService.updatePassword(req.getOldPassword(),req.getNewPassword())) {
                 return  new NormalReturn("200","success");
             } else {
                 return  new NormalReturn("500","Can not find User");
@@ -113,7 +110,7 @@ public class UserController implements IUserController {
             userService.delUserLogic(req.getUserName());
             return  new NormalReturn("200","success");
         } catch (Exception e) {
-            logger.error("userGrant error",e);
+            logger.error("",e);
             return  new NormalReturn("500",e.getMessage());
         }
     }
@@ -123,21 +120,14 @@ public class UserController implements IUserController {
     public NormalReturn resetPassword(ServiceRequest request) {
         UserAddContract req = request.getContract();
         try {
-            AuthUser authUser = userService.queryByUserName(req.getUserName());
-            if (authUser == null) {
-                return  new NormalReturn("500","Can not find User:"+req.getUserName());
-            }
-            AuthUser tempAuthUser = new AuthUser();
-            tempAuthUser.setUsername(req.getUserName());
-            tempAuthUser.setPassword(defaultPassword);
-            if (userService.updatePassword(authUser)) {
+            if (userService.resetPassword(req.getUserName(),req.getPassword())) {
                 return  new NormalReturn("200","success");
             } else {
                 return  new NormalReturn("500","error");
             }
 
         } catch (Exception e) {
-            logger.error("updatePassword error",e);
+            logger.error("resetPassword error",e);
             return  new NormalReturn("500",e.getMessage());
         }
     }

@@ -12,6 +12,7 @@ import cn.mwee.auto.auth.dao.AuthUserRoleExtMapper;
 import cn.mwee.auto.auth.dao.AuthUserRoleMapper;
 import cn.mwee.auto.auth.model.*;
 import cn.mwee.auto.auth.service.IUserRoleService;
+import cn.mwee.auto.auth.util.AuthUtils;
 import cn.mwee.auto.auth.util.SqlUtils;
 import cn.mwee.auto.common.db.BaseModel;
 import cn.mwee.auto.common.db.BaseQueryResult;
@@ -20,6 +21,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import cn.mwee.auto.auth.dao.AuthUserMapper;
@@ -47,6 +49,9 @@ public class UserService implements IUserService {
 
     @Autowired
     private IUserRoleService userRoleService;
+
+    @Value("${user.default.password}")
+    private String defaultPassword;
 
 	@Override
 	public Integer addUser(AuthUser authUser) throws Exception {
@@ -123,16 +128,31 @@ public class UserService implements IUserService {
 	}
 	
 	@Override
-	public boolean updatePassword(AuthUser authUser) {
-		AuthUser record = new AuthUser();
-		record.setPassword(authUser.getPassword());
-		record.setUpdateTime(new Date());
-		encryptPassword(record);
-        AuthUserExample example = ctreteExample();
-        example.createCriteria()
-                .andUsernameEqualTo(authUser.getUsername());
-		return authUserMapper.updateByExampleSelective(record,example) > 0;
+	public boolean updatePassword(String oldPassword , String newPassword) throws Exception {
+
+		String currentUserName = AuthUtils.getCurrUserName();
+		AuthUser currentUser = queryByUserName(currentUserName);
+		if (!passwordHelper.checkPassword(currentUser.getSalt(),oldPassword,currentUser.getPassword())) {
+			throw new Exception("原密码错误");
+		}
+		AuthUser authUser = new AuthUser();
+        authUser.setId(currentUser.getId());
+		authUser.setPassword(newPassword);
+        authUser.setUpdateTime(new Date());
+		encryptPassword(authUser);
+		return updateUser(authUser);
+
 	}
+
+    public boolean resetPassword(String userName, String newPassword){
+        AuthUser oldAuthUser = queryByUserName(userName);
+        AuthUser authUser = new AuthUser();
+        authUser.setId(oldAuthUser.getId());
+        authUser.setPassword(StringUtils.isBlank(newPassword) ?defaultPassword : newPassword);
+        authUser.setUpdateTime(new Date());
+        encryptPassword(authUser);
+        return updateUser(authUser);
+    }
 
 	@Override
 	public BaseQueryResult<AuthUser> queryUsers(UserQueryContract userQueryContract) {

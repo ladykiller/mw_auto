@@ -53,14 +53,24 @@ public interface IUserService {
 	 * @return
 	 */
 	boolean updateUser(AuthUser authUser);
-	
+
 	/**
 	 * 修改密码
-	 * @param authUser
+	 * @param oldPassw
+	 * @param newPassword
 	 * @return
-	 */
-	boolean updatePassword(AuthUser authUser);
-	
+	 * @throws Exception
+     */
+	boolean updatePassword(String oldPassw , String newPassword) throws Exception;
+
+	/**
+	 * 重置密码
+	 * @param userName 用户名
+	 * @param newPassword 新密码
+     * @return
+     */
+	boolean resetPassword(String userName, String newPassword);
+
 	/**
 	 * delete user by userId
 	 * @param authUserId

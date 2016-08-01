@@ -15,4 +15,6 @@ public class UserAddContract extends BaseContract {
      */
     @NotBlank(message = "用户名不能为空")
     private String userName;
+
+    private String password;
 }
