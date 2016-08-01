@@ -34,6 +34,14 @@ public class TemplateTask {
     private Short priority;
 
     /**
+     * 执行目标区
+     * template_tasks.exec_zone
+     *
+     * @mbggenerated
+     */
+    private String execZone;
+
+    /**
      * 任务id
      * template_tasks.task_id
      *
@@ -42,7 +50,7 @@ public class TemplateTask {
     private Integer taskId;
 
     /**
-     * 任务类型 [手动，自动，定时]
+     * 任务类型 [AUTO,MANUAL,TIMER]
      * template_tasks.task_type
      *
      * @mbggenerated
@@ -180,6 +188,30 @@ public class TemplateTask {
     }
 
     /**
+     * 执行目标区
+     * This method returns the value of the database column template_tasks.exec_zone
+     *
+     * @return the value of template_tasks.exec_zone
+     *
+     * @mbggenerated
+     */
+    public String getExecZone() {
+        return execZone;
+    }
+
+    /**
+     * 执行目标区
+     * This method sets the value of the database column template_tasks.exec_zone
+     *
+     * @param execZone the value for template_tasks.exec_zone
+     *
+     * @mbggenerated
+     */
+    public void setExecZone(String execZone) {
+        this.execZone = execZone;
+    }
+
+    /**
      * 任务id
      * This method returns the value of the database column template_tasks.task_id
      *
@@ -204,7 +236,7 @@ public class TemplateTask {
     }
 
     /**
-     * 任务类型 [手动，自动，定时]
+     * 任务类型 [AUTO,MANUAL,TIMER]
      * This method returns the value of the database column template_tasks.task_type
      *
      * @return the value of template_tasks.task_type
@@ -216,7 +248,7 @@ public class TemplateTask {
     }
 
     /**
-     * 任务类型 [手动，自动，定时]
+     * 任务类型 [AUTO,MANUAL,TIMER]
      * This method sets the value of the database column template_tasks.task_type
      *
      * @param taskType the value for template_tasks.task_type
