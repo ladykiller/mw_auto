@@ -189,9 +189,6 @@
 			<generatedKey column="ID" sqlStatement="MYSQL" identity="true" />
 		</table>
 
-
- 		-->
-
 		<table tableName="templates" domainObjectName="AutoTemplate"
 			   enableCountByExample="true"
 			   enableUpdateByExample="true"
@@ -211,6 +208,18 @@
 			   selectByExampleQueryId="true">
 			<generatedKey column="ID" sqlStatement="MYSQL" identity="true" />
 		</table>
+
+ 		-->
+
+		<table tableName="template_tasks" domainObjectName="TemplateTask"
+			   enableCountByExample="true"
+			   enableUpdateByExample="true"
+			   enableDeleteByExample="true"
+			   enableSelectByExample="true"
+			   selectByExampleQueryId="true">
+			<generatedKey column="ID" sqlStatement="MYSQL" identity="true" />
+		</table>
+
 
 	</context>
 </generatorConfiguration>
