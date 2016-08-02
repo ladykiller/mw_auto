@@ -133,44 +133,33 @@ public class FlowManagerService implements IFlowManagerService {
             throw new NullPointerException("Cant find template for id:" + flow.getTemplateId());
         }
 
-        //get flowTask
-        TemplateTaskExample ttExample = new TemplateTaskExample();
-        ttExample.createCriteria().andTemplateIdEqualTo(flow.getTemplateId());
-        List<TemplateTask> tts = templateTaskMapper.selectByExample(ttExample);
-        //parse zones
-        String zoneStr = flow.getZones();
+        //获取模板任务
+        List<TemplateTask> tts = templateManagerService.getTemplateTasks(flow.getTemplateId());
+
+        //获取区域
+        String zoneStr = StringUtils.isBlank(flow.getZones()) ? "" : flow.getZones();
         String[] zones = zoneStr.split(",");
-        //parse Task EXE params
-        Map<String, String> paramsMap = new HashMap<>();
+        //用户定义变量
+        Map<String, String> userParamsMap = new HashMap<>();
         String paramStr = flow.getParams();
         if (StringUtils.isNotBlank(paramStr)) {
-            paramsMap = JSON.parseObject(flow.getParams(), Map.class);
+            userParamsMap = JSON.parseObject(flow.getParams(), Map.class);
         }
-        Map<String,String> flowParamMap =initFlowParams(template,flow);
+        //流程变量
+        Map<String, String> flowParamMap = initFlowParams(template, flow);
+        //复制任务
         List<FlowTask> fts = new ArrayList<>();
-        //prepare组(根据模板中是否有配置git仓库添加prepare组)
-        if (StringUtils.isNotBlank(template.getVcsRep())) {
-            fts.addAll(buildPrepareTasks(flow, template));
-        }
-        //copy tasks
         for (TemplateTask tt : tts) {
+            //prepareGroup
+            if (tt.getGroup().equals(GroupType.PrepareGroup)) {
+                fts.add(buildFlowTask(tt,flowId,localHost,flowParamMap,userParamsMap));
+                continue;
+            }
+
             //区域组
             for (String zone : zones) {
                 if (StringUtils.isBlank(zone)) continue;
-                FlowTask ft = new FlowTask();
-                ft.setGroup(tt.getGroup());
-                ft.setPriority(tt.getPriority());
-                ft.setExecZone(tt.getExecZone());
-                ft.setTaskId(tt.getTaskId());
-                ft.setTaskType(tt.getTaskType());
-                ft.setFlowId(flowId);
-                ft.setZone(zone);
-                flowParamMap.put("%zone%",zone);
-                replaceFlowParams(ft,flowParamMap);
-                replaceUserParams(ft, paramsMap);
-                ft.setState(TaskState.INIT.name());
-                ft.setCreateTime(new Date());
-                fts.add(ft);
+                fts.add(buildFlowTask(tt,flowId,zone,flowParamMap,userParamsMap));
             }
         }
         int result = flowTaskExtMapper.insertBatch(fts);
@@ -178,10 +167,36 @@ public class FlowManagerService implements IFlowManagerService {
     }
 
     /**
+     * 构建flowTask
+     * @param tt
+     * @param flowId
+     * @param zone
+     * @param flowParamMap
+     * @param userParamsMap
+     * @return
+     */
+    private FlowTask buildFlowTask(TemplateTask tt,Integer flowId,String zone,
+                               Map<String,String> flowParamMap,Map<String,String> userParamsMap) {
+        FlowTask ft = new FlowTask();
+        ft.setGroup(tt.getGroup());
+        ft.setPriority(tt.getPriority());
+        ft.setTaskId(tt.getTaskId());
+        ft.setTaskType(tt.getTaskType());
+        ft.setFlowId(flowId);
+        ft.setZone(zone);
+        flowParamMap.put("%zone%", zone);
+        replaceFlowParams(ft, flowParamMap);
+        replaceUserParams(ft, userParamsMap);
+        ft.setState(TaskState.INIT.name());
+        ft.setCreateTime(new Date());
+        return ft;
+    }
+
+    /**
      * 参数替换
      *
-     * @param ft
-     * @param paramMap
+     * @param ft flowTask
+     * @param paramMap paramMap
      */
     private void replaceUserParams(FlowTask ft, Map<String, String> paramMap) {
 
@@ -191,8 +206,8 @@ public class FlowManagerService implements IFlowManagerService {
             if (paramStr.indexOf('#') < 0) return;
             Set<String> keySet = paramMap.keySet();
             for (String key : keySet) {
-                String paramKey = "#"+key+"#";
-                paramStr = paramStr.replaceAll(paramKey,paramMap.get(key));
+                String paramKey = "#" + key + "#";
+                paramStr = paramStr.replaceAll(paramKey, paramMap.get(key));
             }
             ft.setTaskParam(paramStr);
         }
@@ -230,7 +245,6 @@ public class FlowManagerService implements IFlowManagerService {
                     setDeployShell(template,flow,ft);
                     break;*/
             }
-            ft.setExecZone(localHost);
             ft.setState(TaskState.INIT.name());
             ft.setCreateTime(new Date());
             list.add(ft);
@@ -305,7 +319,7 @@ public class FlowManagerService implements IFlowManagerService {
         AutoTask task = autoTaskMapper.selectByPrimaryKey(ft.getTaskId());
         if (task != null && StringUtils.isNotBlank(task.getParams())) {
             String paramStr = task.getParams();
-            if (paramStr.indexOf('%') < 0 ) return;
+            if (paramStr.indexOf('%') < 0) return;
             Set<String> keySet = flowParamMap.keySet();
             for (String key : keySet) {
                 paramStr = paramStr.replaceAll(key, flowParamMap.get(key));
@@ -674,10 +688,11 @@ public class FlowManagerService implements IFlowManagerService {
     }
 
     public static void main(String[] args) {
+        /*
         String str = "i am /#p#/#p#";
-        Map<String ,String> paramMap = new HashMap<>();
-        paramMap.put("#p#","tmp");
-        paramMap.put("#vcs#","tmp");
+        Map<String, String> paramMap = new HashMap<>();
+        paramMap.put("#p#", "tmp");
+        paramMap.put("#vcs#", "tmp");
 
 
         Set<String> keySet = paramMap.keySet();
@@ -687,7 +702,9 @@ public class FlowManagerService implements IFlowManagerService {
         System.out.println(str);
 
 
-
         System.out.println(String.format("sh /opt/auto/local/pullcode.sh -v %s -u %s -b %s -p", "s222", "s333", "b", "p"));
+        */
+        String[] strs = "".split(",");
+        System.out.println(strs.length);
     }
 }

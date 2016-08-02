@@ -42,11 +42,11 @@ public class TemplateZone {
 
     /**
      * 更新原因
-     * template_zones.update_reson
+     * template_zones.update_reason
      *
      * @mbggenerated
      */
-    private String updateReson;
+    private String updateReason;
 
     /**
      * This method returns the value of the database column template_zones.id
@@ -164,25 +164,25 @@ public class TemplateZone {
 
     /**
      * 更新原因
-     * This method returns the value of the database column template_zones.update_reson
+     * This method returns the value of the database column template_zones.update_reason
      *
-     * @return the value of template_zones.update_reson
+     * @return the value of template_zones.update_reason
      *
      * @mbggenerated
      */
-    public String getUpdateReson() {
-        return updateReson;
+    public String getUpdateReason() {
+        return updateReason;
     }
 
     /**
      * 更新原因
-     * This method sets the value of the database column template_zones.update_reson
+     * This method sets the value of the database column template_zones.update_reason
      *
-     * @param updateReson the value for template_zones.update_reson
+     * @param updateReason the value for template_zones.update_reason
      *
      * @mbggenerated
      */
-    public void setUpdateReson(String updateReson) {
-        this.updateReson = updateReson;
+    public void setUpdateReason(String updateReason) {
+        this.updateReason = updateReason;
     }
 }

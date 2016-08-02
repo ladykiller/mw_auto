@@ -106,8 +106,7 @@ public class SimpleTaskExecutor implements TaskExecutor {
 
     @Override
     public boolean execute(FlowTask flowTask) {
-        AutoTask task = null;
-
+        /*AutoTask task = null;
         // 为prepare组任务生成匿名任务
         if (flowTask.getGroup().equals(AutoConsts.GroupType.PrepareGroup)) {
             task = new AutoTask();
@@ -117,8 +116,8 @@ public class SimpleTaskExecutor implements TaskExecutor {
             task.setExecUser("root");
         } else {
             task = taskManagerService.getTask(flowTask.getTaskId());
-        }
-
+        }*/
+        AutoTask task = taskManagerService.getTask(flowTask.getTaskId());
         SSHManager instance = null;
 
         Integer logId = flowTaskLogService.addLog(flowTask, task);
@@ -133,8 +132,8 @@ public class SimpleTaskExecutor implements TaskExecutor {
             if (StringUtils.isEmpty(sshPriAddr)) {
                 throw new Exception("找不到用户[" + sshShellUser + "]的秘钥地址，请检查是否配置");
             }
-            String exeTargetHost = AutoConsts.DEFAULT_EXEC_ZONE.equals(flowTask.getExecZone()) ?
-                    flowTask.getZone() : flowTask.getExecZone();
+            String exeTargetHost = AutoConsts.DEFAULT_EXEC_ZONE.equals(task.getExecZone()) ?
+                    flowTask.getZone() : task.getExecZone();
             instance = new SSHManager(sshShellUser, sshPriAddr, exeTargetHost,
                     flowTaskLogService, springTaskExecutor, logId);
 

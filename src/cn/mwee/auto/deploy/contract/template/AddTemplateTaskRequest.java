@@ -18,7 +18,7 @@ public class AddTemplateTaskRequest {
     private Integer templateId;
 
     @NotNull(message = "group is null")
-    @Range(min = -127, max = 127, message = "invalid group value")
+    @Range(min = -128, max = 127, message = "invalid group value")
     private Byte group;
 
     @Min(value = 1, message = "invalid priority value")

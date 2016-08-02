@@ -551,73 +551,73 @@ public class TemplateZoneExample {
             return (Criteria) this;
         }
 
-        public Criteria andUpdateResonIsNull() {
-            addCriterion("update_reson is null");
+        public Criteria andUpdateReasonIsNull() {
+            addCriterion("update_reason is null");
             return (Criteria) this;
         }
 
-        public Criteria andUpdateResonIsNotNull() {
-            addCriterion("update_reson is not null");
+        public Criteria andUpdateReasonIsNotNull() {
+            addCriterion("update_reason is not null");
             return (Criteria) this;
         }
 
-        public Criteria andUpdateResonEqualTo(String value) {
-            addCriterion("update_reson =", value, "updateReson");
+        public Criteria andUpdateReasonEqualTo(String value) {
+            addCriterion("update_reason =", value, "updateReason");
             return (Criteria) this;
         }
 
-        public Criteria andUpdateResonNotEqualTo(String value) {
-            addCriterion("update_reson <>", value, "updateReson");
+        public Criteria andUpdateReasonNotEqualTo(String value) {
+            addCriterion("update_reason <>", value, "updateReason");
             return (Criteria) this;
         }
 
-        public Criteria andUpdateResonGreaterThan(String value) {
-            addCriterion("update_reson >", value, "updateReson");
+        public Criteria andUpdateReasonGreaterThan(String value) {
+            addCriterion("update_reason >", value, "updateReason");
             return (Criteria) this;
         }
 
-        public Criteria andUpdateResonGreaterThanOrEqualTo(String value) {
-            addCriterion("update_reson >=", value, "updateReson");
+        public Criteria andUpdateReasonGreaterThanOrEqualTo(String value) {
+            addCriterion("update_reason >=", value, "updateReason");
             return (Criteria) this;
         }
 
-        public Criteria andUpdateResonLessThan(String value) {
-            addCriterion("update_reson <", value, "updateReson");
+        public Criteria andUpdateReasonLessThan(String value) {
+            addCriterion("update_reason <", value, "updateReason");
             return (Criteria) this;
         }
 
-        public Criteria andUpdateResonLessThanOrEqualTo(String value) {
-            addCriterion("update_reson <=", value, "updateReson");
+        public Criteria andUpdateReasonLessThanOrEqualTo(String value) {
+            addCriterion("update_reason <=", value, "updateReason");
             return (Criteria) this;
         }
 
-        public Criteria andUpdateResonLike(String value) {
-            addCriterion("update_reson like", value, "updateReson");
+        public Criteria andUpdateReasonLike(String value) {
+            addCriterion("update_reason like", value, "updateReason");
             return (Criteria) this;
         }
 
-        public Criteria andUpdateResonNotLike(String value) {
-            addCriterion("update_reson not like", value, "updateReson");
+        public Criteria andUpdateReasonNotLike(String value) {
+            addCriterion("update_reason not like", value, "updateReason");
             return (Criteria) this;
         }
 
-        public Criteria andUpdateResonIn(List<String> values) {
-            addCriterion("update_reson in", values, "updateReson");
+        public Criteria andUpdateReasonIn(List<String> values) {
+            addCriterion("update_reason in", values, "updateReason");
             return (Criteria) this;
         }
 
-        public Criteria andUpdateResonNotIn(List<String> values) {
-            addCriterion("update_reson not in", values, "updateReson");
+        public Criteria andUpdateReasonNotIn(List<String> values) {
+            addCriterion("update_reason not in", values, "updateReason");
             return (Criteria) this;
         }
 
-        public Criteria andUpdateResonBetween(String value1, String value2) {
-            addCriterion("update_reson between", value1, value2, "updateReson");
+        public Criteria andUpdateReasonBetween(String value1, String value2) {
+            addCriterion("update_reason between", value1, value2, "updateReason");
             return (Criteria) this;
         }
 
-        public Criteria andUpdateResonNotBetween(String value1, String value2) {
-            addCriterion("update_reson not between", value1, value2, "updateReson");
+        public Criteria andUpdateReasonNotBetween(String value1, String value2) {
+            addCriterion("update_reason not between", value1, value2, "updateReason");
             return (Criteria) this;
         }
     }

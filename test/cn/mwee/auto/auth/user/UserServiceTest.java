@@ -95,7 +95,11 @@ public class UserServiceTest extends AbstractJUnit4SpringContextTests  {
 		AuthUser user = new AuthUser();
 		user.setId(2);
 		user.setPassword("123456");
-		userService.updatePassword(user);
+		try {
+			userService.updatePassword("123456","123456");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 }
