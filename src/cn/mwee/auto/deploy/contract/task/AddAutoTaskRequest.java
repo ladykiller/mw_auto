@@ -18,6 +18,8 @@ public class AddAutoTaskRequest
     @NotBlank(message="任务描述不能为空")
     private String desc;
 
+    private String execZone;
+
     private String execUser;
 
     private String params;
