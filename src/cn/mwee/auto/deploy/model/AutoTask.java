@@ -19,7 +19,7 @@ public class AutoTask {
     private String name;
 
     /**
-     * 路径
+     * 执行路径
      * tasks.exec
      *
      * @mbggenerated
@@ -33,6 +33,14 @@ public class AutoTask {
      * @mbggenerated
      */
     private String execUser;
+
+    /**
+     * 任务脚本执行目标主机
+     * tasks.exec_zone
+     *
+     * @mbggenerated
+     */
+    private String execZone;
 
     /**
      * 参数
@@ -119,7 +127,7 @@ public class AutoTask {
     }
 
     /**
-     * 路径
+     * 执行路径
      * This method returns the value of the database column tasks.exec
      *
      * @return the value of tasks.exec
@@ -131,7 +139,7 @@ public class AutoTask {
     }
 
     /**
-     * 路径
+     * 执行路径
      * This method sets the value of the database column tasks.exec
      *
      * @param exec the value for tasks.exec
@@ -164,6 +172,30 @@ public class AutoTask {
      */
     public void setExecUser(String execUser) {
         this.execUser = execUser;
+    }
+
+    /**
+     * 任务脚本执行目标主机
+     * This method returns the value of the database column tasks.exec_zone
+     *
+     * @return the value of tasks.exec_zone
+     *
+     * @mbggenerated
+     */
+    public String getExecZone() {
+        return execZone;
+    }
+
+    /**
+     * 任务脚本执行目标主机
+     * This method sets the value of the database column tasks.exec_zone
+     *
+     * @param execZone the value for tasks.exec_zone
+     *
+     * @mbggenerated
+     */
+    public void setExecZone(String execZone) {
+        this.execZone = execZone;
     }
 
     /**
