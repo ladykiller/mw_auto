@@ -30,8 +30,19 @@ public interface ITemplateController extends IController  {
     NormalReturn getTemplateTasks(ServiceRequest request);
 
     /**
-     * 获取模板详细信息
+     * 获取流程模板详细信息
      * @return
      */
     NormalReturn getTemplateInfo(ServiceRequest request);
+
+    /**
+     * 获取模板详细信息
+     * @return
+     */
+    NormalReturn getTemplateDetail(ServiceRequest request);
+
+
+    NormalReturn addTemplateZone(ServiceRequest request);
+
+    NormalReturn removeTemplateZone(ServiceRequest request);
 }

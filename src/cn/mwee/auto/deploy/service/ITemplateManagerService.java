@@ -1,17 +1,10 @@
 package cn.mwee.auto.deploy.service;
 
-import java.util.Collection;
 import java.util.List;
-
 import cn.mwee.auto.deploy.contract.template.QueryTemplatesRequest;
 import cn.mwee.auto.deploy.contract.template.QueryTemplatesResult;
-import cn.mwee.auto.deploy.contract.template.TemplateTaskContract;
 import cn.mwee.auto.deploy.model.*;
-import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
-import org.eclipse.jgit.lib.Ref;
-import org.eclipse.jgit.transport.CredentialsProvider;
-import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 
 /**
  * Created by huming on 16/6/24.
@@ -73,5 +66,10 @@ public interface ITemplateManagerService {
      * @return
      */
     VcsModel getGitRepInfo(AutoTemplate template) throws GitAPIException;
+
+
+    boolean addTemplateZone(TemplateZone templateZone);
+
+    boolean removeTemplateZone(int id);
 
 }

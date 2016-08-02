@@ -1,6 +1,7 @@
 package cn.mwee.auto.deploy.model;
 
 import java.util.Date;
+import java.util.List;
 
 public class AutoTemplate {
     /**
@@ -81,6 +82,17 @@ public class AutoTemplate {
      * @mbggenerated
      */
     private Date updateTime;
+
+    private List<TemplateZone> templateZoneList;
+
+
+    public List<TemplateZone> getTemplateZoneList() {
+        return templateZoneList;
+    }
+
+    public void setTemplateZoneList(List<TemplateZone> templateZoneList) {
+        this.templateZoneList = templateZoneList;
+    }
 
     /**
      * This method returns the value of the database column templates.id
