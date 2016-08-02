@@ -95,6 +95,15 @@ public class TemplateController extends AutoAbstractController implements ITempl
     }
 
     @Override
+    @Model(contract = ModifyTemplateTaskRequest.class, model = TemplateTask.class)
+    public NormalReturn modifyTemplateTask(ServiceRequest request)
+    {
+        TemplateTask templateTask = request.getModel();
+        boolean modifySuccess = templateManagerService.modifyTemplateTask(templateTask);
+        return new NormalReturn(modifySuccess);
+    }
+
+    @Override
     @Contract(TemplateIdQuery.class)
     public NormalReturn getTemplateTasks(ServiceRequest request)
     {

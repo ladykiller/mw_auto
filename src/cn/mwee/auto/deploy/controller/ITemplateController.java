@@ -23,6 +23,8 @@ public interface ITemplateController extends IController  {
 
     NormalReturn removeTemplateTask(ServiceRequest request);
 
+    NormalReturn modifyTemplateTask(ServiceRequest request);
+
     /**
      * 获取模板任务信息
      * @return
