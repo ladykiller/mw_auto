@@ -761,6 +761,66 @@ public class FlowTaskExample {
             return (Criteria) this;
         }
 
+        public Criteria andDelayIsNull() {
+            addCriterion("delay is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDelayIsNotNull() {
+            addCriterion("delay is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDelayEqualTo(Integer value) {
+            addCriterion("delay =", value, "delay");
+            return (Criteria) this;
+        }
+
+        public Criteria andDelayNotEqualTo(Integer value) {
+            addCriterion("delay <>", value, "delay");
+            return (Criteria) this;
+        }
+
+        public Criteria andDelayGreaterThan(Integer value) {
+            addCriterion("delay >", value, "delay");
+            return (Criteria) this;
+        }
+
+        public Criteria andDelayGreaterThanOrEqualTo(Integer value) {
+            addCriterion("delay >=", value, "delay");
+            return (Criteria) this;
+        }
+
+        public Criteria andDelayLessThan(Integer value) {
+            addCriterion("delay <", value, "delay");
+            return (Criteria) this;
+        }
+
+        public Criteria andDelayLessThanOrEqualTo(Integer value) {
+            addCriterion("delay <=", value, "delay");
+            return (Criteria) this;
+        }
+
+        public Criteria andDelayIn(List<Integer> values) {
+            addCriterion("delay in", values, "delay");
+            return (Criteria) this;
+        }
+
+        public Criteria andDelayNotIn(List<Integer> values) {
+            addCriterion("delay not in", values, "delay");
+            return (Criteria) this;
+        }
+
+        public Criteria andDelayBetween(Integer value1, Integer value2) {
+            addCriterion("delay between", value1, value2, "delay");
+            return (Criteria) this;
+        }
+
+        public Criteria andDelayNotBetween(Integer value1, Integer value2) {
+            addCriterion("delay not between", value1, value2, "delay");
+            return (Criteria) this;
+        }
+
         public Criteria andStateIsNull() {
             addCriterion("`state` is null");
             return (Criteria) this;

@@ -145,6 +145,7 @@ public class FlowManagerService implements IFlowManagerService {
         if (flow == null) {
             throw new NullPointerException("Cant find flow for id:" + flowId);
         }
+        FlowStrategy flowStrategy = getFlowStrategy4Flow(flowId);
         //get template
         AutoTemplate template = templateManagerService.getTemplate(flow.getTemplateId());
         if (template == null) {
@@ -167,25 +168,48 @@ public class FlowManagerService implements IFlowManagerService {
         Map<String, String> flowParamMap = initFlowParams(template, flow);
         //复制任务
         List<FlowTask> fts = new ArrayList<>();
+        Map<String, FlowTask> zoneStartTaskMap = new HashMap<>();
         for (TemplateTask tt : tts) {
             //prepareGroup
             if (tt.getGroup().equals(GroupType.PrepareGroup)) {
-                fts.add(buildFlowTask(tt,flowId,localHost,flowParamMap,userParamsMap));
+                fts.add(buildFlowTask(tt, flowId, localHost, flowParamMap, userParamsMap));
                 continue;
             }
-
             //区域组
+            for (int i = 0; i < zones.length; i++) {
+                if (StringUtils.isBlank(zones[i])) continue;
+                FlowTask flowTask = buildFlowTask(tt, flowId, zones[i], flowParamMap, userParamsMap);
+                if (flowStrategy != null) {
+                    calStrategy(flowTask,i,zoneStartTaskMap,flowStrategy);
+                }
+                fts.add(flowTask);
+            }
+            /*
             for (String zone : zones) {
                 if (StringUtils.isBlank(zone)) continue;
-                fts.add(buildFlowTask(tt,flowId,zone,flowParamMap,userParamsMap));
+                fts.add(buildFlowTask(tt, flowId, zone, flowParamMap, userParamsMap));
             }
+            */
         }
         int result = flowTaskExtMapper.insertBatch(fts);
         return result > 0;
     }
 
+    private void calStrategy(FlowTask flowTask, int index, Map<String, FlowTask> zoneStartTaskMap, FlowStrategy flowStrategy) {
+        String key = flowTask.getZone();
+        if (zoneStartTaskMap.get(key)!= null) return;
+        if (flowTask.getGroup() > GroupType.PreGroup
+                && flowTask.getGroup()<GroupType.PostGroup){
+            key +=flowTask.getGroup();
+            if (zoneStartTaskMap.get(key)!= null) return;
+        }
+        zoneStartTaskMap.put(key,flowTask);
+        flowTask.setDelay(((index)/flowStrategy.getZonesize()) * flowStrategy.getInterval());
+    }
+
     /**
      * 构建flowTask
+     *
      * @param tt
      * @param flowId
      * @param zone
@@ -193,8 +217,8 @@ public class FlowManagerService implements IFlowManagerService {
      * @param userParamsMap
      * @return
      */
-    private FlowTask buildFlowTask(TemplateTask tt,Integer flowId,String zone,
-                               Map<String,String> flowParamMap,Map<String,String> userParamsMap) {
+    private FlowTask buildFlowTask(TemplateTask tt, Integer flowId, String zone,
+                                   Map<String, String> flowParamMap, Map<String, String> userParamsMap) {
         FlowTask ft = new FlowTask();
         ft.setGroup(tt.getGroup());
         ft.setPriority(tt.getPriority());
@@ -202,6 +226,7 @@ public class FlowManagerService implements IFlowManagerService {
         ft.setTaskType(tt.getTaskType());
         ft.setFlowId(flowId);
         ft.setZone(zone);
+        ft.setDelay(0);
         flowParamMap.put("%zone%", zone);
         replaceFlowParams(ft, flowParamMap);
         replaceUserParams(ft, userParamsMap);
@@ -213,7 +238,7 @@ public class FlowManagerService implements IFlowManagerService {
     /**
      * 参数替换
      *
-     * @param ft flowTask
+     * @param ft       flowTask
      * @param paramMap paramMap
      */
     private void replaceUserParams(FlowTask ft, Map<String, String> paramMap) {
@@ -490,6 +515,10 @@ public class FlowManagerService implements IFlowManagerService {
     }
 
     public List<FlowTask> getZoneStartFlowTask(int flowId) {
+
+        Flow flow = flowMapper.selectByPrimaryKey(flowId);
+        String[] zones = flow.getZones().split(",");
+
         List<FlowTask> list = null;
         FlowTaskExample example = new FlowTaskExample();
         //获取前置组初始任务
@@ -502,8 +531,6 @@ public class FlowManagerService implements IFlowManagerService {
             return list;
         }
         //获取并发组
-        Flow flow = flowMapper.selectByPrimaryKey(flowId);
-        String[] zones = flow.getZones().split(",");
         for (String zone : zones) {
             example.clear();
             example.createCriteria()
@@ -527,6 +554,12 @@ public class FlowManagerService implements IFlowManagerService {
         return list;
     }
 
+    public FlowStrategy getFlowStrategy4Flow(Integer flowId) {
+        FlowStrategyExample example = new FlowStrategyExample();
+        example.createCriteria().andFlowIdEqualTo(flowId);
+        List<FlowStrategy> list = flowStrategyMapper.selectByExample(example);
+        return CollectionUtils.isEmpty(list) ? null : list.get(0);
+    }
 
     private boolean startFlow(int flowId) {
         try {

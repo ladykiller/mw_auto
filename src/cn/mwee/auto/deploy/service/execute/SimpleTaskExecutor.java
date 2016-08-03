@@ -76,7 +76,7 @@ public class SimpleTaskExecutor implements TaskExecutor {
                 return;
             }
             if (!execute(flowTask)) {
-                throw new Exception();
+                throw new Exception(String.format("execute task error id[%s]", flowTask.getId()));
             }
             flowManagerService.updateTaskStatus(flowTask.getId(), TaskState.SUCCESS.name());
             FlowTask nextFlowTask = flowManagerService.getCurrentGroupNextTask(flowTask.getId());

@@ -12,6 +12,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import cn.mwee.auto.common.util.MessageUtil;
 import cn.mwee.auto.deploy.service.IFlowManagerService;
 import cn.mwee.auto.deploy.util.AutoConsts;
 import org.springframework.stereotype.Component;
@@ -29,6 +30,9 @@ public class SimpleTaskMsgSender implements TaskMsgSender {
 
 	@Resource
 	private MQSender appEventMQSender;
+
+    @Resource
+	private MessageUtil activeMQSender;
 
 	@Resource
 	IFlowManagerService flowManagerService;
@@ -51,24 +55,12 @@ public class SimpleTaskMsgSender implements TaskMsgSender {
 			flowManagerService.updateTaskStatus(flowTask.getId(),AutoConsts.TaskState.MANUAL.name());
 			return;
 		}
-		/*
-		long delay = 0;
-		//定时任务
-		if (AutoConsts.TaskState.TIMER.equals(flowTask.getTaskType())) {
-			flowManagerService.updateTaskStatus(flowTask.getId(),AutoConsts.TaskState.TIMER.name());
-			delay = calcDelayTime(flowTask.getCreateTime());
-		}
-		//延迟消息
-		if (delay>0) {
-
-		}
-		*/
 		AppEvent event = new AppEvent(0, "soa.notify.flow.create", flowTask);
-		appEventMQSender.sendAsync(event.getEventType(), event);
-	}
-
-
-	private long calcDelayTime(Date executeDate) {
-		return executeDate.getTime() - new Date().getTime();
+//		appEventMQSender.sendAsync(event.getEventType(), event);
+        if (flowTask.getDelay() > 0) {
+            activeMQSender.convertAndSendDelay(event,flowTask.getDelay()*1000);
+        } else {
+            activeMQSender.convertAndSend(event);
+        }
 	}
 }

@@ -66,6 +66,14 @@ public class FlowTask {
     private Short priority;
 
     /**
+     * 延迟
+     * flow_tasks.delay
+     *
+     * @mbggenerated
+     */
+    private Integer delay;
+
+    /**
      * 状态[新建,运行中,手动,定时,失败,成功]
      * flow_tasks.state
      *
@@ -273,6 +281,30 @@ public class FlowTask {
      */
     public void setPriority(Short priority) {
         this.priority = priority;
+    }
+
+    /**
+     * 延迟
+     * This method returns the value of the database column flow_tasks.delay
+     *
+     * @return the value of flow_tasks.delay
+     *
+     * @mbggenerated
+     */
+    public Integer getDelay() {
+        return delay;
+    }
+
+    /**
+     * 延迟
+     * This method sets the value of the database column flow_tasks.delay
+     *
+     * @param delay the value for flow_tasks.delay
+     *
+     * @mbggenerated
+     */
+    public void setDelay(Integer delay) {
+        this.delay = delay;
     }
 
     /**
