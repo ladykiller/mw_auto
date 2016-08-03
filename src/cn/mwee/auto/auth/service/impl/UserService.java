@@ -161,9 +161,8 @@ public class UserService implements IUserService {
         criteria.andStatusEqualTo(true);
         if (StringUtils.isNotBlank(userQueryContract.getUserName()))
             criteria.andUsernameLike(SqlUtils.wrapLike(userQueryContract.getUserName()));
-        BaseQueryResult<AuthUser> result = BaseModel.selectByPage(authUserMapper,example
+        return BaseModel.selectByPage(authUserMapper,example
                 ,userQueryContract.getPageInfo(),userQueryContract.getPageInfo()==null);
-        return result;
 	}
 
     @Override
@@ -216,12 +215,5 @@ public class UserService implements IUserService {
 		return new AuthUserExample();
 	}
 
-	private AuthUserExample ctreteExample(BaseContract contract) {
-		AuthUserExample example = new AuthUserExample();
-		example.setLimitStart(contract.getLimitStart());
-		example.setLimitEnd(contract.getLimitEnd());
-		if (StringUtils.isNotBlank(contract.getSortInfo())) example.setOrderByClause(contract.getSortInfo());
-		return example;
-	}
-	
+
 }

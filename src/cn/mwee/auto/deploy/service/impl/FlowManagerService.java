@@ -3,6 +3,7 @@ package cn.mwee.auto.deploy.service.impl;
 import cn.mwee.auto.auth.util.AuthUtils;
 import cn.mwee.auto.common.db.BaseModel;
 import cn.mwee.auto.common.db.BaseQueryResult;
+import cn.mwee.auto.deploy.contract.flow.FlowAddContract;
 import cn.mwee.auto.deploy.contract.flow.FlowQueryContract;
 import cn.mwee.auto.deploy.dao.*;
 import cn.mwee.auto.deploy.model.*;
@@ -54,6 +55,9 @@ public class FlowManagerService implements IFlowManagerService {
     @Autowired
     private AutoTaskMapper autoTaskMapper;
 
+    @Autowired
+    private FlowStrategyMapper flowStrategyMapper;
+
     @Resource
     private ITemplateManagerService templateManagerService;
 
@@ -72,17 +76,11 @@ public class FlowManagerService implements IFlowManagerService {
     @Value("${localhost.name}")
     private String localHost = "127.0.0.1";
 
+
     @Override
-    public int createFlow(Flow flow, Map<String, Object> params) throws Exception {
-        /*
-        FlowExample example = new FlowExample();
-
-        FlowExample.Criteria criteria= example.createCriteria();
-
-        criteria.andStateEqualTo("ing");
-
-        List<Flow> list = flowMapper.selectByExample(example);
-        */
+    public Integer createFlow(FlowAddContract req) {
+        Flow flow = createFlowSimple(req);
+        Map<String, Object> params = req.getParams() == null ? new HashMap<>() : req.getParams();
         AutoTemplate template = templateManagerService.getTemplate(flow.getTemplateId());
         if (template == null) {
             throw new NullPointerException("未找到相应模板");
@@ -94,7 +92,27 @@ public class FlowManagerService implements IFlowManagerService {
         flow.setParams(JSON.toJSONString(params));
         flow.setState(TaskState.INIT.name());
         int result = flowMapper.insertSelective(flow);
+        if (result > 0 && req.getStrategyZoneSize() != null
+                && req.getStrategyInterval() != null) {
+            FlowStrategy flowStrategy = new FlowStrategy();
+            flowStrategy.setFlowId(flow.getId());
+            flowStrategy.setCreatetime(new Date());
+            flowStrategy.setInterval(req.getStrategyInterval());
+            flowStrategy.setZonesize(req.getStrategyZoneSize());
+            flowStrategyMapper.insertSelective(flowStrategy);
+        }
         return result > 0 ? flow.getId() : 0;
+    }
+
+    private Flow createFlowSimple(FlowAddContract req) {
+        Flow flow = new Flow();
+        flow.setName(req.getName());
+        flow.setTemplateId(req.getTemplateId());
+        flow.setProjectId(req.getProjectId());
+        flow.setZones(req.getZones());
+        flow.setVcsBranch(req.getVcsBranch());
+        flow.setNeedbuild(req.getNeedBuild());
+        return flow;
     }
 
     @Override
@@ -704,7 +722,8 @@ public class FlowManagerService implements IFlowManagerService {
 
         System.out.println(String.format("sh /opt/auto/local/pullcode.sh -v %s -u %s -b %s -p", "s222", "s333", "b", "p"));
         */
-        String[] strs = "".split(",");
-        System.out.println(strs.length);
+//        String[] strs = "".split(",");
+        Integer i = null;
+        System.out.println(i > 0);
     }
 }

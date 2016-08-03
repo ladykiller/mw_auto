@@ -1,8 +1,10 @@
 package cn.mwee.auto.deploy.service;
 
 import cn.mwee.auto.common.db.BaseQueryResult;
+import cn.mwee.auto.deploy.contract.flow.FlowAddContract;
 import cn.mwee.auto.deploy.contract.flow.FlowQueryContract;
 import cn.mwee.auto.deploy.model.Flow;
+import cn.mwee.auto.deploy.model.FlowStrategy;
 import cn.mwee.auto.deploy.model.FlowTask;
 
 import java.util.List;
@@ -14,21 +16,16 @@ import java.util.Map;
 public interface IFlowManagerService {
 
     /**
-     *
-     * createFlow -> flow 新建状态 -> 执行流程 (1.初始化流程任务,2.执行任务)-> 任务流处理listener
-     *
-     * @param templateId
-     * @param zones
-     * @param params
+     * createFlow
+     * @param req
      * @return
      */
-    int createFlow(Flow flow,Map<String,Object> params) throws Exception;
+	Integer createFlow(FlowAddContract req);
 
     /**
      * 执行任务流
      * 
      * @param flowId
-     * @param operater
      * @return
      */
     boolean executeFlow(int flowId) throws Exception;

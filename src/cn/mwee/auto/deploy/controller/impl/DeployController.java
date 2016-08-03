@@ -54,7 +54,7 @@ public class DeployController implements IDeployController {
 		FlowAddContract req = request.getContract();
 		try {
 			
-			int flowId = flowManagerService.createFlow(createFlowTask(req), req.getParams());
+			int flowId = flowManagerService.createFlow(req);
 			if (flowId > 0) {
                 if (req.getExeNow() == 1) {
                     flowManagerService.executeFlow(flowId);
@@ -105,16 +105,7 @@ public class DeployController implements IDeployController {
 		}
 	}
 	
-	private Flow createFlowTask(FlowAddContract req) {
-		Flow flow = new Flow();
-		flow.setName(req.getName());
-		flow.setTemplateId(req.getTemplateId());
-        flow.setProjectId(req.getProjectId());
-		flow.setZones(req.getZones());
-        flow.setVcsBranch(req.getVcsBranch());
-        flow.setNeedbuild(req.getNeedBuild());
-		return flow;
-	}
+
 
 	@Override
 	@Contract(FlowStartContract.class)

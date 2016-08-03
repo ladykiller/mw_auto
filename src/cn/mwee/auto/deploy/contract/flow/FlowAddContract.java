@@ -9,6 +9,7 @@ import java.util.Map;
 
 import javax.validation.constraints.NotNull;
 
+import cn.mwee.auto.deploy.model.FlowStrategy;
 import org.hibernate.validator.constraints.NotBlank;
 
 import lombok.Data;
@@ -56,10 +57,21 @@ public class FlowAddContract {
     /**
      * 是否立即执行（0，否；1，是）
      */
+	@Range(min = 0,max = 1,message = "参数不合法")
     private byte exeNow;
 
 	/**
      *  执行参数
      */
 	private Map<String, Object> params;
+
+	/**
+	 * 流程策略-区域组大小
+	 */
+	private Integer strategyZoneSize;
+
+	/**
+	 * 流程策略-延迟时间
+	 */
+	private Integer strategyInterval;
 }

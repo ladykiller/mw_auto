@@ -31,40 +31,7 @@ public class BaseContract {
 	 */
 	private PageInfo pageInfo;
 
-	/** 每页记录，默认20 **/
-	@Min(value=1)
-	private Integer pageSize = 20;
-	
-	/** 页码，默认1 **/
-	@Min(value=1)
-	private Integer pageIndex = 1;
-	
-	/** 排序列，默认Id **/
-	private String sortInfo = "";
-	
-	/** 总页数 **/
-	private Integer pageSum;
-	
-	/** 总条数 **/
-	private Integer count = 0;
-	
-	/** 返回的数据 **/
-	private Object data;
-	
-	@JSONField(serialize=false)
-	public Integer getLimitStart() {
-		return (pageIndex - 1) * pageSize;
-	}
-	
-	@JSONField(serialize=false)
-	public Integer getLimitEnd(){
-		return pageSize;
-	}
-	
-	public Integer getPageSum () {
-		pageSum = (count + pageSize -1 ) / pageSize;
-		return pageSum;
-	}
+
 	
 	
 }
