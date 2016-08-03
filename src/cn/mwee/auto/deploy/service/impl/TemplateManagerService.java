@@ -221,6 +221,20 @@ public class TemplateManagerService implements ITemplateManagerService {
         return vcsModel;
     }
 
+    @Override
+    public boolean addTemplateZone(TemplateZone templateZone)
+    {
+        templateZone.setCreateTime(new Date());
+
+        return templateZoneMapper.insertSelective(templateZone) > 0;
+    }
+
+    @Override
+    public boolean removeTemplateZone(int id)
+    {
+        return templateZoneMapper.deleteByPrimaryKey(id) > 0;
+    }
+
     public static void main(String[] args) {
         String url = "http://git.9now.net:10080/devops/mw_auto.git";
         System.out.println(url.substring(url.lastIndexOf('/')+1,url.lastIndexOf('.')));

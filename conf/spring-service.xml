@@ -16,6 +16,7 @@
 				<entry key="/user/{label}" value="cn.mwee.auto.auth.handler.UserHandler" />
 				<entry key="/role/{label}" value="cn.mwee.auto.auth.handler.RoleHandler" />
 				<entry key="/permission/{label}" value="cn.mwee.auto.auth.handler.PermissionHandler" />
+				<entry key="/zone/{label}" value="cn.mwee.auto.deploy.handler.ZoneHandler" />
 			</map>
 		</property>
 	</bean>

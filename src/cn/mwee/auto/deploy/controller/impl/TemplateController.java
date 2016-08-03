@@ -5,6 +5,7 @@ import cn.mwee.auto.deploy.contract.template.*;
 import cn.mwee.auto.deploy.controller.ITemplateController;
 import cn.mwee.auto.deploy.model.AutoTemplate;
 import cn.mwee.auto.deploy.model.TemplateTask;
+import cn.mwee.auto.deploy.model.TemplateZone;
 import cn.mwee.auto.deploy.service.ITemplateManagerService;
 import cn.mwee.auto.misc.aspect.contract.Contract;
 import cn.mwee.auto.misc.aspect.contract.Model;
@@ -94,6 +95,15 @@ public class TemplateController extends AutoAbstractController implements ITempl
     }
 
     @Override
+    @Model(contract = ModifyTemplateTaskRequest.class, model = TemplateTask.class)
+    public NormalReturn modifyTemplateTask(ServiceRequest request)
+    {
+        TemplateTask templateTask = request.getModel();
+        boolean modifySuccess = templateManagerService.modifyTemplateTask(templateTask);
+        return new NormalReturn(modifySuccess);
+    }
+
+    @Override
     @Contract(TemplateIdQuery.class)
     public NormalReturn getTemplateTasks(ServiceRequest request)
     {
@@ -115,7 +125,7 @@ public class TemplateController extends AutoAbstractController implements ITempl
             Map<String,Object> result = new HashMap<>();
             //基础信息
             result.put("baseInfo",templateManagerService.getTemplate(req.getTemplateId()));
-            //区域信息
+            //区信息
             result.put("zones", templateManagerService.getTemplateZones(req.getTemplateId()));
             //任务信息
 //            result.put("tasks", templateManagerService.getTemplateSimpleTasks(req.getTemplateId()));
@@ -127,5 +137,53 @@ public class TemplateController extends AutoAbstractController implements ITempl
             logger.error("",e);
             return new NormalReturn("500","error",e.getMessage());
         }
+    }
+
+    @Override
+    @Contract(TemplateIdQuery.class)
+    public NormalReturn getTemplateDetail(ServiceRequest request)
+    {
+        TemplateIdQuery req = request.getContract();
+        try {
+            AutoTemplate template = templateManagerService.getTemplate(req.getTemplateId());
+            if (template == null) {
+                return new NormalReturn("500","error","模板不存在");
+            }
+
+            Map<String,Object> result = new HashMap<>();
+            //基础信息
+            result.put("baseInfo",templateManagerService.getTemplate(req.getTemplateId()));
+            //区信息
+            result.put("zones", templateManagerService.getTemplateZones(req.getTemplateId()));
+            //任务信息
+            result.put("templateTasks", templateManagerService.getTemplateTasks(req.getTemplateId()));
+
+            return new NormalReturn(result);
+        }
+        catch (Exception e)
+        {
+            logger.error("",e);
+            return new NormalReturn("500","error",e.getMessage());
+        }
+    }
+
+    @Override
+    @Model(contract = AddTemplateZoneRequest.class, model = TemplateZone.class)
+    public NormalReturn addTemplateZone(ServiceRequest request)
+    {
+        TemplateZone templateZone = request.getModel();
+
+        boolean addSuccess = templateManagerService.addTemplateZone(templateZone);
+
+        return new NormalReturn(addSuccess);
+    }
+
+    @Override
+    @Contract(TemplateZoneIdQuery.class)
+    public NormalReturn removeTemplateZone(ServiceRequest request)
+    {
+        TemplateZoneIdQuery contract = request.getContract();
+        boolean rmSuccess = templateManagerService.removeTemplateZone(contract.getTemplateZoneId());
+        return new NormalReturn(rmSuccess);
     }
 }
