@@ -109,12 +109,22 @@ public class UserService implements IUserService {
 	}
 
 	@Override
-	public Set<String> queryRoles(String username) {
+	public List<AuthRole> queryRoles(String username) {
 		AuthUser authUser = queryByUserName(username);
         if (authUser != null) {
             return authUserRoleExtMapper.queryRoles4User(authUser.getId());
         }
 		return null;
+	}
+
+	@Override
+	public Set<String> queryRoleCodes(String username) {
+        Set<String> roleCodeSet = new HashSet<>();
+        List<AuthRole> roles = queryRoles(username);
+        if (CollectionUtils.isNotEmpty(roles)) {
+            roles.forEach(authRole -> roleCodeSet.add(authRole.getRolecode()));
+        }
+        return roleCodeSet;
 	}
 
 	@Override

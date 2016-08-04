@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 import cn.mwee.auto.auth.contract.user.UserQueryContract;
+import cn.mwee.auto.auth.model.AuthRole;
 import cn.mwee.auto.auth.model.AuthUser;
 import cn.mwee.auto.common.db.BaseQueryResult;
 import cn.mwee.auto.deploy.contract.commom.BaseContract;
@@ -83,8 +84,15 @@ public interface IUserService {
 	 * @param username
 	 * @return
 	 */
-	Set<String> queryRoles(String username);
-	
+	List<AuthRole> queryRoles(String username);
+
+	/**
+	 * 用户角色codes
+	 * @param username
+	 * @return
+	 */
+	Set<String> queryRoleCodes(String username);
+
 	/**
 	 * 用户权限
 	 * @param username

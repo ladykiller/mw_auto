@@ -23,6 +23,13 @@ public interface IPermissionController extends IController {
 	NormalReturn addPermission(ServiceRequest request);
 
 	/**
+	 * 新增菜单
+	 * @param request
+	 * @return
+	 */
+	NormalReturn getPermission(ServiceRequest request);
+
+	/**
 	 * 更新菜单
 	 * @param request
 	 * @return

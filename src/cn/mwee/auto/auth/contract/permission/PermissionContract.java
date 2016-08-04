@@ -2,6 +2,7 @@ package cn.mwee.auto.auth.contract.permission;
 
 import cn.mwee.auto.deploy.contract.commom.BaseContract;
 import lombok.Data;
+import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.constraints.NotNull;
 
@@ -25,16 +26,19 @@ public class PermissionContract extends BaseContract {
     /**
      * 菜单url
      */
+    @NotBlank(message = "code不能为空")
     private String code;
 
     /**
      * 菜单标题
      */
+    @NotBlank(message = "标题不能为空")
     private String name;
 
     /**
      * 菜单类型
      */
+    @NotNull(message = "未指定菜单类型")
     private Byte type;
 
     /**

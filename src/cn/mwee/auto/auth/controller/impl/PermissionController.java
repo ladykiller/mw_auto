@@ -1,9 +1,6 @@
 package cn.mwee.auto.auth.controller.impl;
 
-import cn.mwee.auto.auth.contract.permission.PermLevelQueryContract;
-import cn.mwee.auto.auth.contract.permission.PermissionAddContract;
-import cn.mwee.auto.auth.contract.permission.PermissionContract;
-import cn.mwee.auto.auth.contract.permission.PermissionQueryContract;
+import cn.mwee.auto.auth.contract.permission.*;
 import cn.mwee.auto.auth.controller.IPermissionController;
 import cn.mwee.auto.auth.model.AuthPermission;
 import cn.mwee.auto.auth.service.IPermissionService;
@@ -55,6 +52,19 @@ public class PermissionController implements IPermissionController {
     }
 
     @Override
+//    @RequiresPermissions(value = "/permission/getPermission",logical = Logical.OR)
+    @Contract(PermissionIdContract.class)
+    public NormalReturn getPermission(ServiceRequest request) {
+        PermissionIdContract req = request.getContract();
+        try {
+            return new NormalReturn("200","success",permissionService.select(req.getId()));
+        } catch (Exception e) {
+            logger.error("",e);
+            return new NormalReturn("500","error",e.getMessage());
+        }
+    }
+
+    @Override
     @RequiresPermissions(value = "/permission/updatePermission",logical = Logical.OR)
     @Contract(PermissionContract.class)
     public NormalReturn updatePermission(ServiceRequest request) {
@@ -77,9 +87,9 @@ public class PermissionController implements IPermissionController {
 
     @Override
     @RequiresPermissions(value = "/permission/delPermission",logical = Logical.OR)
-    @Contract(PermissionContract.class)
+    @Contract(PermissionIdContract.class)
     public NormalReturn delPermission(ServiceRequest request) {
-        PermissionContract req = request.getContract();
+        PermissionIdContract req = request.getContract();
         try {
             permissionService.delete(req.getId());
             return new NormalReturn("200","success","success");

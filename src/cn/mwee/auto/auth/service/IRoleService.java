@@ -6,6 +6,7 @@ package cn.mwee.auto.auth.service;
 import java.util.List;
 
 import cn.mwee.auto.auth.contract.role.RoleQueryContract;
+import cn.mwee.auto.auth.model.AuthPermission;
 import cn.mwee.auto.auth.model.AuthRole;
 import cn.mwee.auto.auth.model.AuthRolePermission;
 import cn.mwee.auto.common.db.BaseQueryResult;
@@ -70,5 +71,5 @@ public interface IRoleService {
      * @param roleId
      * @return
      */
-    List<AuthRolePermission> queryRoleAuths(Integer roleId);
+	List<AuthPermission> queryRoleAuths(Integer roleId);
 }

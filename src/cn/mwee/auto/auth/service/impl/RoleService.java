@@ -10,10 +10,10 @@ import java.util.Date;
 import java.util.List;
 
 import cn.mwee.auto.auth.contract.role.RoleQueryContract;
+import cn.mwee.auto.auth.dao.AuthPermissionMapper;
 import cn.mwee.auto.auth.dao.AuthRolePermissionExtMapper;
 import cn.mwee.auto.auth.dao.AuthRolePermissionMapper;
-import cn.mwee.auto.auth.model.AuthRolePermission;
-import cn.mwee.auto.auth.model.AuthRolePermissionExample;
+import cn.mwee.auto.auth.model.*;
 import cn.mwee.auto.auth.util.SqlUtils;
 import cn.mwee.auto.common.db.BaseModel;
 import cn.mwee.auto.common.db.BaseQueryResult;
@@ -23,8 +23,6 @@ import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import cn.mwee.auto.auth.dao.AuthRoleMapper;
-import cn.mwee.auto.auth.model.AuthRole;
-import cn.mwee.auto.auth.model.AuthRoleExample;
 import cn.mwee.auto.auth.service.IRoleService;
 import org.springframework.stereotype.Service;
 
@@ -45,6 +43,9 @@ public class RoleService implements IRoleService {
 
     @Autowired
     private AuthRolePermissionMapper authRolePermissionMapper;
+
+    @Autowired
+    private AuthPermissionMapper authPermissionMapper;
 
 	@Override
 	public boolean add(AuthRole authRole) {
@@ -115,7 +116,14 @@ public class RoleService implements IRoleService {
     }
 
     @Override
-    public List<AuthRolePermission> queryRoleAuths(Integer roleId) {
-        return null;
+    public List<AuthPermission> queryRoleAuths(Integer roleId) {
+        AuthRolePermissionExample example = new AuthRolePermissionExample();
+        example.createCriteria().andRoleIdEqualTo(roleId);
+        List<AuthRolePermission> list = authRolePermissionMapper.selectByExample(example);
+        List<Integer> permIds = new ArrayList<>();
+        list.forEach(authRolePermission -> permIds.add(authRolePermission.getPermissionId()));
+        AuthPermissionExample example1 = new AuthPermissionExample();
+        example1.createCriteria().andIdIn(permIds);
+        return authPermissionMapper.selectByExample(example1);
     }
 }

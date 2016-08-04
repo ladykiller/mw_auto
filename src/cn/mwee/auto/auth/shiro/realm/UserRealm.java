@@ -39,7 +39,7 @@ public class UserRealm extends AuthorizingRealm {
 		// TODO Auto-generated method stub
 		String username = (String)principals.getPrimaryPrincipal();
 		SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
-        authorizationInfo.setRoles(userService.queryRoles(username));
+        authorizationInfo.setRoles(userService.queryRoleCodes(username));
         authorizationInfo.setStringPermissions(userService.queryPermissions(username));
         if ("admin".equals(username)) authorizationInfo.addStringPermission("*");
         return authorizationInfo;

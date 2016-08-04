@@ -1,8 +1,10 @@
 package cn.mwee.auto.auth.dao;
 
 
+import cn.mwee.auto.auth.model.AuthRole;
 import cn.mwee.auto.auth.model.AuthUserRole;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.ResultMap;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
@@ -17,8 +19,9 @@ public interface AuthUserRoleExtMapper {
     int insertBatch(List<AuthUserRole> list);
 
 
-    @Select("SELECT r.rolecode FROM auth_user_role ur LEFT JOIN auth_role r ON ur.role_id = r.id WHERE ur.user_id = #{userId}")
-    Set<String> queryRoles4User(@Param("userId") Integer userId);
+    @Select("SELECT r.* FROM auth_user_role ur LEFT JOIN auth_role r ON ur.role_id = r.id WHERE ur.user_id = #{userId}")
+    @ResultMap("cn.mwee.auto.auth.dao.AuthUserRoleMapper.BaseResultMap")
+    List<AuthRole> queryRoles4User(@Param("userId") Integer userId);
 
     @Select("SELECT p.`code` FROM auth_permission p " +
             "LEFT JOIN auth_role_permission rp on p.id = rp.permission_id " +

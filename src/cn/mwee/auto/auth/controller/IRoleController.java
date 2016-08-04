@@ -26,6 +26,13 @@ public interface IRoleController extends IController {
 	 */
 	NormalReturn addRole(ServiceRequest request);
 
+    /**
+     * 获取角色信息
+     * @param request
+     * @return
+     */
+    NormalReturn getRole(ServiceRequest request);
+
 	/**
 	 * 更新角色
 	 * @param request

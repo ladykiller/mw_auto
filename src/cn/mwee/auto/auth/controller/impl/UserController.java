@@ -19,6 +19,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Created by Administrator on 2016/7/20.
  */
@@ -46,6 +49,22 @@ public class UserController implements IUserController {
                 return  new NormalReturn("200","success",authUser.getUsername());
             }
             return  new NormalReturn("500","error");
+        } catch (Exception e) {
+            logger.error("",e);
+            return  new NormalReturn("500",e.getMessage());
+        }
+    }
+
+    @Override
+//    @RequiresPermissions(value = "/user/userInfo",logical = Logical.OR)
+    @Contract(UserDelContract.class)
+    public NormalReturn userInfo(ServiceRequest request) {
+        UserDelContract req = request.getContract();
+        try {
+            Map<String,Object> result = new HashMap<>();
+            result.put("userInfo",userService.queryByUserName(req.getUserName()));
+            result.put("userRoles",userService.queryRoles(req.getUserName()));
+            return  new NormalReturn("200","success",result);
         } catch (Exception e) {
             logger.error("",e);
             return  new NormalReturn("500",e.getMessage());

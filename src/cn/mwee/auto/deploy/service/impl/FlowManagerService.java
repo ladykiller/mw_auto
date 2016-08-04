@@ -714,11 +714,13 @@ public class FlowManagerService implements IFlowManagerService {
     @Override
     public BaseQueryResult<Flow> getFlows(FlowQueryContract req, Flow flow) {
         FlowExample example = new FlowExample();
-        example.setOrderByClause("id desc");
-        example.setLimitStart(0);
-        example.setLimitEnd(20);
-        example.createCriteria()
-                .andProjectIdEqualTo(req.getProjectId());
+        FlowExample.Criteria criteria = example.createCriteria();
+        criteria.andProjectIdEqualTo(req.getProjectId());
+        if (req.getCreateDateS() != null) criteria.andCreateTimeGreaterThanOrEqualTo(req.getCreateDateS());
+        if (req.getCreateDateE() != null) criteria.andCreateTimeLessThanOrEqualTo(req.getCreateDateE());
+        if (req.getFlowId() != null) criteria.andIdEqualTo(req.getFlowId());
+        if (StringUtils.isNotBlank(req.getZone())) criteria.andZonesLike(req.getZone());
+        if (CollectionUtils.isNotEmpty(req.getState())) criteria.andStateIn(req.getState());
         return BaseModel.selectByPage(flowMapper, example, req.getPageInfo(), req.getPageInfo() == null);
     }
 
