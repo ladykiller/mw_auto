@@ -6,6 +6,8 @@
 package cn.mwee.auto.deploy.service.impl;
 
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import cn.mwee.auto.common.db.BaseModel;
 import cn.mwee.auto.common.db.BaseQueryResult;
@@ -154,10 +156,7 @@ public class TemplateManagerService implements ITemplateManagerService {
                 .andTemplateIdEqualTo(templateId);
         List<TemplateZone> tzs = templateZoneMapper.selectByExample(example);
         List<Integer> zoneIds = new ArrayList<>();
-        tzs.forEach(item-> {
-            zoneIds.add(item.getZoneId());
-        });
-
+        tzs.forEach(item-> zoneIds.add(item.getZoneId()));
         if (CollectionUtils.isEmpty(zoneIds)) return new ArrayList<>();
 
         ZoneExample zoneExample = new ZoneExample();
@@ -183,17 +182,33 @@ public class TemplateManagerService implements ITemplateManagerService {
         for (AutoTask task:tasks) {
             String paramStr = task.getParams();
             if (StringUtils.isEmpty(paramStr)) continue;
+            parseParamKeys(paramStr,paramKeySet);
+            /*
             String[] params = paramStr.split(" ");
             for (String param : params) {
                 if (StringUtils.isEmpty(param)) continue;
                 if (param.startsWith("#") && param.endsWith("#")) {
                     paramKeySet.add(param.replace("#",""));
                 }
-            }
+            }*/
         }
         List<String> paramKeys = new ArrayList<>();
         paramKeys.addAll(paramKeySet);
         return paramKeys;
+    }
+
+    /**
+     * 参数名解析
+     * @param paramStr 参数
+     * @param paramKeySet 参数名set
+     */
+    private void parseParamKeys(String paramStr, Set<String> paramKeySet){
+        Pattern pattern = Pattern.compile("#(.*?)#");
+        Matcher matcher = pattern.matcher(paramStr);
+        while (matcher.find()) {
+            String key = matcher.group();
+            if (StringUtils.isNotBlank(key)) paramKeySet.add(key.replace("#",""));
+        }
     }
 
     @Override
