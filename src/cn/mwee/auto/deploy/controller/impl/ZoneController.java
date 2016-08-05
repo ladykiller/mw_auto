@@ -13,6 +13,7 @@ import cn.mwee.auto.misc.aspect.contract.Contract;
 import cn.mwee.auto.misc.aspect.contract.Model;
 import cn.mwee.auto.misc.req.ServiceRequest;
 import cn.mwee.auto.misc.resp.NormalReturn;
+import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -37,6 +38,7 @@ public class ZoneController extends AutoAbstractController implements IZoneContr
 
     @Override
     @Model(contract = AddZoneRequest.class, model = Zone.class)
+    @RequiresAuthentication
     public NormalReturn addZone(ServiceRequest request) {
         Zone zone = request.getModel();
         int zoneId = zoneService.addZone(zone);
@@ -45,6 +47,7 @@ public class ZoneController extends AutoAbstractController implements IZoneContr
 
     @Override
     @Contract(ZoneIdQuery.class)
+    @RequiresAuthentication
     public NormalReturn getZone(ServiceRequest request) {
         ZoneIdQuery contract = request.getContract();
         Zone zone = zoneService.getZone(contract.getZoneId());
@@ -53,6 +56,7 @@ public class ZoneController extends AutoAbstractController implements IZoneContr
 
     @Override
     @Contract(ZoneIdQuery.class)
+    @RequiresAuthentication
     public NormalReturn deleteZone(ServiceRequest request) {
         ZoneIdQuery contract = request.getContract();
         boolean delSuccess = zoneService.deleteZone(contract.getZoneId());
@@ -61,6 +65,7 @@ public class ZoneController extends AutoAbstractController implements IZoneContr
 
     @Override
     @Model(contract = ModifyZoneRequest.class, model = Zone.class)
+    @RequiresAuthentication
     public NormalReturn modifyZone(ServiceRequest request) {
         Zone zone = request.getModel();
         boolean modifySuccess = zoneService.modifyZone(zone);

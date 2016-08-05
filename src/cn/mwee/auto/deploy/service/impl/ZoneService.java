@@ -2,6 +2,7 @@ package cn.mwee.auto.deploy.service.impl;
 
 import cn.mwee.auto.common.db.BaseModel;
 import cn.mwee.auto.common.db.BaseQueryResult;
+import cn.mwee.auto.common.util.DateUtil;
 import cn.mwee.auto.deploy.contract.task.QueryTasksResult;
 import cn.mwee.auto.deploy.contract.zone.QueryZoneRequest;
 import cn.mwee.auto.deploy.contract.zone.QueryZonesResult;
@@ -12,6 +13,7 @@ import cn.mwee.auto.deploy.model.Zone;
 import cn.mwee.auto.deploy.model.ZoneExample;
 import cn.mwee.auto.deploy.service.IZoneService;
 import cn.mwee.auto.deploy.util.AutoConsts;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,6 +35,42 @@ public class ZoneService implements IZoneService{
         ZoneExample.Criteria c = e.createCriteria();
 
         e.setOrderByClause("id DESC");
+
+
+        if(req.getId() != null)
+        {
+            c.andIdEqualTo(req.getId());
+        }
+        else
+        {
+            Date start = DateUtil.parseDate(req.getCreateTimeS());
+
+            Date end = DateUtil.parseDate(req.getCreateTimeE());
+
+            if(start != null)
+            {
+                c.andCreateTimeGreaterThanOrEqualTo(start);
+            }
+            if(end != null)
+            {
+                c.andCreateTimeLessThanOrEqualTo(end);
+            }
+
+            String zoneName = req.getName();
+
+
+            if(StringUtils.isNotBlank(zoneName))
+            {
+                c.andNameLike("%".concat(zoneName).concat("%"));
+            }
+
+            String ipOrHost = req.getIpOrHost();
+
+            if(StringUtils.isNotBlank(ipOrHost))
+            {
+                c.andIpEqualTo(ipOrHost);
+            }
+        }
 
         QueryZonesResult rs = new QueryZonesResult();
         BaseQueryResult<Zone> qrs = BaseModel.selectByPage(zoneMapper, e, req.getPage());

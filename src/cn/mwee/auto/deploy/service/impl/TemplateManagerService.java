@@ -11,6 +11,7 @@ import java.util.regex.Pattern;
 
 import cn.mwee.auto.common.db.BaseModel;
 import cn.mwee.auto.common.db.BaseQueryResult;
+import cn.mwee.auto.common.util.DateUtil;
 import cn.mwee.auto.deploy.dao.TemplateZoneMapper;
 import cn.mwee.auto.deploy.contract.template.QueryTemplatesRequest;
 import cn.mwee.auto.deploy.contract.template.QueryTemplatesResult;
@@ -129,8 +130,43 @@ public class TemplateManagerService implements ITemplateManagerService {
 		c.andInuseEqualTo(InUseType.IN_USE);
 		e.setOrderByClause("id desc");
 
+        if(req.getId() != null)
+        {
+            c.andIdEqualTo(req.getId());
+        }
+        else
+        {
+            Date start = DateUtil.parseDate(req.getCreateTimeS());
+
+            Date end = DateUtil.parseDate(req.getCreateTimeE());
+
+            if(start != null)
+            {
+               c.andCreateTimeGreaterThanOrEqualTo(start);
+            }
+            if(end != null)
+            {
+                c.andCreateTimeLessThanOrEqualTo(end);
+            }
+
+            String templateName = req.getName();
+
+
+            if(StringUtils.isNotBlank(templateName))
+            {
+                c.andNameLike("%".concat(templateName).concat("%"));
+            }
+
+            Byte review = req.getReview();
+
+            if(review != null)
+            {
+                c.andReviewEqualTo(review);
+            }
+        }
+
 		QueryTemplatesResult rs = new QueryTemplatesResult();
-		BaseQueryResult<AutoTask> qrs = BaseModel.selectByPage(autoTemplateMapper, e, req.getPage());
+		BaseQueryResult<AutoTemplate> qrs = BaseModel.selectByPage(autoTemplateMapper, e, req.getPage());
 
 		rs.setList(qrs.getList());
 		rs.setPage(qrs.getPage());
