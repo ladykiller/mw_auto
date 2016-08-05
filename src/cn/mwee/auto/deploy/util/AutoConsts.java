@@ -40,8 +40,8 @@ public class AutoConsts {
 	/** 组类型 */
 	public static class GroupType
 	{
-		public static final Byte PrepareGroup   = Byte.MIN_VALUE;
-		public static final Byte PreGroup		= Byte.MIN_VALUE+1;
+		public static final Byte PrepareGroup   = -1;
+		public static final Byte PreGroup		= 0;
 		public static final Byte PostGroup 		= Byte.MAX_VALUE;
 	}
 
