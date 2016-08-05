@@ -7,6 +7,7 @@ package cn.mwee.auto.jgit;
 
 import static org.junit.Assert.*;
 
+import cn.mwee.auto.deploy.util.AutoConsts;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 
@@ -61,5 +62,12 @@ public class JgitTest {
 		for(char c : cs){
 			System.out.println(0xffffffff);
 		}
+	}
+
+	@Test
+	public void test3() {
+		System.out.println(AutoConsts.GroupType.PrepareGroup);
+		System.out.println(AutoConsts.GroupType.PreGroup);
+		System.out.println(AutoConsts.GroupType.PostGroup);
 	}
 }
