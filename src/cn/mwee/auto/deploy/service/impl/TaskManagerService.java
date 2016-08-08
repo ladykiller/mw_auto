@@ -7,10 +7,13 @@ package cn.mwee.auto.deploy.service.impl;
 
 import cn.mwee.auto.common.db.BaseModel;
 import cn.mwee.auto.common.db.BaseQueryResult;
+import cn.mwee.auto.common.util.DateUtil;
 import cn.mwee.auto.deploy.contract.task.QueryTasksRequest;
 import cn.mwee.auto.deploy.contract.task.QueryTasksResult;
 import cn.mwee.auto.deploy.model.AutoTaskExample;
 import static cn.mwee.auto.deploy.util.AutoConsts.*;
+
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -70,6 +73,55 @@ public class TaskManagerService implements ITaskManagerService {
 
 		c.andInuseEqualTo(InUseType.IN_USE);
 		e.setOrderByClause("id DESC");
+
+		if(req.getId() != null)
+		{
+			c.andIdEqualTo(req.getId());
+		}
+		else
+		{
+			Date start = DateUtil.parseDate(req.getCreateTimeS());
+
+			Date end = DateUtil.parseDate(req.getCreateTimeE());
+
+			if(start != null)
+			{
+				c.andCreateTimeGreaterThanOrEqualTo(start);
+			}
+			if(end != null)
+			{
+				c.andCreateTimeLessThanOrEqualTo(end);
+			}
+
+			String taskName = req.getName();
+
+
+			if(StringUtils.isNotBlank(taskName))
+			{
+				c.andNameLike("%".concat(taskName).concat("%"));
+			}
+
+			String desc = req.getDesc();
+
+			if(StringUtils.isNotBlank(desc))
+			{
+				c.andDescEqualTo(desc);
+			}
+
+			String exec = req.getExec();
+
+			if(StringUtils.isNotBlank(exec))
+			{
+				c.andExecEqualTo(exec);
+			}
+
+			String params = req.getParams();
+
+			if(StringUtils.isNotBlank(params))
+			{
+				c.andParamsEqualTo(params);
+			}
+		}
 
 		QueryTasksResult rs = new QueryTasksResult();
 		BaseQueryResult<AutoTask> qrs = BaseModel.selectByPage(autoTaskMapper, e, req.getPage());

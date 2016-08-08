@@ -716,6 +716,9 @@ public class FlowManagerService implements IFlowManagerService {
         FlowExample example = new FlowExample();
         FlowExample.Criteria criteria = example.createCriteria();
         criteria.andProjectIdEqualTo(req.getProjectId());
+
+        example.setOrderByClause("id DESC");
+
         if (req.getCreateDateS() != null) criteria.andCreateTimeGreaterThanOrEqualTo(req.getCreateDateS());
         if (req.getCreateDateE() != null) criteria.andCreateTimeLessThanOrEqualTo(req.getCreateDateE());
         if (req.getFlowId() != null) criteria.andIdEqualTo(req.getFlowId());

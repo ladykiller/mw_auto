@@ -48,7 +48,7 @@
         <property name="connectionFactory" ref="jmsFactory" />
         <property name="destination" ref="destination" />
         <property name="messageListener" ref="activeMQMessageListener" />
-        <property name="concurrentConsumers" value="1" />
+        <property name="concurrentConsumers" value="50" />
     </bean>
 
     <!-- 消息监听器 -->
