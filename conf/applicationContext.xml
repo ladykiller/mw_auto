@@ -17,13 +17,10 @@
     <task:annotation-driven/>
     <import resource="spring-dao.xml"/>
     <import resource="spring-beanContext.xml"/>
-
-
-    <import resource="spring-rabbit.xml"/>
     <!--
-        <import resource="spring-rabbit-listener.xml"/>
-    -->
+    <import resource="spring-rabbit.xml"/>
     <import resource="spring-rabbit-listener.xml"/>
+    -->
     <import resource="spring-jms.xml"/>
 
     <import resource="propertyFileConfigurer.xml"/>

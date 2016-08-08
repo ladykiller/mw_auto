@@ -11,6 +11,7 @@ import cn.mwee.auto.auth.contract.user.UserQueryContract;
 import cn.mwee.auto.auth.dao.AuthUserRoleExtMapper;
 import cn.mwee.auto.auth.dao.AuthUserRoleMapper;
 import cn.mwee.auto.auth.model.*;
+import cn.mwee.auto.auth.service.IRoleService;
 import cn.mwee.auto.auth.service.IUserRoleService;
 import cn.mwee.auto.auth.util.AuthUtils;
 import cn.mwee.auto.auth.util.SqlUtils;
@@ -49,6 +50,9 @@ public class UserService implements IUserService {
 
     @Autowired
     private IUserRoleService userRoleService;
+
+    @Autowired
+    private IRoleService roleService;
 
     @Value("${user.default.password}")
     private String defaultPassword;
@@ -109,18 +113,35 @@ public class UserService implements IUserService {
 	}
 
 	@Override
-	public List<AuthRole> queryRoles(String username) {
-		AuthUser authUser = queryByUserName(username);
-        if (authUser != null) {
-            return authUserRoleExtMapper.queryRoles4User(authUser.getId());
-        }
-		return null;
+	public List<AuthRole> queryRoles(Integer userId) {
+        return authUserRoleExtMapper.queryRoles4User(userId);
 	}
+
+    @Override
+    public List<AuthRole> queryUnAuthRoles(Integer userId,List<AuthRole> authRoles) {
+        List<AuthRole> unAuthRoles = new ArrayList<>();
+        List<AuthRole> allRoles = roleService.queryAllRoles();
+        if (CollectionUtils.isEmpty(allRoles)){
+            return unAuthRoles;
+        }
+        Set<Integer> authRoleIds = new HashSet<>();
+        authRoles.forEach(authRole -> {
+            authRoleIds.add(authRole.getId());
+        });
+        allRoles.forEach(authRole -> {
+            if (!authRoleIds.contains(authRole.getId()))
+                unAuthRoles.add(authRole);
+        });
+
+        return unAuthRoles;
+    }
 
 	@Override
 	public Set<String> queryRoleCodes(String username) {
+        AuthUser authUser = queryByUserName(username);
         Set<String> roleCodeSet = new HashSet<>();
-        List<AuthRole> roles = queryRoles(username);
+        if (authUser == null) return roleCodeSet;
+        List<AuthRole> roles = queryRoles(authUser.getId());
         if (CollectionUtils.isNotEmpty(roles)) {
             roles.forEach(authRole -> roleCodeSet.add(authRole.getRolecode()));
         }
@@ -176,29 +197,23 @@ public class UserService implements IUserService {
 	}
 
     @Override
-    public int updateUserGrant(AuthUser authUser, String roles) {
+    public int updateUserGrant(AuthUser authUser,List<Integer> roleIds) {
         String currentUser = SecurityUtils.getSubject().getPrincipal().toString();
         List<AuthUserRole> userRoles = new ArrayList<>();
-        String[] roleStrs = roles.split(",");
-        for (String role : roleStrs) {
-			if (StringUtils.isEmpty(role)){
-				continue;
-			}
+        roleIds.forEach(roleId -> {
             AuthUserRole userRole = new AuthUserRole();
             userRole.setUserId(authUser.getId());
-            userRole.setRoleId(new Integer(role));
+            userRole.setRoleId(roleId);
             userRole.setCreateTime(new Date());
             userRole.setCreator(currentUser);
             userRoles.add(userRole);
-        }
+        });
 		userRoleService.delByUserId(authUser.getId());
 		if (CollectionUtils.isNotEmpty(userRoles)) {
 			return userRoleService.insertBatch(userRoles);
 		} else {
 			return 1;
 		}
-
-
     }
 
 	@Override

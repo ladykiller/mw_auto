@@ -20,7 +20,7 @@ public interface AuthUserRoleExtMapper {
 
 
     @Select("SELECT r.* FROM auth_user_role ur LEFT JOIN auth_role r ON ur.role_id = r.id WHERE ur.user_id = #{userId}")
-    @ResultMap("cn.mwee.auto.auth.dao.AuthUserRoleMapper.BaseResultMap")
+    @ResultMap("cn.mwee.auto.auth.dao.AuthRoleMapper.BaseResultMap")
     List<AuthRole> queryRoles4User(@Param("userId") Integer userId);
 
     @Select("SELECT p.`code` FROM auth_permission p " +

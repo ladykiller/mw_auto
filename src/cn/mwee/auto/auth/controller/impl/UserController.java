@@ -2,6 +2,7 @@ package cn.mwee.auto.auth.controller.impl;
 
 import cn.mwee.auto.auth.contract.user.*;
 import cn.mwee.auto.auth.controller.IUserController;
+import cn.mwee.auto.auth.model.AuthRole;
 import cn.mwee.auto.auth.model.AuthUser;
 import cn.mwee.auto.auth.service.IUserService;
 import cn.mwee.auto.auth.util.AuthUtils;
@@ -20,6 +21,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -62,8 +64,11 @@ public class UserController implements IUserController {
         UserDelContract req = request.getContract();
         try {
             Map<String,Object> result = new HashMap<>();
-            result.put("userInfo",userService.queryByUserName(req.getUserName()));
-            result.put("userRoles",userService.queryRoles(req.getUserName()));
+            AuthUser userInfo = userService.queryByUserName(req.getUserName());
+            result.put("userInfo",userInfo);
+            List<AuthRole> authRoles = userService.queryRoles(userInfo.getId());
+            result.put("authRoles",authRoles);
+            result.put("unAuthRoles",userService.queryUnAuthRoles(userInfo.getId(),authRoles));
             return  new NormalReturn("200","success",result);
         } catch (Exception e) {
             logger.error("",e);
@@ -112,7 +117,7 @@ public class UserController implements IUserController {
             if (authUser == null) {
                 return  new NormalReturn("500","Can not find User:"+req.getUserName());
             }
-            userService.updateUserGrant(authUser,req.getRoles());
+            userService.updateUserGrant(authUser,req.getRoleIds());
             return  new NormalReturn("200","success");
         } catch (Exception e) {
             logger.error("userGrant error",e);

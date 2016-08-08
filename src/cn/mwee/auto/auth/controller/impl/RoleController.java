@@ -60,7 +60,7 @@ public class RoleController implements IRoleController {
         try {
             Map<String,Object> result = new HashMap<>();
             result.put("roleInfo",roleService.select(req.getRoleId()));
-            result.put("authInfo",roleService.queryRoleAuths(req.getRoleId()));
+            result.put("authInfo",roleService.queryRoleAuths4Ztree(req.getRoleId()));
             return new NormalReturn("200","success",result);
         } catch (Exception e) {
             logger.error("",e);
@@ -122,7 +122,7 @@ public class RoleController implements IRoleController {
             if (roleService.select(req.getRoleId()) == null) {
                 return new NormalReturn("500","error","角色不存在");
             }
-            roleService.updateRoleAuth(req.getRoleId(), req.getPermissionStr());
+            roleService.updateRoleAuth(req.getRoleId(), req.getPermissionIds());
             return new NormalReturn("200","success","success");
         } catch (Exception e) {
             logger.error("",e);

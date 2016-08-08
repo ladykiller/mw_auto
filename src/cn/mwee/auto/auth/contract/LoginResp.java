@@ -5,20 +5,15 @@
  */
 package cn.mwee.auto.auth.contract;
 
+import lombok.Data;
+
 /**
  * @author mengfanyuan
  * 2016年6月30日上午10:03:19
  */
+@Data
 public class LoginResp {
 	
 	/** 用户信息token **/
 	private String token;
-
-	public String getToken() {
-		return token;
-	}
-
-	public void setToken(String token) {
-		this.token = token;
-	}
 }

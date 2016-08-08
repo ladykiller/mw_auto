@@ -81,10 +81,18 @@ public interface IUserService {
 	
 	/**
 	 * 用户角色
-	 * @param username
+	 * @param userId
 	 * @return
 	 */
-	List<AuthRole> queryRoles(String username);
+	List<AuthRole> queryRoles(Integer userId);
+
+	/**
+	 * 用户未授权的角色
+	 * @param userId 用户Id
+	 * @param authRoles 已授权的角色；
+     * @return
+     */
+	List<AuthRole> queryUnAuthRoles(Integer userId,List<AuthRole> authRoles);
 
 	/**
 	 * 用户角色codes
@@ -111,7 +119,7 @@ public interface IUserService {
 	 * @param authUser
 	 * @param roles
      */
-	int updateUserGrant(AuthUser authUser, String roles);
+	int updateUserGrant(AuthUser authUser, List<Integer> roleIds);
 
 	/**
 	 * 逻辑删除用户

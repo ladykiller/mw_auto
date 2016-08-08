@@ -5,6 +5,7 @@ import lombok.Data;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 /**
  * Created by Administrator on 2016/7/19.
@@ -21,7 +22,7 @@ public class RoleGrantContract extends BaseContract {
     /**
      * 权限集
      */
-    @NotBlank(message = "未指定权限集")
-    private String permissionStr;
+    @NotNull(message = "未指定权限集")
+    private List<Integer> permissionIds;
 
 }

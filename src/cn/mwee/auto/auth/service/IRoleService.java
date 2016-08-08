@@ -9,6 +9,7 @@ import cn.mwee.auto.auth.contract.role.RoleQueryContract;
 import cn.mwee.auto.auth.model.AuthPermission;
 import cn.mwee.auto.auth.model.AuthRole;
 import cn.mwee.auto.auth.model.AuthRolePermission;
+import cn.mwee.auto.auth.model.ZtreePerm;
 import cn.mwee.auto.common.db.BaseQueryResult;
 
 /**
@@ -54,6 +55,12 @@ public interface IRoleService {
     AuthRole selectByName(String roleName);
 
 	/**
+	 * 查询所有角色
+	 * @return
+     */
+	List<AuthRole> queryAllRoles();
+
+	/**
 	 * 查询（含分页）
 	 * @param roleQueryContract
 	 * @return
@@ -64,7 +71,7 @@ public interface IRoleService {
 	 * 角色赋权
 	 * @return
 	 */
-	int updateRoleAuth(Integer roleId,String permissionStr);
+	int updateRoleAuth(Integer roleId,List<Integer> permissionIds);
 
     /**
      * 查询角色权限
@@ -72,4 +79,12 @@ public interface IRoleService {
      * @return
      */
 	List<AuthPermission> queryRoleAuths(Integer roleId);
+
+	/**
+	 * 查询角色权限4ztree
+	 * @param roleId
+	 * @return
+	 */
+	List<ZtreePerm> queryRoleAuths4Ztree(Integer roleId);
+
 }

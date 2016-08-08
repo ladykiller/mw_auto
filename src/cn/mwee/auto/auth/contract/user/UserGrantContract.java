@@ -4,6 +4,9 @@ import cn.mwee.auto.deploy.contract.commom.BaseContract;
 import lombok.Data;
 import org.hibernate.validator.constraints.NotBlank;
 
+import javax.validation.constraints.NotNull;
+import java.util.List;
+
 /**
  * Created by Administrator on 2016/7/19.
  */
@@ -13,6 +16,6 @@ public class UserGrantContract extends BaseContract {
     @NotBlank(message = "未指定用户")
     private String userName;
 
-    @NotBlank(message = "未指定角色")
-    private String roles;
+    @NotNull(message = "未指定角色")
+    private List<Integer> roleIds;
 }

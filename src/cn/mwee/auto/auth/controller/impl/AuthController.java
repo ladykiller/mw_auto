@@ -87,7 +87,7 @@ public class AuthController implements IAuthController {
 			Session session = SecurityUtils.getSecurityManager().getSession(new DefaultSessionKey(req.getToken()));
 			if (session != null) {
                 Subject subject = (Subject)session.getAttribute("subject");
-                subject.logout();
+				subject.logout();
             }
 		} catch (Exception e) {
 			logger.error("",e);

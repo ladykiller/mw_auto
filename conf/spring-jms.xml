@@ -56,4 +56,7 @@
         <property name="flowTaskListener" ref="flowTaskListener"/>
     </bean>
 
+    <bean id="flowTaskListener" class="cn.mwee.auto.listener.auto.FlowTaskListener"	>
+        <property name="taskExecutor" ref="simpleTaskExecutor" />
+    </bean>
 </beans>
