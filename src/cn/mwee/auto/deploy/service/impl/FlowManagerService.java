@@ -475,7 +475,7 @@ public class FlowManagerService implements IFlowManagerService {
                     .andFlowIdEqualTo(currentFlowTask.getFlowId())
                     .andGroupEqualTo(GroupType.PostGroup)
                     .andZoneEqualTo(currentFlowTask.getZone());
-            example.setOrderByClause("");
+            example.setOrderByClause("priority");
             example.setLimitStart(0);
             example.setLimitEnd(1);
             list = flowTaskMapper.selectByExample(example);
