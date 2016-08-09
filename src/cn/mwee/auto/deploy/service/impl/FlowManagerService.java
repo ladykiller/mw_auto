@@ -77,6 +77,8 @@ public class FlowManagerService implements IFlowManagerService {
     @Value("${localhost.name}")
     private String localHost = "127.0.0.1";
 
+    @Value("${deploy.env}")
+    private String deployEnv="";
 
     @Override
     public Integer createFlow(FlowAddContract req) {
@@ -351,6 +353,7 @@ public class FlowManagerService implements IFlowManagerService {
         String repUrl = template.getVcsRep();
         if (StringUtils.isNotBlank(repUrl)
                 && StringUtils.isNotBlank(flow.getVcsBranch())) {
+            flowParamMap.put("%env%", deployEnv);
             flowParamMap.put("%vcsType%", template.getVcsType());
             flowParamMap.put("%vcsRep%", template.getVcsRep());
             flowParamMap.put("%vcsBranch%", flow.getVcsBranch());

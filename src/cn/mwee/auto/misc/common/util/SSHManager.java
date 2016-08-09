@@ -146,7 +146,7 @@ public class SSHManager
             */
             channel.disconnect();
             if (outputBuffer.length()<1) {
-            	flowTaskLogService.addLineLog(logId, "No such file or directory:"+ command);
+            	flowTaskLogService.addLineLog(logId, "No such file or command has no output");
             }
         }
         catch(IOException ioX)
