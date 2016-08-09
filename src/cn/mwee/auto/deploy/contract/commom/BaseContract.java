@@ -29,7 +29,7 @@ public class BaseContract {
 	/**
 	 * 分页信息
 	 */
-	private PageInfo pageInfo;
+	private PageInfo page;
 
 
 	

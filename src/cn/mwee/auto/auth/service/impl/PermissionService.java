@@ -9,12 +9,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import cn.mwee.auto.auth.contract.permission.PermissionContract;
 import cn.mwee.auto.auth.contract.permission.PermissionQueryContract;
 import cn.mwee.auto.auth.dao.AuthPermissionExtMapper;
 import cn.mwee.auto.auth.dao.AuthRolePermissionExtMapper;
 import cn.mwee.auto.auth.model.AuthMenu;
-import cn.mwee.auto.auth.model.ZtreePerm;
 import cn.mwee.auto.auth.util.SqlUtils;
 import cn.mwee.auto.common.db.BaseModel;
 import cn.mwee.auto.common.db.BaseQueryResult;
@@ -90,7 +88,7 @@ public class PermissionService implements IPermissionService {
         if (permissionQuery.getType() != null)
             criteria.andTypeEqualTo(permissionQuery.getType());
         BaseQueryResult<AuthPermission> result = BaseModel.selectByPage(authPermissionMapper,example
-                ,permissionQuery.getPageInfo(),permissionQuery.getPageInfo()==null);
+                ,permissionQuery.getPage(),permissionQuery.getPage()==null);
 		return result;
 	}
 

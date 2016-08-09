@@ -9,7 +9,6 @@ import javax.annotation.Resource;
 
 import cn.mwee.auto.auth.contract.user.UserQueryContract;
 import cn.mwee.auto.auth.dao.AuthUserRoleExtMapper;
-import cn.mwee.auto.auth.dao.AuthUserRoleMapper;
 import cn.mwee.auto.auth.model.*;
 import cn.mwee.auto.auth.service.IRoleService;
 import cn.mwee.auto.auth.service.IUserRoleService;
@@ -17,7 +16,6 @@ import cn.mwee.auto.auth.util.AuthUtils;
 import cn.mwee.auto.auth.util.SqlUtils;
 import cn.mwee.auto.common.db.BaseModel;
 import cn.mwee.auto.common.db.BaseQueryResult;
-import cn.mwee.auto.deploy.contract.commom.BaseContract;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
@@ -193,7 +191,7 @@ public class UserService implements IUserService {
         if (StringUtils.isNotBlank(userQueryContract.getUserName()))
             criteria.andUsernameLike(SqlUtils.wrapLike(userQueryContract.getUserName()));
         return BaseModel.selectByPage(authUserMapper,example
-                ,userQueryContract.getPageInfo(),userQueryContract.getPageInfo()==null);
+                ,userQueryContract.getPage(),userQueryContract.getPage()==null);
 	}
 
     @Override

@@ -101,7 +101,7 @@ public class RoleService implements IRoleService {
         if (StringUtils.isNotBlank(roleQueryContract.getRoleName()))
             example.createCriteria().andRolenameLike(SqlUtils.wrapLike(roleQueryContract.getRoleName()));
         BaseQueryResult<AuthRole> result = BaseModel.selectByPage(authRoleMapper, example
-                , roleQueryContract.getPageInfo(), roleQueryContract.getPageInfo() == null);
+                , roleQueryContract.getPage(), roleQueryContract.getPage() == null);
         return result;
     }
 

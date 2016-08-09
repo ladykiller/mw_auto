@@ -728,7 +728,7 @@ public class FlowManagerService implements IFlowManagerService {
         if (req.getFlowId() != null) criteria.andIdEqualTo(req.getFlowId());
         if (StringUtils.isNotBlank(req.getZone())) criteria.andZonesLike(SqlUtils.wrapLike(req.getZone()));
         if (CollectionUtils.isNotEmpty(req.getState())) criteria.andStateIn(req.getState());
-        return BaseModel.selectByPage(flowMapper, example, req.getPageInfo(), req.getPageInfo() == null);
+        return BaseModel.selectByPage(flowMapper, example, req.getPage(), req.getPage() == null);
     }
 
     @Override
