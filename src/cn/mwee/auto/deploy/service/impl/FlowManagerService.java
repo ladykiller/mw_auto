@@ -1,6 +1,7 @@
 package cn.mwee.auto.deploy.service.impl;
 
 import cn.mwee.auto.auth.util.AuthUtils;
+import cn.mwee.auto.auth.util.SqlUtils;
 import cn.mwee.auto.common.db.BaseModel;
 import cn.mwee.auto.common.db.BaseQueryResult;
 import cn.mwee.auto.deploy.contract.flow.FlowAddContract;
@@ -722,7 +723,7 @@ public class FlowManagerService implements IFlowManagerService {
         if (req.getCreateDateS() != null) criteria.andCreateTimeGreaterThanOrEqualTo(req.getCreateDateS());
         if (req.getCreateDateE() != null) criteria.andCreateTimeLessThanOrEqualTo(req.getCreateDateE());
         if (req.getFlowId() != null) criteria.andIdEqualTo(req.getFlowId());
-        if (StringUtils.isNotBlank(req.getZone())) criteria.andZonesLike(req.getZone());
+        if (StringUtils.isNotBlank(req.getZone())) criteria.andZonesLike(SqlUtils.wrapLike(req.getZone()));
         if (CollectionUtils.isNotEmpty(req.getState())) criteria.andStateIn(req.getState());
         return BaseModel.selectByPage(flowMapper, example, req.getPageInfo(), req.getPageInfo() == null);
     }
