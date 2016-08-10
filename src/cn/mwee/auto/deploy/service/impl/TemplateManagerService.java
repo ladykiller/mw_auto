@@ -12,10 +12,9 @@ import java.util.regex.Pattern;
 import cn.mwee.auto.common.db.BaseModel;
 import cn.mwee.auto.common.db.BaseQueryResult;
 import cn.mwee.auto.common.util.DateUtil;
-import cn.mwee.auto.deploy.dao.TemplateZoneMapper;
+import cn.mwee.auto.deploy.dao.*;
 import cn.mwee.auto.deploy.contract.template.QueryTemplatesRequest;
 import cn.mwee.auto.deploy.contract.template.QueryTemplatesResult;
-import cn.mwee.auto.deploy.dao.ZoneMapper;
 import cn.mwee.auto.deploy.model.*;
 import static cn.mwee.auto.deploy.util.AutoConsts.*;
 
@@ -31,8 +30,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import cn.mwee.auto.deploy.contract.template.TemplateTaskContract;
-import cn.mwee.auto.deploy.dao.AutoTemplateMapper;
-import cn.mwee.auto.deploy.dao.TemplateTaskMapper;
 import cn.mwee.auto.deploy.service.ITemplateManagerService;
 
 /**
@@ -56,6 +53,9 @@ public class TemplateManagerService implements ITemplateManagerService {
 
     @Autowired
     private ZoneMapper zoneMapper;
+
+    @Autowired
+    private TemplateZoneExtMapper templateZoneExtMapper;
 
     @Value(value = "${git.username}")
     private String gitUserName;
@@ -284,6 +284,19 @@ public class TemplateManagerService implements ITemplateManagerService {
     public boolean removeTemplateZone(int id)
     {
         return templateZoneMapper.deleteByPrimaryKey(id) > 0;
+    }
+
+
+    @Override
+    public List<AutoTemplate> getTemplates4Project(Integer projectId) {
+        AutoTemplateExample example = new AutoTemplateExample();
+        example.createCriteria().andProjectIdEqualTo(projectId);
+        return  autoTemplateMapper.selectByExample(example);
+    }
+
+    @Override
+    public List<ZoneStateModel> getTemplateZoneStatus(Integer templateId) {
+        return templateZoneExtMapper.selectZoneState(templateId);
     }
 
     public static void main(String[] args) {

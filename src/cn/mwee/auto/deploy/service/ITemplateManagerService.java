@@ -62,7 +62,7 @@ public interface ITemplateManagerService {
 
     /**
      * git分支信息
-     * @param gitRepUrl
+     * @param template
      * @return
      */
     VcsModel getGitRepInfo(AutoTemplate template) throws GitAPIException;
@@ -71,5 +71,19 @@ public interface ITemplateManagerService {
     boolean addTemplateZone(TemplateZone templateZone);
 
     boolean removeTemplateZone(int id);
+
+    /**
+     * 获取项目模板
+     * @param projectId
+     * @return
+     */
+    List<AutoTemplate> getTemplates4Project(Integer projectId);
+
+    /**
+     * 获取模板下区域主机状态
+     * @param templateId
+     * @return
+     */
+    List<ZoneStateModel> getTemplateZoneStatus(Integer templateId);
 
 }
