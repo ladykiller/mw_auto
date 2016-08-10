@@ -41,7 +41,7 @@ public interface IPermissionService {
 	 * @param id
 	 * @return
 	 */
-	boolean delete(Integer id);
+	boolean delete(Integer id) throws Exception;
 	
 	/**
 	 * query authPermission by Id

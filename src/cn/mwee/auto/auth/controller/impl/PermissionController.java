@@ -74,6 +74,7 @@ public class PermissionController implements IPermissionController {
             authPermission.setId(req.getId());
             if (req.getParentId()!=null) authPermission.setParentId(req.getParentId());
             if (req.getType() != null) authPermission.setType(req.getType());
+            if (req.getLevel()!= null) authPermission.setLevel(req.getLevel());
             if (StringUtils.isNotBlank(req.getCode())) authPermission.setCode(req.getCode());
             if (StringUtils.isNotBlank(req.getName())) authPermission.setName(req.getName());
             if (StringUtils.isNotBlank(req.getDescription())) authPermission.setDescription(req.getDescription());

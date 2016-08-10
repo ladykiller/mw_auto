@@ -58,8 +58,14 @@ public class PermissionService implements IPermissionService {
 	}
 
 	@Override
-	public boolean delete(Integer id) {
-		return authPermissionMapper.deleteByPrimaryKey(id) > 0;
+	public boolean delete(Integer id) throws Exception {
+        AuthPermissionExample example = new AuthPermissionExample();
+        example.createCriteria().andParentIdEqualTo(id);
+        List<AuthPermission> childPerms = authPermissionMapper.selectByExample(example);
+        if (CollectionUtils.isNotEmpty(childPerms)) {
+            throw new Exception("Perm["+id+"] has child perms,delete child perms first please");
+        }
+        return authPermissionMapper.deleteByPrimaryKey(id) > 0;
 	}
 
 	@Override
@@ -83,10 +89,16 @@ public class PermissionService implements IPermissionService {
             criteria.andNameLike(SqlUtils.wrapLike(permissionQuery.getName()));
         if (StringUtils.isNotBlank(permissionQuery.getCode()))
             criteria.andCodeLike(SqlUtils.wrapLike(permissionQuery.getCode()));
-        if (StringUtils.isNotBlank(permissionQuery.getDescription()))
-            criteria.andDescriptionLike(SqlUtils.wrapLike(permissionQuery.getDescription()));
+        if (permissionQuery.getParentId() != null)
+            criteria.andParentIdEqualTo(permissionQuery.getParentId());
         if (permissionQuery.getType() != null)
             criteria.andTypeEqualTo(permissionQuery.getType());
+        if (permissionQuery.getLevel() != null)
+            criteria.andLevelEqualTo(permissionQuery.getLevel());
+		if (permissionQuery.getCreateTimeS()!=null)
+            criteria.andCreateTimeGreaterThanOrEqualTo(permissionQuery.getCreateTimeS());
+        if (permissionQuery.getCreateTimeE()!=null)
+            criteria.andCreateTimeLessThanOrEqualTo(permissionQuery.getCreateTimeE());
         BaseQueryResult<AuthPermission> result = BaseModel.selectByPage(authPermissionMapper,example
                 ,permissionQuery.getPage(),permissionQuery.getPage()==null);
 		return result;
@@ -94,7 +106,7 @@ public class PermissionService implements IPermissionService {
 
 	@Override
 	public List<AuthMenu> getLeftMenu(Integer userId) {
-		List<AuthMenu> topMenus = new ArrayList<AuthMenu>();
+		List<AuthMenu> topMenus = new ArrayList<>();
 		List<AuthMenu> menus = authPermissionExtMapper.selectPrivateMenu(userId);
 		if (CollectionUtils.isEmpty(menus)) {
 			return topMenus;
@@ -124,9 +136,9 @@ public class PermissionService implements IPermissionService {
 	public List<AuthPermission> queryLevelMenu(Byte type,Byte level) {
 		AuthPermissionExample example = new AuthPermissionExample();
         if (type.byteValue() == 1) {
-            example.createCriteria().andLevelEqualTo(--level).andTypeEqualTo((byte)1).andCodeEqualTo("#");
+            example.createCriteria().andLevelEqualTo(--level).andTypeEqualTo((byte)1);
         } else {
-            example.createCriteria().andLevelEqualTo(level).andTypeEqualTo((byte)1).andCodeNotEqualTo("#");
+            example.createCriteria().andLevelEqualTo(level).andTypeEqualTo((byte)1);
         }
 		return authPermissionMapper.selectByExample(example);
 	}

@@ -4,6 +4,7 @@ import cn.mwee.auto.deploy.contract.commom.BaseContract;
 import lombok.Data;
 
 import javax.validation.constraints.NotNull;
+import java.util.Date;
 
 /**
  * Created by Administrator on 2016/7/19.
@@ -32,7 +33,18 @@ public class PermissionQueryContract extends BaseContract {
     private Byte type;
 
     /**
-     * 描述
+     *
      */
-    private String description;
+    private Byte level;
+
+    /**
+     * 创建日期-开始
+     */
+    private Date createTimeS;
+
+    /**
+     * 创建日期-结束
+     */
+    private Date createTimeE;
+
 }
