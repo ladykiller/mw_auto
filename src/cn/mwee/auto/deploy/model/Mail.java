@@ -24,5 +24,4 @@ public class Mail {
     private String receiveUser;
     private String ccReceiveUser;
     private String bccReceiveUser;
-    private Boolean isHtmlFormat;
 }

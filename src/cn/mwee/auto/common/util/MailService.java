@@ -1,14 +1,11 @@
 package cn.mwee.auto.common.util;
 
 
+import org.apache.commons.mail.SimpleEmail;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
 
-import javax.mail.*;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeUtility;
 import java.util.Properties;
 import java.util.concurrent.FutureTask;
 
@@ -19,7 +16,6 @@ public class MailService {
 
     private static Logger logger = LoggerFactory.getLogger(MailService.class);
 
-    private Session session;
     private String smtpHost = "";
     private int smtpPort = 25;
     private String senderUserName = "";
@@ -51,26 +47,6 @@ public class MailService {
         this.receiver = properties.getProperty("mail.to");
         this.ccReceiver = properties.getProperty("mail.cc");
         this.bccReceiver = properties.getProperty("mail.bcc");
-        session = Session.getDefaultInstance(properties, new Authenticator() {
-            protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(senderUserName, senderPassword);
-
-            }
-        });
-        //开启后有调试信息
-        session.setDebug(debug);
-    }
-
-    /**
-     * 发送Html格式邮件
-     *
-     * @param subject     邮件标题
-     * @param mailBody    邮件内容
-     * @param receiveUser 收件人地址
-     */
-    public void sendHtmlMail(String subject, String mailBody,
-                             String receiveUser) {
-        sendEmail(subject, mailBody, null, receiveUser, null, null, true);
     }
 
     /**
@@ -82,18 +58,9 @@ public class MailService {
      */
     public void sendTextMail(String subject, String mailBody,
                              String receiveUser) {
-        sendEmail(subject, mailBody, null, receiveUser, null, null, false);
+        sendEmail(subject, mailBody, null, receiveUser, null, null);
     }
 
-    /**
-     * 发送Html格式邮件
-     *
-     * @param subject  邮件标题
-     * @param mailBody 邮件内容
-     */
-    public void sendHtmlMail(String subject, String mailBody) {
-        sendEmail(subject, mailBody, this.senderNickName, this.receiver, this.ccReceiver, this.bccReceiver, true);
-    }
 
     /**
      * 发送纯文件邮件
@@ -102,23 +69,8 @@ public class MailService {
      * @param mailBody 邮件内容
      */
     public boolean sendTextMail(String subject, String mailBody) {
-        return sendEmail(subject, mailBody, this.senderNickName, this.receiver, this.ccReceiver, this.bccReceiver, false);
+        return sendEmail(subject, mailBody, this.senderNickName, this.receiver, this.ccReceiver, this.bccReceiver);
     }
-
-
-    /**
-     * 发送Html格式邮件
-     *
-     * @param subject        邮件标题
-     * @param mailBody       邮件内容
-     * @param receiveUser    收件人地址
-     * @param ccReceiverUser 抄送地址
-     */
-    public void sendHtmlMail(String subject, String mailBody,
-                             String receiveUser, String ccReceiverUser) {
-        sendEmail(subject, mailBody, null, receiveUser, ccReceiverUser, null, true);
-    }
-
 
     /**
      * 发送纯文本邮件
@@ -130,7 +82,7 @@ public class MailService {
      */
     public void sendTextMail(String subject, String mailBody,
                              String receiveUser, String ccReceiverUser) {
-        sendEmail(subject, mailBody, null, receiveUser, ccReceiverUser, null, false);
+        sendEmail(subject, mailBody, null, receiveUser, ccReceiverUser, null);
     }
 
     /**
@@ -144,77 +96,48 @@ public class MailService {
      * @param bccReceiveUser 密送地址
      */
     public boolean sendEmail(final String subject, String mailBody, String senderNickName,
-                          String receiveUser, String ccReceiveUser, String bccReceiveUser, Boolean isHtmlFormat) {
+                          String receiveUser, String ccReceiveUser, String bccReceiveUser) {
 
-        Transport transport = null;
-        MimeMessage message = null;
+
         try {
-            message = new MimeMessage(session);
+            SimpleEmail email = new SimpleEmail();
+            email.setHostName(smtpHost);
+            email.setAuthentication(senderUserName, senderPassword);// 邮件服务器验证：用户名/密码
+            email.setCharset("utf-8");// 必须放在前面，否则乱码
+
             // 发件人
-            InternetAddress from = null;
-            if (StringUtils.isEmpty(senderNickName)) {
-                from = new InternetAddress(senderUserName);
-            } else {
-                from = new InternetAddress(MimeUtility.encodeWord(senderNickName) + " <" + senderUserName + ">");
-            }
-            message.setFrom(from);
+            email.setFrom(senderUserName, senderNickName);
 
             // 收件人(支持多个，中间用";"分隔)
             String[] arrTo = receiveUser.split(";");
-            InternetAddress[] toAddrs = new InternetAddress[arrTo.length];
-            for (int i = 0; i < arrTo.length; i++) {
-                toAddrs[i] = new InternetAddress(arrTo[i]);
+            for (String to : arrTo) {
+                email.addTo(to);
             }
-            message.setRecipients(Message.RecipientType.TO, toAddrs);
 
             //抄送人
             if (!StringUtils.isEmpty(ccReceiveUser)) {
                 String[] arrCC = ccReceiveUser.split(";");
-                InternetAddress[] ccAddrs = new InternetAddress[arrCC.length];
-                for (int i = 0; i < arrCC.length; i++) {
-                    ccAddrs[i] = new InternetAddress(arrCC[i]);
+                for (String cc : arrCC) {
+                    email.addCc(cc);
                 }
-                message.setRecipients(Message.RecipientType.CC, ccAddrs);
             }
 
             //密送人
             if (!StringUtils.isEmpty(bccReceiveUser)) {
                 String[] arrBCC = bccReceiveUser.split(";");
-                InternetAddress[] bccAddrs = new InternetAddress[arrBCC.length];
-                for (int i = 0; i < arrBCC.length; i++) {
-                    bccAddrs[i] = new InternetAddress(arrBCC[i]);
+                for (String bcc : arrBCC) {
+                    email.addBcc(bcc);
                 }
-                message.setRecipients(Message.RecipientType.BCC, bccAddrs);
             }
 
-            String subjectEnCode = MimeUtility.encodeWord(subject, "UTF-8", "Q");//解决邮件标题乱码问题
-
-            message.setSubject(subjectEnCode);
+            email.setSubject(subject);
             String content = mailBody.toString();
-
-            if (isHtmlFormat) {
-                message.setContent(content, "text/html;charset=UTF-8");
-            } else {
-                message.setContent(content, "text/plain;charset=UTF-8");
-            }
-            message.saveChanges();
-            transport = session.getTransport("smtp");
-            transport.connect(smtpHost, smtpPort, senderUserName, senderPassword);
-            transport.sendMessage(message, message.getAllRecipients());
-
+            email.setMsg(content);
+            email.send();
             logger.info(senderUserName + " 向 " + receiveUser + " 发送邮件成功！");
             return true;
         } catch (Exception e) {
             logger.error("sendEmail失败！", e);
-        } finally {
-            if (transport != null) {
-                try {
-                    transport.close();
-                } catch (MessagingException e) {
-                    e.printStackTrace();
-                    logger.error("sendEmail->transport关闭失败！", e);
-                }
-            }
         }
         return false;
     }
@@ -230,79 +153,10 @@ public class MailService {
      * @param bccReceiveUser 密送地址
      */
     public void sendAsyncEmail(final String subject, String mailBody, String senderNickName,
-                          String receiveUser, String ccReceiveUser, String bccReceiveUser, Boolean isHtmlFormat) {
+                          String receiveUser, String ccReceiveUser, String bccReceiveUser) {
 
         FutureTask<String> task = new FutureTask<>(() -> {
-            Transport transport = null;
-            MimeMessage message = null;
-            try {
-                message = new MimeMessage(session);
-                // 发件人
-                InternetAddress from = null;
-                if (StringUtils.isEmpty(senderNickName)) {
-                    from = new InternetAddress(senderUserName);
-                } else {
-                    from = new InternetAddress(MimeUtility.encodeWord(senderNickName) + " <" + senderUserName + ">");
-                }
-                message.setFrom(from);
-
-                // 收件人(支持多个，中间用";"分隔)
-                String[] arrTo = receiveUser.split(";");
-                InternetAddress[] toAddrs = new InternetAddress[arrTo.length];
-                for (int i = 0; i < arrTo.length; i++) {
-                    toAddrs[i] = new InternetAddress(arrTo[i]);
-                }
-                message.setRecipients(Message.RecipientType.TO, toAddrs);
-
-                //抄送人
-                if (!StringUtils.isEmpty(ccReceiveUser)) {
-                    String[] arrCC = ccReceiveUser.split(";");
-                    InternetAddress[] ccAddrs = new InternetAddress[arrCC.length];
-                    for (int i = 0; i < arrCC.length; i++) {
-                        ccAddrs[i] = new InternetAddress(arrCC[i]);
-                    }
-                    message.setRecipients(Message.RecipientType.CC, ccAddrs);
-                }
-
-                //密送人
-                if (!StringUtils.isEmpty(bccReceiveUser)) {
-                    String[] arrBCC = bccReceiveUser.split(";");
-                    InternetAddress[] bccAddrs = new InternetAddress[arrBCC.length];
-                    for (int i = 0; i < arrBCC.length; i++) {
-                        bccAddrs[i] = new InternetAddress(arrBCC[i]);
-                    }
-                    message.setRecipients(Message.RecipientType.BCC, bccAddrs);
-                }
-
-                String subjectEnCode = MimeUtility.encodeWord(subject, "UTF-8", "Q");//解决邮件标题乱码问题
-
-                message.setSubject(subjectEnCode);
-                String content = mailBody.toString();
-
-                if (isHtmlFormat) {
-                    message.setContent(content, "text/html;charset=UTF-8");
-                } else {
-                    message.setContent(content, "text/plain;charset=UTF-8");
-                }
-                message.saveChanges();
-                transport = session.getTransport("smtp");
-                transport.connect(smtpHost, smtpPort, senderUserName, senderPassword);
-                transport.sendMessage(message, message.getAllRecipients());
-
-                logger.info(senderUserName + " 向 " + receiveUser + " 发送邮件成功！");
-
-            } catch (Exception e) {
-                logger.error("sendEmail失败！", e);
-            } finally {
-                if (transport != null) {
-                    try {
-                        transport.close();
-                    } catch (MessagingException e) {
-                        e.printStackTrace();
-                        logger.error("sendEmail->transport关闭失败！", e);
-                    }
-                }
-            }
+            sendEmail(subject, mailBody, senderNickName, receiveUser, ccReceiveUser, bccReceiveUser);
             return null;
         });
 
