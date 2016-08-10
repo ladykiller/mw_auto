@@ -1,7 +1,6 @@
 package cn.mwee.auto.deploy.model;
 
 import java.util.Date;
-import java.util.List;
 
 public class AutoTemplate {
     /**
@@ -18,6 +17,14 @@ public class AutoTemplate {
      * @mbggenerated
      */
     private String name;
+
+    /**
+     * 项目Id；为空时表示通用模板
+     * templates.project_id
+     *
+     * @mbggenerated
+     */
+    private Integer projectId;
 
     /**
      * 版本控制系统类型
@@ -83,17 +90,6 @@ public class AutoTemplate {
      */
     private Date updateTime;
 
-    private List<TemplateZone> templateZoneList;
-
-
-    public List<TemplateZone> getTemplateZoneList() {
-        return templateZoneList;
-    }
-
-    public void setTemplateZoneList(List<TemplateZone> templateZoneList) {
-        this.templateZoneList = templateZoneList;
-    }
-
     /**
      * This method returns the value of the database column templates.id
      *
@@ -138,6 +134,30 @@ public class AutoTemplate {
      */
     public void setName(String name) {
         this.name = name;
+    }
+
+    /**
+     * 项目Id；为空时表示通用模板
+     * This method returns the value of the database column templates.project_id
+     *
+     * @return the value of templates.project_id
+     *
+     * @mbggenerated
+     */
+    public Integer getProjectId() {
+        return projectId;
+    }
+
+    /**
+     * 项目Id；为空时表示通用模板
+     * This method sets the value of the database column templates.project_id
+     *
+     * @param projectId the value for templates.project_id
+     *
+     * @mbggenerated
+     */
+    public void setProjectId(Integer projectId) {
+        this.projectId = projectId;
     }
 
     /**

@@ -27,6 +27,14 @@ public class TemplateZone {
     private Integer zoneId;
 
     /**
+     * 状态
+     * template_zones.state
+     *
+     * @mbggenerated
+     */
+    private String state;
+
+    /**
      * template_zones.create_time
      *
      * @mbggenerated
@@ -116,6 +124,30 @@ public class TemplateZone {
      */
     public void setZoneId(Integer zoneId) {
         this.zoneId = zoneId;
+    }
+
+    /**
+     * 状态
+     * This method returns the value of the database column template_zones.state
+     *
+     * @return the value of template_zones.state
+     *
+     * @mbggenerated
+     */
+    public String getState() {
+        return state;
+    }
+
+    /**
+     * 状态
+     * This method sets the value of the database column template_zones.state
+     *
+     * @param state the value for template_zones.state
+     *
+     * @mbggenerated
+     */
+    public void setState(String state) {
+        this.state = state;
     }
 
     /**
