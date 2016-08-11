@@ -6,6 +6,7 @@ import cn.mwee.auto.deploy.contract.flow.FlowQueryContract;
 import cn.mwee.auto.deploy.model.Flow;
 import cn.mwee.auto.deploy.model.FlowStrategy;
 import cn.mwee.auto.deploy.model.FlowTask;
+import cn.mwee.auto.deploy.model.FlowTaskExtModel;
 
 import java.util.List;
 import java.util.Map;
@@ -104,7 +105,7 @@ public interface IFlowManagerService {
 	 * @param zone
 	 * @return
 	 */
-	List<FlowTask> getZoneFlowTaskInfoSimple(Integer flowId, String zone);
+	List<FlowTaskExtModel> getZoneFlowTaskInfoSimple(Integer flowId, String zone);
 	
 	/**
 	 * 获取各区域状态

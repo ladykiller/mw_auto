@@ -646,13 +646,13 @@ public class FlowManagerService implements IFlowManagerService {
     }
 
     @Override
-    public List<FlowTask> getZoneFlowTaskInfoSimple(Integer flowId, String zone) {
+    public List<FlowTaskExtModel> getZoneFlowTaskInfoSimple(Integer flowId, String zone) {
         FlowTaskExample example = new FlowTaskExample();
         example.createCriteria()
                 .andFlowIdEqualTo(flowId)
                 .andZoneEqualTo(zone);
         example.setOrderByClause("`group` ASC,priority ASC");
-        return flowTaskMapper.selectByExample(example);
+        return flowTaskExtMapper.getFlowTaskExtByExample(example);
     }
 
     @Override
