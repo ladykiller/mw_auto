@@ -186,4 +186,5 @@ public class TemplateController extends AutoAbstractController implements ITempl
         boolean rmSuccess = templateManagerService.removeTemplateZone(contract.getTemplateZoneId());
         return new NormalReturn(rmSuccess);
     }
+
 }
