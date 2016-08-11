@@ -6,7 +6,7 @@ apply plugin:'application'
 
 mainClassName = "cn.mwee.auto.misc.main.ServicesServer"
 
-applicationDefaultJvmArgs = ["-Xms256M", "-Xmx1G" , "-Xss256k" , "-Xincgc" , "-XX:+HeapDumpOnOutOfMemoryError" , "-Dfile.encoding=UTF-8"]
+applicationDefaultJvmArgs = ["-Xms2G", "-Xmx4G" , "-Xss256k" , "-Xincgc" , "-XX:+HeapDumpOnOutOfMemoryError" , "-Dfile.encoding=UTF-8"]
 
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
@@ -46,7 +46,6 @@ sourceSets {
 
 dependencies {
     compile group: 'javax.el', name: 'javax.el-api', version: '2.2.4'
-    compile group: 'javax.mail', name: 'mail', version: '1.4.1'
 
     compile group: 'org.hibernate', name: 'hibernate-validator', version: '5.1.3.Final'
     compile group: 'io.netty', name: 'netty', version: '3.10.5.Final'
@@ -84,6 +83,8 @@ dependencies {
     compile 'org.apache.logging.log4j:log4j-slf4j-impl:2.6.1'
     compile 'net.sf.ezmorph:ezmorph:1.0.6'
     compile 'com.google.collections:google-collections:1.0'
+
+    compile group: 'org.apache.commons', name: 'commons-email', version: '1.4'
     compile group: 'org.apache.shiro', name: 'shiro-core', version: '1.2.4'
     compile group: 'org.apache.shiro', name: 'shiro-ehcache', version: '1.2.4'
     compile group: 'org.apache.shiro', name: 'shiro-spring', version: '1.2.4'

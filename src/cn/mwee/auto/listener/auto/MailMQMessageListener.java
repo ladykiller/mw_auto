@@ -35,8 +35,7 @@ public class MailMQMessageListener implements MessageListener {
                         mailService.sendTextMail(mail.getSubject(), mail.getMailBody());
                     } else {
                         mailService.sendEmail(mail.getSubject(), mail.getMailBody(), mail.getSenderNickName(),
-                                mail.getReceiveUser(), mail.getCcReceiveUser(), mail.getBccReceiveUser(),
-                                mail.getIsHtmlFormat());
+                                mail.getReceiveUser(), mail.getCcReceiveUser(), mail.getBccReceiveUser());
                     }
                 } catch (Exception e) {
                     logger.error("MailMQMessageListener.onMessage => ", e);
