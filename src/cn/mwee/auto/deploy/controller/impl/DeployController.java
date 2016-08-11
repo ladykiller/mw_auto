@@ -9,8 +9,7 @@ import java.util.*;
 
 import cn.mwee.auto.deploy.contract.*;
 import cn.mwee.auto.deploy.contract.flow.*;
-import cn.mwee.auto.deploy.model.AutoTemplate;
-import cn.mwee.auto.deploy.model.FlowTaskLog;
+import cn.mwee.auto.deploy.model.*;
 import cn.mwee.auto.deploy.service.ITaskManagerService;
 import cn.mwee.auto.misc.aspect.contract.Model;
 import org.slf4j.Logger;
@@ -20,8 +19,6 @@ import org.springframework.stereotype.Controller;
 
 import cn.mwee.auto.deploy.contract.template.TemplateTaskContract;
 import cn.mwee.auto.deploy.controller.IDeployController;
-import cn.mwee.auto.deploy.model.Flow;
-import cn.mwee.auto.deploy.model.TemplateTask;
 import cn.mwee.auto.deploy.service.IFlowManagerService;
 import cn.mwee.auto.deploy.service.IFlowTaskLogService;
 import cn.mwee.auto.deploy.service.ITemplateManagerService;
@@ -189,7 +186,7 @@ public class DeployController implements IDeployController {
 	public NormalReturn getZoneLogs(ServiceRequest request) {
 		ZoneStateContract req = request.getContract();
 		try {
-            List<FlowTaskLog> logs = flowTaskLogService.getZoneLogs(req.getFlowId(), req.getZone());
+            List<FlowTaskLogExtModle> logs = flowTaskLogService.getZoneLogs(req.getFlowId(), req.getZone());
             String state = flowManagerService.getZoneState(req.getFlowId(), req.getZone());
             Map<String,Object> result = new HashMap<>();
             result.put("state",state);
