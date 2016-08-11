@@ -1,5 +1,7 @@
 package cn.mwee.auto.deploy.service;
 
+import cn.mwee.auto.auth.model.AuthUser;
+
 import java.util.List;
 import java.util.Map;
 
@@ -12,4 +14,6 @@ public interface IProjectService {
      * @return
      */
     List<Map<String,Object>> getProjectZonesStatus(Integer projectId);
+
+    List<AuthUser> getUsers4Project(Integer projectId);
 }

@@ -1,9 +1,12 @@
 package cn.mwee.auto.deploy.service.impl;
 
+import cn.mwee.auto.auth.model.AuthUser;
+import cn.mwee.auto.deploy.dao.ProjectUserExtMapper;
 import cn.mwee.auto.deploy.model.AutoTemplate;
 import cn.mwee.auto.deploy.service.IProjectService;
 import cn.mwee.auto.deploy.service.ITemplateManagerService;
 import org.apache.commons.collections4.CollectionUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -21,6 +24,10 @@ public class ProjectService implements IProjectService {
     @Resource
     private ITemplateManagerService templateManagerService;
 
+    @Autowired
+    private ProjectUserExtMapper projectUserExtMapper;
+
+
     @Override
     public List<Map<String, Object>> getProjectZonesStatus(Integer projectId) {
         List<AutoTemplate> templates = templateManagerService.getTemplates4Project(projectId);
@@ -33,5 +40,10 @@ public class ProjectService implements IProjectService {
             resultList.add(map);
         });
         return resultList;
+    }
+
+    @Override
+    public List<AuthUser> getUsers4Project(Integer projectId) {
+        return  projectUserExtMapper.selectUsers4Project(projectId);
     }
 }

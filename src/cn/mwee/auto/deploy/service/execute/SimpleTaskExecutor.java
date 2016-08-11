@@ -47,11 +47,13 @@ public class SimpleTaskExecutor implements TaskExecutor {
     @Autowired
     private IFlowTaskLogService flowTaskLogService;
 
-    @Resource
-    private ThreadPoolTaskExecutor springTaskExecutor;
+    @Resource(name = "taskLogExecutor")
+    private ThreadPoolTaskExecutor taskLogExecutor;
 
     @Resource
     private TaskMsgSender taskMsgSender;
+
+
 
     @Value("${auto.ssh.auths}")
     private String sshAuthStrs;
@@ -135,7 +137,7 @@ public class SimpleTaskExecutor implements TaskExecutor {
             String exeTargetHost = AutoConsts.DEFAULT_EXEC_ZONE.equals(task.getExecZone()) ?
                     flowTask.getZone() : task.getExecZone();
             instance = new SSHManager(sshShellUser, sshPriAddr, exeTargetHost,
-                    flowTaskLogService, springTaskExecutor, logId);
+                    flowTaskLogService, taskLogExecutor, logId);
 
             String errorMessage = instance.connect();
 

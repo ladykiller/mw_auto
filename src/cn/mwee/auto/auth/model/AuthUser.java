@@ -20,6 +20,38 @@ public class AuthUser {
     private String username;
 
     /**
+     * 姓名
+     * auth_user.name
+     *
+     * @mbggenerated
+     */
+    private String name;
+
+    /**
+     * 邮箱
+     * auth_user.email
+     *
+     * @mbggenerated
+     */
+    private String email;
+
+    /**
+     * 手机号
+     * auth_user.phoneNo
+     *
+     * @mbggenerated
+     */
+    private String phoneno;
+
+    /**
+     * 部门
+     * auth_user.department
+     *
+     * @mbggenerated
+     */
+    private String department;
+
+    /**
      * 密码
      * auth_user.password
      *
@@ -113,6 +145,102 @@ public class AuthUser {
      */
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    /**
+     * 姓名
+     * This method returns the value of the database column auth_user.name
+     *
+     * @return the value of auth_user.name
+     *
+     * @mbggenerated
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * 姓名
+     * This method sets the value of the database column auth_user.name
+     *
+     * @param name the value for auth_user.name
+     *
+     * @mbggenerated
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    /**
+     * 邮箱
+     * This method returns the value of the database column auth_user.email
+     *
+     * @return the value of auth_user.email
+     *
+     * @mbggenerated
+     */
+    public String getEmail() {
+        return email;
+    }
+
+    /**
+     * 邮箱
+     * This method sets the value of the database column auth_user.email
+     *
+     * @param email the value for auth_user.email
+     *
+     * @mbggenerated
+     */
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    /**
+     * 手机号
+     * This method returns the value of the database column auth_user.phoneNo
+     *
+     * @return the value of auth_user.phoneNo
+     *
+     * @mbggenerated
+     */
+    public String getPhoneno() {
+        return phoneno;
+    }
+
+    /**
+     * 手机号
+     * This method sets the value of the database column auth_user.phoneNo
+     *
+     * @param phoneno the value for auth_user.phoneNo
+     *
+     * @mbggenerated
+     */
+    public void setPhoneno(String phoneno) {
+        this.phoneno = phoneno;
+    }
+
+    /**
+     * 部门
+     * This method returns the value of the database column auth_user.department
+     *
+     * @return the value of auth_user.department
+     *
+     * @mbggenerated
+     */
+    public String getDepartment() {
+        return department;
+    }
+
+    /**
+     * 部门
+     * This method sets the value of the database column auth_user.department
+     *
+     * @param department the value for auth_user.department
+     *
+     * @mbggenerated
+     */
+    public void setDepartment(String department) {
+        this.department = department;
     }
 
     /**

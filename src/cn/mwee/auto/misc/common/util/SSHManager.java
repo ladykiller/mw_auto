@@ -33,11 +33,11 @@ public class SSHManager
 
     private String prvkey;
     
-    private ThreadPoolTaskExecutor springTaskExecutor;
+    private ThreadPoolTaskExecutor taskLogExecutor;
 	private IFlowTaskLogService flowTaskLogService;
 	private Integer logId;
     public SSHManager(String userName, String prvkey,String connectionIP,
-    		IFlowTaskLogService flowTaskLogService,ThreadPoolTaskExecutor springTaskExecutor,Integer logId)
+    		IFlowTaskLogService flowTaskLogService,ThreadPoolTaskExecutor taskLogExecutor,Integer logId)
     {
         this.strUserName = userName;
         this.prvkey = prvkey;
@@ -45,7 +45,7 @@ public class SSHManager
         
         
         this.flowTaskLogService = flowTaskLogService;
-        this.springTaskExecutor = springTaskExecutor;
+        this.taskLogExecutor = taskLogExecutor;
         this.logId = logId;
 
         jschSSHChannel = new JSch();
@@ -125,7 +125,7 @@ public class SSHManager
             while ((lineStr = reader.readLine()) != null) {
             	outputBuffer.append(lineStr);
             	final String tmpLineStr = lineStr;
-            	springTaskExecutor.execute(new Runnable() {
+                taskLogExecutor.execute(new Runnable() {
 					@Override
 					public void run() {
 						flowTaskLogService.addLineLog(logId, tmpLineStr);

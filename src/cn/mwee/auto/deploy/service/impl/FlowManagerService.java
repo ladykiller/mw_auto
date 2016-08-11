@@ -10,6 +10,7 @@ import cn.mwee.auto.deploy.dao.*;
 import cn.mwee.auto.deploy.model.*;
 import cn.mwee.auto.deploy.service.IFlowManagerService;
 import cn.mwee.auto.deploy.service.ITemplateManagerService;
+import cn.mwee.auto.deploy.service.execute.SimpleMailSender;
 import cn.mwee.auto.deploy.service.execute.SimpleTaskExecutor;
 import cn.mwee.auto.deploy.service.execute.TaskMsgSender;
 
@@ -63,6 +64,9 @@ public class FlowManagerService implements IFlowManagerService {
     private ITemplateManagerService templateManagerService;
 
     @Resource
+    private SimpleMailSender simpleMailSender;
+
+    @Resource
     private TaskMsgSender taskMsgSender;
 
     @Value(value = "${prepare.update.shell}")
@@ -78,7 +82,7 @@ public class FlowManagerService implements IFlowManagerService {
     private String localHost = "127.0.0.1";
 
     @Value("${deploy.env}")
-    private String deployEnv="";
+    private String deployEnv = "";
 
     @Override
     public Integer createFlow(FlowAddContract req) {
@@ -183,7 +187,7 @@ public class FlowManagerService implements IFlowManagerService {
                 if (StringUtils.isBlank(zones[i])) continue;
                 FlowTask flowTask = buildFlowTask(tt, flowId, zones[i], flowParamMap, userParamsMap);
                 if (flowStrategy != null) {
-                    calStrategy(flowTask,i,zoneStartTaskMap,flowStrategy);
+                    calStrategy(flowTask, i, zoneStartTaskMap, flowStrategy);
                 }
                 fts.add(flowTask);
             }
@@ -200,14 +204,14 @@ public class FlowManagerService implements IFlowManagerService {
 
     private void calStrategy(FlowTask flowTask, int index, Map<String, FlowTask> zoneStartTaskMap, FlowStrategy flowStrategy) {
         String key = flowTask.getZone();
-        if (zoneStartTaskMap.get(key)!= null) return;
+        if (zoneStartTaskMap.get(key) != null) return;
         if (flowTask.getGroup() > GroupType.PreGroup
-                && flowTask.getGroup()<GroupType.PostGroup){
-            key +=flowTask.getGroup();
-            if (zoneStartTaskMap.get(key)!= null) return;
+                && flowTask.getGroup() < GroupType.PostGroup) {
+            key += flowTask.getGroup();
+            if (zoneStartTaskMap.get(key) != null) return;
         }
-        zoneStartTaskMap.put(key,flowTask);
-        flowTask.setDelay(((index)/flowStrategy.getZonesize()) * flowStrategy.getInterval());
+        zoneStartTaskMap.put(key, flowTask);
+        flowTask.setDelay(((index) / flowStrategy.getZonesize()) * flowStrategy.getInterval());
     }
 
     /**
@@ -383,15 +387,30 @@ public class FlowManagerService implements IFlowManagerService {
         example.createCriteria().andFlowIdEqualTo(flowId);
         List<Map<String, Object>> list = flowTaskExtMapper.countState(example);
         String stateNew = calcFlowStatus(list);
-        int result = 1;
-        if (!stateNew.equals(flow.getState())) {
-            Flow flowTmp = new Flow();
-            flowTmp.setId(flow.getId());
-            flowTmp.setState(stateNew);
+        Flow flowTmp = new Flow();
+        flowTmp.setId(flow.getId());
+        flowTmp.setState(stateNew);
+        int result = flowMapper.updateByPrimaryKeySelective(flowTmp);
+        if (result > 0) {
             flowTmp.setUpdateTime(new Date());
-            result = flowMapper.updateByPrimaryKeySelective(flowTmp);
+            flowMapper.updateByPrimaryKeySelective(flowTmp);
+            sendNoticeMail(flow,stateNew);
         }
-        return result > 0;
+        return true;
+    }
+
+    private void sendNoticeMail(Flow flow, String stateNew) {
+        //在成功或失败是发送邮件
+        try {
+            if (TaskState.SUCCESS.name().equals(stateNew) ||
+                    TaskState.ERROR.name().equals(stateNew)) {
+                String contentTemp = "流程[%s],执行结果[%s]";
+                String content = String.format(contentTemp,flow.getName(),stateNew);
+                simpleMailSender.sendNotice4ProjectAsync(flow.getProjectId(), content);
+            }
+        } catch (Exception e) {
+            logger.error("sendNoticeMail error",e);
+        }
     }
 
     @Override

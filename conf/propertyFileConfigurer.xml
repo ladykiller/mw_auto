@@ -11,7 +11,7 @@
 				<value>classpath:config.properties</value>
 				<value>classpath:mail.properties</value>
 				<!-- deploy config -->
-				<value>file:/opt/mwee_config/auto/config.properties</value>
+				<value>file:D:\tmp\config.properties</value>
 			</list>
 		</property>
 	</bean>
