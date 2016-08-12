@@ -281,9 +281,13 @@ public class TemplateManagerService implements ITemplateManagerService {
     }
 
     @Override
-    public boolean removeTemplateZone(int id)
+    public boolean removeTemplateZone(int templateId,int zoneId)
     {
-        return templateZoneMapper.deleteByPrimaryKey(id) > 0;
+        TemplateZoneExample example = new TemplateZoneExample();
+        TemplateZoneExample.Criteria c = example.createCriteria();
+        c.andTemplateIdEqualTo(templateId);
+        c.andZoneIdEqualTo(zoneId);
+        return templateZoneMapper.deleteByExample(example) > 0;
     }
 
 
