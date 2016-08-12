@@ -10,6 +10,4 @@ public class CloneTemplateRequest {
 
     private Integer templateId;
 
-    private Integer targetTemplateId;
-
 }

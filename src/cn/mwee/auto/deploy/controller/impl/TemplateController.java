@@ -254,6 +254,12 @@ public class TemplateController extends AutoAbstractController implements ITempl
 
         List<TemplateTask> templateTasks = templateManagerService.getTemplateTasks(sourceTemplate.getId());
 
+        for(TemplateTask templateTask : templateTasks)
+        {
+            //1.取任务
+            //2.创建新的任务 拿到新的任务ID
+            //3.创建新的模板任务 更新任务ID
+        }
 
 
         return null;
