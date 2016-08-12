@@ -64,12 +64,15 @@ public class AuthController implements IAuthController {
 		try {
 			Subject subject = SecurityUtils.getSubject();
 			UsernamePasswordToken token = new UsernamePasswordToken(req.getUserName(), req.getPassword());
-			subject.login(token);
+            subject.login(token);
 			Session session = subject.getSession(false);
 			session.setTimeout(sessionTimeout);
 			session.setAttribute("subject", subject);
 			LoginResp resp = new LoginResp();
+            AuthUser user = userService.queryByUserName(req.getUserName());
 			resp.setToken(subject.getSession().getId().toString());
+            resp.setName(user.getName());
+            resp.setUserName(user.getUsername());
 			return new NormalReturn("200","success",resp);
 		} catch (AuthenticationException e) {
 			return new NormalReturn("502","error","用户名/密码错误");

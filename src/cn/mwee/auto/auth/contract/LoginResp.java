@@ -16,4 +16,14 @@ public class LoginResp {
 	
 	/** 用户信息token **/
 	private String token;
+    /**
+     * 用户名
+     */
+	private String userName;
+    /**
+     * 姓名
+     */
+	private String name;
+
+
 }
