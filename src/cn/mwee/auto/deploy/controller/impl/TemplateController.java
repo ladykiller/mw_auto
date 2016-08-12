@@ -248,21 +248,9 @@ public class TemplateController extends AutoAbstractController implements ITempl
     @Contract(CloneTemplateRequest.class)
     public NormalReturn cloneTemplate(ServiceRequest request)
     {
-        CloneTemplateRequest clone = request.getContract();
-
-        AutoTemplate sourceTemplate = templateManagerService.getTemplate(clone.getTemplateId());
-
-        List<TemplateTask> templateTasks = templateManagerService.getTemplateTasks(sourceTemplate.getId());
-
-        for(TemplateTask templateTask : templateTasks)
-        {
-            //1.取任务
-            //2.创建新的任务 拿到新的任务ID
-            //3.创建新的模板任务 更新任务ID
-        }
-
-
-        return null;
+        CloneTemplateRequest req = request.getContract();
+        templateManagerService.cloneTemplate(req.getTemplateId());
+        return new NormalReturn("success");
     }
 
 }

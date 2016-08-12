@@ -86,4 +86,10 @@ public interface ITemplateManagerService {
      */
     List<ZoneStateModel> getTemplateZoneStatus(Integer templateId);
 
+    /**
+     * 克隆模板
+     */
+    void cloneTemplate(Integer templateId);
+
+
 }
