@@ -70,7 +70,7 @@ public interface ITemplateManagerService {
 
     boolean addTemplateZone(TemplateZone templateZone);
 
-    boolean removeTemplateZone(int id);
+    boolean removeTemplateZone(int templateId,int zoneId);
 
     /**
      * 获取项目模板

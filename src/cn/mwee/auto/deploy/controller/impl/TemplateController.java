@@ -236,11 +236,11 @@ public class TemplateController extends AutoAbstractController implements ITempl
     }
 
     @Override
-    @Contract(TemplateZoneIdQuery.class)
+    @Contract(DeleteTemplateZoneRequest.class)
     public NormalReturn removeTemplateZone(ServiceRequest request)
     {
-        TemplateZoneIdQuery contract = request.getContract();
-        boolean rmSuccess = templateManagerService.removeTemplateZone(contract.getTemplateZoneId());
+        DeleteTemplateZoneRequest contract = request.getContract();
+        boolean rmSuccess = templateManagerService.removeTemplateZone(contract.getTemplateId(),contract.getZoneId());
         return new NormalReturn(rmSuccess);
     }
 
