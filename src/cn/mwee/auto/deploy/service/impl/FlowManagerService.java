@@ -135,6 +135,7 @@ public class FlowManagerService implements IFlowManagerService {
             flow.setOperater(SecurityUtils.getSubject().getPrincipal() == null ? "system" : SecurityUtils.getSubject().getPrincipal().toString());
             flow.setUpdateTime(new Date());
             flowMapper.updateByPrimaryKeySelective(flow);
+            sendNoticeMail(flow,TaskState.ING.name());
             return true;
         } else {
             return false;
@@ -394,7 +395,10 @@ public class FlowManagerService implements IFlowManagerService {
         if (result > 0) {
             flowTmp.setUpdateTime(new Date());
             flowMapper.updateByPrimaryKeySelective(flowTmp);
-            sendNoticeMail(flow,stateNew);
+            if (TaskState.SUCCESS.name().equals(stateNew) ||
+                    TaskState.ERROR.name().equals(stateNew)) {
+                sendNoticeMail(flow,stateNew);
+            }
         }
         return true;
     }
@@ -402,12 +406,9 @@ public class FlowManagerService implements IFlowManagerService {
     private void sendNoticeMail(Flow flow, String stateNew) {
         //在成功或失败是发送邮件
         try {
-            if (TaskState.SUCCESS.name().equals(stateNew) ||
-                    TaskState.ERROR.name().equals(stateNew)) {
-                String contentTemp = "流程[%s],执行结果[%s]";
-                String content = String.format(contentTemp,flow.getName(),stateNew);
-                simpleMailSender.sendNotice4ProjectAsync(flow.getProjectId(), content);
-            }
+            String contentTemp = "流程[%s],当前状态[%s]";
+            String content = String.format(contentTemp,flow.getName(),stateNew);
+            simpleMailSender.sendNotice4ProjectAsync(flow.getProjectId(), content);
         } catch (Exception e) {
             logger.error("sendNoticeMail error",e);
         }
