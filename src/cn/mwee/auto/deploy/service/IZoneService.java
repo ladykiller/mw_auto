@@ -15,6 +15,8 @@ public interface IZoneService {
 
     int addZone(Zone zone);
 
+    int addZone(String ip);
+
     Zone getZone(int zoneId);
 
     boolean deleteZone(int zoneId);

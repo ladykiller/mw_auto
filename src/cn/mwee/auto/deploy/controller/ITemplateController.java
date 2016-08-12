@@ -46,5 +46,8 @@ public interface ITemplateController extends IController  {
 
     NormalReturn addTemplateZone(ServiceRequest request);
 
+    NormalReturn addBatchTemplateZone(ServiceRequest request);
+
+
     NormalReturn removeTemplateZone(ServiceRequest request);
 }

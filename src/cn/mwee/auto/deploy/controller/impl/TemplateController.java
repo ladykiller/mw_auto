@@ -7,10 +7,15 @@ import cn.mwee.auto.deploy.model.AutoTemplate;
 import cn.mwee.auto.deploy.model.TemplateTask;
 import cn.mwee.auto.deploy.model.TemplateZone;
 import cn.mwee.auto.deploy.service.ITemplateManagerService;
+import cn.mwee.auto.deploy.service.IZoneService;
 import cn.mwee.auto.misc.aspect.contract.Contract;
 import cn.mwee.auto.misc.aspect.contract.Model;
+import cn.mwee.auto.misc.common.util.Utilities;
 import cn.mwee.auto.misc.req.ServiceRequest;
 import cn.mwee.auto.misc.resp.NormalReturn;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +35,9 @@ public class TemplateController extends AutoAbstractController implements ITempl
 
     @Autowired
     private ITemplateManagerService templateManagerService;
+
+    @Autowired
+    private IZoneService zoneService;
 
     @Override
     @Contract(QueryTemplatesRequest.class)
@@ -176,6 +184,55 @@ public class TemplateController extends AutoAbstractController implements ITempl
         boolean addSuccess = templateManagerService.addTemplateZone(templateZone);
 
         return new NormalReturn(addSuccess);
+    }
+
+    @Override
+    @Contract(AddTemplateZonesRequest.class)
+    public NormalReturn addBatchTemplateZone(ServiceRequest request)
+    {
+        AddTemplateZonesRequest contract = request.getContract();
+
+        String[] zones = StringUtils.split(contract.getZones(), ",|;| ");
+
+        List<String> successList = Lists.newArrayList();
+        List<String> failList = Lists.newArrayList();
+
+        for (String zone : zones)
+        {
+            if(Utilities.isIpAddress(zone))
+            {
+                int zoneId = zoneService.addZone(zone);
+
+                TemplateZone templateZone = new TemplateZone();
+
+                templateZone.setTemplateId(contract.getTemplateId());
+
+                templateZone.setZoneId(zoneId);
+
+                boolean addSuccess = templateManagerService.addTemplateZone(templateZone);
+
+                if(addSuccess)
+                {
+                    successList.add(zone);
+                }
+                else
+                {
+                    failList.add(zone);
+                }
+
+            }
+            else
+            {
+                failList.add(zone);
+            }
+        }
+
+        HashMap<String,List<String>> maps = Maps.newHashMap();
+
+        maps.put("successList",successList);
+        maps.put("failList",failList);
+
+        return new NormalReturn(maps);
     }
 
     @Override
