@@ -50,4 +50,7 @@ public interface ITemplateController extends IController  {
 
 
     NormalReturn removeTemplateZone(ServiceRequest request);
+
+    NormalReturn cloneTemplate(ServiceRequest request);
+
 }
