@@ -27,6 +27,7 @@ public class SSHManager
     private String strConnectionIP;
     private String strPassword;
     private Session sesConnection;
+    private Channel channel;
 
     private int intTimeOut = 60000;
     private int intConnectionPort = 22;
@@ -165,9 +166,36 @@ public class SSHManager
         return outputBuffer.toString();
     }
 
-    public void close()
-    {
-        sesConnection.disconnect();
+    public InputStream sendCmd(String command) {
+        try {
+            channel = sesConnection.openChannel("exec");
+            ((ChannelExec)channel).setCommand(command);
+            channel.connect();
+            return channel.getInputStream();
+        } catch (IOException e) {
+            logWarning(e.getMessage());
+        } catch (JSchException e) {
+            logWarning(e.getMessage());
+        }
+        return null;
+    }
+
+    public void close() {
+        if (channel != null) {
+            try {
+                channel.disconnect();
+            } catch (Exception e) {
+                logWarning(e.getMessage());
+            }
+        }
+        if (sesConnection != null) {
+            try {
+                sesConnection.disconnect();
+            } catch (Exception e) {
+                logWarning(e.getMessage());
+            }
+
+        }
     }
 
 }

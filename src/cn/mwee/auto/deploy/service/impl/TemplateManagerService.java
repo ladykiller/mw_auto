@@ -60,6 +60,9 @@ public class TemplateManagerService implements ITemplateManagerService {
     @Autowired
     private TemplateZoneExtMapper templateZoneExtMapper;
 
+    @Autowired
+    private TemplateZonesMonitorMapper templateZonesMonitorMapper;
+
     @Value(value = "${git.username}")
     private String gitUserName;
     @Value(value = "${git.password}")
@@ -348,6 +351,30 @@ public class TemplateManagerService implements ITemplateManagerService {
         });
     }
 
+
+    @Override
+    public boolean updateTemplateZoneStatus(Integer templateZoneId, String state) {
+        TemplateZone templateZone = new TemplateZone();
+        templateZone.setId(templateZoneId);
+        templateZone.setState(state);
+        templateZone.setUpdateTime(new Date());
+        int result = templateZoneMapper.updateByPrimaryKeySelective(templateZone);
+        return result >0;
+    }
+
+    @Override
+    public List<TemplateZonesMonitor> getTemplateZoneMonitor(Integer templateId) {
+        TemplateZonesMonitorExample example = new TemplateZonesMonitorExample();
+        example.createCriteria().andTemplateidEqualTo(templateId);
+        return templateZonesMonitorMapper.selectByExample(example);
+    }
+
+    @Override
+    public List<AutoTemplate> getAllInUseTemplate() {
+        AutoTemplateExample example = new AutoTemplateExample();
+        example.createCriteria().andInuseEqualTo((byte)1);
+        return autoTemplateMapper.selectByExample(example);
+    }
 
     public static void main(String[] args) {
         String url = "http://git.9now.net:10080/devops/mw_auto.git";

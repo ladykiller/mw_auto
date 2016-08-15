@@ -160,8 +160,10 @@ public class SimpleTaskExecutor implements TaskExecutor {
             flowTaskLogService.addLineLog(logId, e.getMessage());
         } finally {
             try {
+                if (instance != null)
                 instance.close();
             } catch (Exception e) {
+                logger.error("",e);
             }
         }
         return false;
