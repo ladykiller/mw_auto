@@ -26,7 +26,5 @@ public class ZoneMonitorScheduleExecutor {
         } catch (Exception e) {
             logger.error("<<<<<<<<<<<<<<<<<<<< end send zone status monitor task with error:",e);
         }
-
-
     }
 }

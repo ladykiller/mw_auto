@@ -46,6 +46,10 @@ public class UserController implements IUserController {
             AuthUser authUser = new AuthUser();
             authUser.setUsername(req.getUserName());
             authUser.setPassword(defaultPassword);
+
+
+
+
             Integer userId = userService.addUser(authUser);
             if (userId != null) {
                 return  new NormalReturn("200","success",authUser.getUsername());

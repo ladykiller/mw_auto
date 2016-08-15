@@ -1,8 +1,8 @@
 package cn.mwee.auto.auth.contract.user;
 
 import cn.mwee.auto.deploy.contract.commom.BaseContract;
+import cn.mwee.auto.misc.common.util.StringUtil;
 import lombok.Data;
-import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 
 /**
@@ -17,4 +17,15 @@ public class UserAddContract extends BaseContract {
     private String userName;
 
     private String password;
+
+    /**
+     *
+     */
+    private String name;
+
+
+    private String email;
+
+    private String phoneNo;
+    private String department;
 }
