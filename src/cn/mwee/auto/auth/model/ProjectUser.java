@@ -1,4 +1,4 @@
-package cn.mwee.auto.deploy.model;
+package cn.mwee.auto.auth.model;
 
 import java.util.Date;
 
@@ -26,6 +26,14 @@ public class ProjectUser {
      * @mbggenerated
      */
     private Integer userid;
+
+    /**
+     * 用户类型：DEV；TEST；ADMIN；PRODUCT
+     * project_user.userType
+     *
+     * @mbggenerated
+     */
+    private String usertype;
 
     /**
      * 创建人
@@ -113,6 +121,30 @@ public class ProjectUser {
      */
     public void setUserid(Integer userid) {
         this.userid = userid;
+    }
+
+    /**
+     * 用户类型：DEV；TEST；ADMIN；PRODUCT
+     * This method returns the value of the database column project_user.userType
+     *
+     * @return the value of project_user.userType
+     *
+     * @mbggenerated
+     */
+    public String getUsertype() {
+        return usertype;
+    }
+
+    /**
+     * 用户类型：DEV；TEST；ADMIN；PRODUCT
+     * This method sets the value of the database column project_user.userType
+     *
+     * @param usertype the value for project_user.userType
+     *
+     * @mbggenerated
+     */
+    public void setUsertype(String usertype) {
+        this.usertype = usertype;
     }
 
     /**

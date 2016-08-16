@@ -376,6 +376,16 @@ public class TemplateManagerService implements ITemplateManagerService {
         return autoTemplateMapper.selectByExample(example);
     }
 
+    @Override
+    public List<AutoTemplate> getCanUseTemplate4Project(Integer projectId) {
+        AutoTemplateExample example = new AutoTemplateExample();
+        example.createCriteria()
+                .andInuseEqualTo((byte)1).andProjectIdEqualTo(projectId);
+        example.or(example.createCriteria().andInuseEqualTo((byte)1)
+                .andProjectIdIsNull());
+        return autoTemplateMapper.selectByExample(example);
+    }
+
     public static void main(String[] args) {
         String url = "http://git.9now.net:10080/devops/mw_auto.git";
         System.out.println(url.substring(url.lastIndexOf('/') + 1, url.lastIndexOf('.')));

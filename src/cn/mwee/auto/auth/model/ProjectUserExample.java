@@ -1,4 +1,4 @@
-package cn.mwee.auto.deploy.model;
+package cn.mwee.auto.auth.model;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -428,6 +428,76 @@ public class ProjectUserExample {
 
         public Criteria andUseridNotBetween(Integer value1, Integer value2) {
             addCriterion("userId not between", value1, value2, "userid");
+            return (Criteria) this;
+        }
+
+        public Criteria andUsertypeIsNull() {
+            addCriterion("userType is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUsertypeIsNotNull() {
+            addCriterion("userType is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUsertypeEqualTo(String value) {
+            addCriterion("userType =", value, "usertype");
+            return (Criteria) this;
+        }
+
+        public Criteria andUsertypeNotEqualTo(String value) {
+            addCriterion("userType <>", value, "usertype");
+            return (Criteria) this;
+        }
+
+        public Criteria andUsertypeGreaterThan(String value) {
+            addCriterion("userType >", value, "usertype");
+            return (Criteria) this;
+        }
+
+        public Criteria andUsertypeGreaterThanOrEqualTo(String value) {
+            addCriterion("userType >=", value, "usertype");
+            return (Criteria) this;
+        }
+
+        public Criteria andUsertypeLessThan(String value) {
+            addCriterion("userType <", value, "usertype");
+            return (Criteria) this;
+        }
+
+        public Criteria andUsertypeLessThanOrEqualTo(String value) {
+            addCriterion("userType <=", value, "usertype");
+            return (Criteria) this;
+        }
+
+        public Criteria andUsertypeLike(String value) {
+            addCriterion("userType like", value, "usertype");
+            return (Criteria) this;
+        }
+
+        public Criteria andUsertypeNotLike(String value) {
+            addCriterion("userType not like", value, "usertype");
+            return (Criteria) this;
+        }
+
+        public Criteria andUsertypeIn(List<String> values) {
+            addCriterion("userType in", values, "usertype");
+            return (Criteria) this;
+        }
+
+        public Criteria andUsertypeNotIn(List<String> values) {
+            addCriterion("userType not in", values, "usertype");
+            return (Criteria) this;
+        }
+
+        public Criteria andUsertypeBetween(String value1, String value2) {
+            addCriterion("userType between", value1, value2, "usertype");
+            return (Criteria) this;
+        }
+
+        public Criteria andUsertypeNotBetween(String value1, String value2) {
+            addCriterion("userType not between", value1, value2, "usertype");
             return (Criteria) this;
         }
 

@@ -70,6 +70,7 @@ public class AuthController implements IAuthController {
 			session.setAttribute("subject", subject);
 			LoginResp resp = new LoginResp();
             AuthUser user = userService.queryByUserName(req.getUserName());
+			session.setAttribute("currentUser",user);
 			resp.setToken(subject.getSession().getId().toString());
             resp.setName(user.getName());
             resp.setUserName(user.getUsername());

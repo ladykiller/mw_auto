@@ -59,6 +59,14 @@ public interface IPermissionService {
 	AuthPermission selectByCode(String code);
 
 	/**
+	 * 名称查找
+	 * @param name 名称
+	 * @param isProject 是否是项目
+	 * @return
+     */
+	AuthPermission selectByName(String name,boolean isProject);
+
+	/**
 	 * query authPermission by condition
 	 * 
 	 * @param permissionQuery

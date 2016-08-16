@@ -109,23 +109,23 @@
 			<generatedKey column="ID" sqlStatement="MYSQL" identity="true" />
 		</table>-->
 
-        <!--<table tableName="project_user" domainObjectName="ProjectUser"
+        <table tableName="project_user" domainObjectName="ProjectUser"
                enableCountByExample="true"
                enableUpdateByExample="true"
                enableDeleteByExample="true"
                enableSelectByExample="true"
                selectByExampleQueryId="true">
             <generatedKey column="ID" sqlStatement="MYSQL" identity="true" />
-        </table>-->
+        </table>
 
-		<table tableName="template_zones_monitor" domainObjectName="TemplateZonesMonitor"
+		<!--<table tableName="template_zones_monitor" domainObjectName="TemplateZonesMonitor"
 			   enableCountByExample="true"
 			   enableUpdateByExample="true"
 			   enableDeleteByExample="true"
 			   enableSelectByExample="true"
 			   selectByExampleQueryId="true">
 			<generatedKey column="ID" sqlStatement="MYSQL" identity="true" />
-		</table>
+		</table>-->
 
 
 <!-- 

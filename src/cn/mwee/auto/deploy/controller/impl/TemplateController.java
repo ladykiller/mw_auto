@@ -252,5 +252,4 @@ public class TemplateController extends AutoAbstractController implements ITempl
         templateManagerService.cloneTemplate(req.getTemplateId());
         return new NormalReturn("success");
     }
-
 }

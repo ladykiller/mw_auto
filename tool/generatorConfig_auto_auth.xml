@@ -91,6 +91,13 @@
 			<generatedKey column="ID" sqlStatement="MYSQL" identity="true" />
 		</table>
 		-->
-		
+		<table tableName="project_user" domainObjectName="ProjectUser"
+			   enableCountByExample="true"
+			   enableUpdateByExample="true"
+			   enableDeleteByExample="true"
+			   enableSelectByExample="true"
+			   selectByExampleQueryId="true">
+			<generatedKey column="ID" sqlStatement="MYSQL" identity="true" />
+		</table>
 	</context>
 </generatorConfiguration>

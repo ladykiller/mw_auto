@@ -1,7 +1,7 @@
-package cn.mwee.auto.deploy.dao;
+package cn.mwee.auto.auth.dao;
 
-import cn.mwee.auto.deploy.model.ProjectUser;
-import cn.mwee.auto.deploy.model.ProjectUserExample;
+import cn.mwee.auto.auth.model.ProjectUser;
+import cn.mwee.auto.auth.model.ProjectUserExample;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 

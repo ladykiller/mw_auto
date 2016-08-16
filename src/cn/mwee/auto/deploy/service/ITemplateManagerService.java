@@ -111,4 +111,10 @@ public interface ITemplateManagerService {
      */
     List<AutoTemplate> getAllInUseTemplate();
 
+    /**
+     * 获取项目可以使用模板
+     * @param projectId
+     * @return
+     */
+    List<AutoTemplate> getCanUseTemplate4Project(Integer projectId);
 }

@@ -52,6 +52,14 @@ public class AuthPermission {
     private Byte type;
 
     /**
+     * 是否是项目：0，不是；1，是
+     * auth_permission.isProject
+     *
+     * @mbggenerated
+     */
+    private Boolean isproject;
+
+    /**
      * 描述
      * auth_permission.description
      *
@@ -225,6 +233,30 @@ public class AuthPermission {
      */
     public void setType(Byte type) {
         this.type = type;
+    }
+
+    /**
+     * 是否是项目：0，不是；1，是
+     * This method returns the value of the database column auth_permission.isProject
+     *
+     * @return the value of auth_permission.isProject
+     *
+     * @mbggenerated
+     */
+    public Boolean getIsproject() {
+        return isproject;
+    }
+
+    /**
+     * 是否是项目：0，不是；1，是
+     * This method sets the value of the database column auth_permission.isProject
+     *
+     * @param isproject the value for auth_permission.isProject
+     *
+     * @mbggenerated
+     */
+    public void setIsproject(Boolean isproject) {
+        this.isproject = isproject;
     }
 
     /**
