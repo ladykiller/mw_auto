@@ -132,10 +132,23 @@ public class ProjectController implements IProjectController {
     }
 
     @Override
-    @Contract(ProjectIdContract.class)
-    public NormalReturn getProjectZonesStatus(ServiceRequest request) {
-        ProjectIdContract req = request.getContract();
-        return new NormalReturn(projectService.getProjectZonesStatus(req.getProjectId()));
+    @Contract(ProjectMenuUpdateContract.class)
+    public NormalReturn projectMenuUpdate(ServiceRequest request) {
+        ProjectMenuUpdateContract req = request.getContract();
+        projectService.updateProjectMenu(req.getMenuId(),req.getMenuName(),req.getMenuUrl(),req.getDesc());
+        return new NormalReturn();
+    }
+
+    @Override
+    @Contract(ProjectMenuIdContract.class)
+    public NormalReturn projectMenuDel(ServiceRequest request) {
+        ProjectMenuIdContract req = request.getContract();
+        try {
+            projectService.delProjectMenu(req.getMenuId());
+        } catch (Exception e) {
+            return new NormalReturn("500", e.getMessage());
+        }
+        return new NormalReturn();
     }
 
     @Override
@@ -143,5 +156,12 @@ public class ProjectController implements IProjectController {
     public NormalReturn getCanUseTemplate(ServiceRequest request) {
         ProjectIdContract req = request.getContract();
         return new NormalReturn(templateManagerService.getCanUseTemplate4Project(req.getProjectId()));
+    }
+
+    @Override
+    @Contract(ProjectIdContract.class)
+    public NormalReturn getProjectZonesStatus(ServiceRequest request) {
+        ProjectIdContract req = request.getContract();
+        return new NormalReturn(projectService.getProjectZonesStatus(req.getProjectId()));
     }
 }

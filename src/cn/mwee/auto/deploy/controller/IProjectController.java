@@ -87,10 +87,18 @@ public interface IProjectController extends IController {
     NormalReturn projectMenuAdd(ServiceRequest request);
 
     /**
-     * 获取项目所有模板中的区域服务状态
+     * 修改项目子菜单
+     * @param request
      * @return
      */
-    NormalReturn getProjectZonesStatus(ServiceRequest request);
+    NormalReturn projectMenuUpdate(ServiceRequest request);
+
+    /**
+     * 删除项目子菜单
+     * @param request
+     * @return
+     */
+    NormalReturn projectMenuDel(ServiceRequest request);
 
     /**
      * 获取项目可用模板
@@ -98,4 +106,11 @@ public interface IProjectController extends IController {
      * @return
      */
     NormalReturn getCanUseTemplate(ServiceRequest request);
+
+    /**
+     * 获取项目所有模板中的区域服务状态
+     * @return
+     */
+    NormalReturn getProjectZonesStatus(ServiceRequest request);
+
 }

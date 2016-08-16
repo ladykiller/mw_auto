@@ -103,5 +103,21 @@ public interface IProjectService {
      */
     AuthPermission getProjectMenu(Integer menuId);
 
+    /**
+     * 删除项目子菜单
+     * @param menuId 菜单Id
+     * @return
+     */
+    boolean delProjectMenu(Integer menuId) throws Exception;
+
+    /**
+     * 修改项目子菜单
+     * @param menuId 菜单Id
+     * @param menuName 菜单标题
+     * @param menuUrl 菜单url
+     * @param desc 描述
+     * @return
+     */
+    boolean updateProjectMenu(Integer menuId, String menuName,String menuUrl,String desc);
 
 }

@@ -197,4 +197,19 @@ public class ProjectService implements IProjectService {
     public AuthPermission getProjectMenu(Integer menuId) {
         return permissionService.select(menuId);
     }
+
+    @Override
+    public boolean delProjectMenu(Integer menuId) throws Exception {
+        return permissionService.delete(menuId);
+    }
+
+    @Override
+    public boolean updateProjectMenu(Integer menuId, String menuName, String menuUrl, String desc) {
+        AuthPermission projectMenu = new AuthPermission();
+        projectMenu.setId(menuId);
+        projectMenu.setName(menuName);
+        projectMenu.setCode(menuUrl);
+        projectMenu.setDescription(desc);
+        return permissionService.update(projectMenu);
+    }
 }
