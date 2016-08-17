@@ -192,6 +192,7 @@ public class FlowManagerService implements IFlowManagerService {
             //区域组
             for (int i = 0; i < zones.length; i++) {
                 if (StringUtils.isBlank(zones[i])) continue;
+                flowParamMap.put("%zoneIndex%", (i+1)+"");
                 FlowTask flowTask = buildFlowTask(tt, flowId, zones[i], flowParamMap, userParamsMap);
                 if (flowStrategy != null) {
                     calStrategy(flowTask, i, zoneStartTaskMap, flowStrategy);
