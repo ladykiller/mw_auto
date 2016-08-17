@@ -149,5 +149,11 @@ public interface IFlowManagerService {
      */
 	boolean reviewFlow(Integer flowId,Byte isReview);
 
+	/**
+	 * 获取页面头部展示的用户项目流程
+	 * @param userId 用户Id
+	 * @return
+     */
+	List<Flow> getUserTopFlows (Integer userId);
 	
 }

@@ -153,6 +153,11 @@ public class ProjectService implements IProjectService {
     }
 
     @Override
+    public List<AuthPermission> getProjects4User(Integer userId) {
+        return projectUserExtMapper.selectProjects4User(userId);
+    }
+
+    @Override
     public List<ProjectUserExtModel> getProjectUsers(Integer projectId) {
         return projectUserExtMapper.selectProjectUsers(projectId);
     }

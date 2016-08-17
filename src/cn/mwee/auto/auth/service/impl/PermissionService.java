@@ -12,10 +12,12 @@ import java.util.List;
 import cn.mwee.auto.auth.contract.permission.PermissionQueryContract;
 import cn.mwee.auto.auth.dao.AuthPermissionExtMapper;
 import cn.mwee.auto.auth.dao.AuthRolePermissionExtMapper;
+import cn.mwee.auto.auth.dao.ProjectUserMapper;
 import cn.mwee.auto.auth.model.AuthMenu;
 import cn.mwee.auto.auth.util.SqlUtils;
 import cn.mwee.auto.common.db.BaseModel;
 import cn.mwee.auto.common.db.BaseQueryResult;
+import cn.mwee.auto.deploy.service.IProjectService;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +27,8 @@ import cn.mwee.auto.auth.model.AuthPermission;
 import cn.mwee.auto.auth.model.AuthPermissionExample;
 import cn.mwee.auto.auth.service.IPermissionService;
 import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
 
 /**
  * manage permission info
@@ -43,6 +47,9 @@ public class PermissionService implements IPermissionService {
 
     @Autowired
     private AuthRolePermissionExtMapper authRolePermissionExtMapper;
+
+    @Resource
+    private IProjectService projectService;
 
     @Override
     public boolean add(AuthPermission authPermission) {
@@ -124,9 +131,14 @@ public class PermissionService implements IPermissionService {
             if (menu.getParentId() == -1) {
                 topMenus.add(menu);
                 menu.setChildMenu(getChildMenu(menus, menu));
-
             }
         }
+        List<AuthPermission> projectList =  projectService.getProjects4User(userId);
+        projectList.forEach(project -> {
+            if (!isExist(project,topMenus)) {
+                topMenus.add(authPermissionExtMapper.selectPermTreeByPrimaryKey(project.getId()));
+            }
+        });
         return topMenus;
     }
 
@@ -139,6 +151,15 @@ public class PermissionService implements IPermissionService {
             }
         }
         return childMenu;
+    }
+
+    private boolean isExist(AuthPermission authPermission , List<AuthMenu> topMenus) {
+        for (AuthMenu authMenu : topMenus) {
+            if (authMenu.getId().intValue() == authPermission.getId()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override

@@ -19,6 +19,7 @@ import cn.mwee.auto.auth.model.AuthUser;
 import cn.mwee.auto.auth.service.IPermissionService;
 import cn.mwee.auto.auth.service.IRoleService;
 import cn.mwee.auto.auth.service.IUserService;
+import cn.mwee.auto.auth.util.AuthUtils;
 import cn.mwee.auto.deploy.contract.commom.BaseContract;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
@@ -119,7 +120,7 @@ public class AuthController implements IAuthController {
     @RequiresAuthentication
     public NormalReturn leftMenu(ServiceRequest request) {
         try {
-            String currUser = SecurityUtils.getSubject().getPrincipal().toString();
+            String currUser = AuthUtils.getCurrUserName();
             AuthUser authUser = userService.queryByUserName(currUser);
             if (authUser == null) {
                 SecurityUtils.getSubject().logout();

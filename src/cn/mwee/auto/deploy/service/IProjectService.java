@@ -69,6 +69,13 @@ public interface IProjectService {
     List<AuthUser> getUsers4Project(Integer projectId);
 
     /**
+     * 获取用户项目
+     * @param userId
+     * @return
+     */
+    List<AuthPermission> getProjects4User(Integer userId);
+
+    /**
      * 获取项目下的成员列表
      * @param projectId 项目Id
      * @return

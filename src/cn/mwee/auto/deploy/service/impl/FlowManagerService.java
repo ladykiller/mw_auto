@@ -1,5 +1,7 @@
 package cn.mwee.auto.deploy.service.impl;
 
+import cn.mwee.auto.auth.dao.ProjectUserMapper;
+import cn.mwee.auto.auth.model.AuthPermission;
 import cn.mwee.auto.auth.util.AuthUtils;
 import cn.mwee.auto.auth.util.SqlUtils;
 import cn.mwee.auto.common.db.BaseModel;
@@ -9,6 +11,7 @@ import cn.mwee.auto.deploy.contract.flow.FlowQueryContract;
 import cn.mwee.auto.deploy.dao.*;
 import cn.mwee.auto.deploy.model.*;
 import cn.mwee.auto.deploy.service.IFlowManagerService;
+import cn.mwee.auto.deploy.service.IProjectService;
 import cn.mwee.auto.deploy.service.ITemplateManagerService;
 import cn.mwee.auto.deploy.service.execute.SimpleMailSender;
 import cn.mwee.auto.deploy.service.execute.SimpleTaskExecutor;
@@ -59,6 +62,9 @@ public class FlowManagerService implements IFlowManagerService {
 
     @Autowired
     private FlowStrategyMapper flowStrategyMapper;
+
+    @Autowired
+    private IProjectService projectService;
 
     @Resource
     private ITemplateManagerService templateManagerService;
@@ -765,6 +771,19 @@ public class FlowManagerService implements IFlowManagerService {
         flow.setReviewdate(new Date());
         flow.setReviewer(AuthUtils.getCurrUserName());
         return flowMapper.updateByPrimaryKeySelective(flow) > 0;
+    }
+
+    @Override
+    public List<Flow> getUserTopFlows(Integer userId) {
+        List<AuthPermission> projects =  projectService.getProjects4User(userId);
+        List<Integer> pIds = new ArrayList<>(projects.size());
+        projects.forEach(project -> pIds.add(project.getId()));
+        FlowExample example = new FlowExample();
+        example.createCriteria().andProjectIdIn(pIds);
+        example.setOrderByClause("update_time DESC");
+        example.setLimitStart(0);
+        example.setLimitEnd(10);
+        return flowMapper.selectByExample(example);
     }
 
     public static void main(String[] args) {
