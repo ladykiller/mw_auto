@@ -47,6 +47,7 @@ public class AuthManager {
 			if (StringUtils.isNotBlank(token)) {
 				try {
 					Session session = SecurityUtils.getSecurityManager().getSession(new DefaultSessionKey(token));
+					session.touch();
 					Subject subject = (Subject)session.getAttribute("subject");
 					ThreadContext.bind(subject);
 				} catch (Exception e) {
