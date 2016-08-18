@@ -778,6 +778,7 @@ public class FlowManagerService implements IFlowManagerService {
     public List<Flow> getUserTopFlows(Integer userId) {
         List<AuthPermission> projects =  projectService.getProjects4User(userId);
         List<Integer> pIds = new ArrayList<>(projects.size());
+        if (CollectionUtils.isEmpty(projects)) return new ArrayList<>();
         projects.forEach(project -> pIds.add(project.getId()));
         FlowExample example = new FlowExample();
         example.createCriteria().andProjectIdIn(pIds);
