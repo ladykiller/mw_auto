@@ -66,14 +66,14 @@
 			<generatedKey column="ID" sqlStatement="MYSQL" identity="true" />
 		</table>
 -->
-		<table tableName="flow_tasks" domainObjectName="FlowTask"
+		<!--<table tableName="flow_tasks" domainObjectName="FlowTask"
 			   enableCountByExample="true"
 			   enableUpdateByExample="true"
 			   enableDeleteByExample="true"
 			   enableSelectByExample="true"
 			   selectByExampleQueryId="true">
 			<generatedKey column="ID" sqlStatement="MYSQL" identity="true" />
-		</table>
+		</table>-->
 
 		<!--<table tableName="flows" domainObjectName="Flow"
 			   enableCountByExample="true"
@@ -91,17 +91,43 @@
 			   selectByExampleQueryId="true">
 			<generatedKey column="ID" sqlStatement="MYSQL" identity="true" />
 		</table>-->
-<!--
-		<table tableName="template_zones" domainObjectName="TemplateZone"
+		<!--<table tableName="template_zones" domainObjectName="TemplateZone"
 			   enableCountByExample="true"
 			   enableUpdateByExample="true"
 			   enableDeleteByExample="true"
 			   enableSelectByExample="true"
 			   selectByExampleQueryId="true">
 			<generatedKey column="ID" sqlStatement="MYSQL" identity="true" />
-		</table>
- -->
- 
+		</table>-->
+
+		<!--<table tableName="projects" domainObjectName="AutoProject"
+			   enableCountByExample="true"
+			   enableUpdateByExample="true"
+			   enableDeleteByExample="true"
+			   enableSelectByExample="true"
+			   selectByExampleQueryId="true">
+			<generatedKey column="ID" sqlStatement="MYSQL" identity="true" />
+		</table>-->
+
+        <table tableName="project_user" domainObjectName="ProjectUser"
+               enableCountByExample="true"
+               enableUpdateByExample="true"
+               enableDeleteByExample="true"
+               enableSelectByExample="true"
+               selectByExampleQueryId="true">
+            <generatedKey column="ID" sqlStatement="MYSQL" identity="true" />
+        </table>
+
+		<!--<table tableName="template_zones_monitor" domainObjectName="TemplateZonesMonitor"
+			   enableCountByExample="true"
+			   enableUpdateByExample="true"
+			   enableDeleteByExample="true"
+			   enableSelectByExample="true"
+			   selectByExampleQueryId="true">
+			<generatedKey column="ID" sqlStatement="MYSQL" identity="true" />
+		</table>-->
+
+
 <!-- 
 		<table tableName="zones" domainObjectName="Zone"
 			   enableCountByExample="true"
@@ -122,5 +148,13 @@
 			<generatedKey column="ID" sqlStatement="MYSQL" identity="true" />
 		</table>
  -->
+		<!--<table tableName="flow_strategy" domainObjectName="FlowStrategy"
+			   enableCountByExample="true"
+			   enableUpdateByExample="true"
+			   enableDeleteByExample="true"
+			   enableSelectByExample="true"
+			   selectByExampleQueryId="true">
+			<generatedKey column="ID" sqlStatement="MYSQL" identity="true" />
+		</table>-->
 	</context>
 </generatorConfiguration>

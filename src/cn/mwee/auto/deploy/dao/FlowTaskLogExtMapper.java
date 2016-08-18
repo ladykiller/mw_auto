@@ -5,8 +5,13 @@
  */
 package cn.mwee.auto.deploy.dao;
 
+import cn.mwee.auto.deploy.model.FlowTaskLog;
+import cn.mwee.auto.deploy.model.FlowTaskLogExample;
+import cn.mwee.auto.deploy.model.FlowTaskLogExtModle;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+
+import java.util.List;
 
 /**
  * @author mengfanyuan
@@ -15,4 +20,8 @@ import org.apache.ibatis.annotations.Select;
 public interface FlowTaskLogExtMapper {
 	@Select("UPDATE flow_task_log SET log =concat(log,#{log}) WHERE id = #{logId};")
 	void addLineLog(@Param("logId")Integer logId, @Param("log")String log);
+
+
+    List<FlowTaskLogExtModle> selectZoneLogsByExample(FlowTaskLogExample example);
+
 }

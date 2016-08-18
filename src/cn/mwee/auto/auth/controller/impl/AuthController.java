@@ -6,34 +6,20 @@
 package cn.mwee.auto.auth.controller.impl;
 
 import cn.mwee.auto.auth.contract.*;
-import cn.mwee.auto.auth.contract.permission.PermissionAddContract;
-import cn.mwee.auto.auth.contract.permission.PermissionContract;
-import cn.mwee.auto.auth.contract.permission.PermissionQueryContract;
-import cn.mwee.auto.auth.contract.role.RoleAddContract;
-import cn.mwee.auto.auth.contract.role.RoleGrantContract;
-import cn.mwee.auto.auth.contract.role.RoleQueryContract;
-import cn.mwee.auto.auth.contract.role.RoleUpdateContract;
-import cn.mwee.auto.auth.model.AuthPermission;
-import cn.mwee.auto.auth.model.AuthRole;
 import cn.mwee.auto.auth.model.AuthUser;
 import cn.mwee.auto.auth.service.IPermissionService;
-import cn.mwee.auto.auth.service.IRoleService;
 import cn.mwee.auto.auth.service.IUserService;
 import cn.mwee.auto.deploy.contract.commom.BaseContract;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
-import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.session.mgt.DefaultSessionKey;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 
 import cn.mwee.auto.auth.controller.IAuthController;
@@ -54,9 +40,6 @@ public class AuthController implements IAuthController {
     @Autowired
     private IUserService userService;
 
-	@Value(value = "${shiro.session.timeout}")
-	private long sessionTimeout;
-
 	@Override
 	@Contract(LoginReq.class)
 	public NormalReturn login(ServiceRequest request) {
@@ -64,12 +47,15 @@ public class AuthController implements IAuthController {
 		try {
 			Subject subject = SecurityUtils.getSubject();
 			UsernamePasswordToken token = new UsernamePasswordToken(req.getUserName(), req.getPassword());
-			subject.login(token);
+            subject.login(token);
 			Session session = subject.getSession(false);
-			session.setTimeout(sessionTimeout);
 			session.setAttribute("subject", subject);
 			LoginResp resp = new LoginResp();
+            AuthUser user = userService.queryByUserName(req.getUserName());
+			session.setAttribute("currentUser",user);
 			resp.setToken(subject.getSession().getId().toString());
+            resp.setName(user.getName());
+            resp.setUserName(user.getUsername());
 			return new NormalReturn("200","success",resp);
 		} catch (AuthenticationException e) {
 			return new NormalReturn("502","error","用户名/密码错误");

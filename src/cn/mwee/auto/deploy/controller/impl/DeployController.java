@@ -1,4 +1,4 @@
-/** 
+ /**
  * 上海普景信息科技有限公司
  * 地址：上海市浦东新区祖冲之路899号 	
  * Copyright © 2013-2016 Puscene,Inc.All Rights Reserved.
@@ -7,10 +7,12 @@ package cn.mwee.auto.deploy.controller.impl;
 
 import java.util.*;
 
+import cn.mwee.auto.auth.model.AuthUser;
+import cn.mwee.auto.auth.util.AuthUtils;
 import cn.mwee.auto.deploy.contract.*;
+import cn.mwee.auto.deploy.contract.commom.BaseContract;
 import cn.mwee.auto.deploy.contract.flow.*;
-import cn.mwee.auto.deploy.model.AutoTemplate;
-import cn.mwee.auto.deploy.model.FlowTaskLog;
+import cn.mwee.auto.deploy.model.*;
 import cn.mwee.auto.deploy.service.ITaskManagerService;
 import cn.mwee.auto.misc.aspect.contract.Model;
 import org.slf4j.Logger;
@@ -20,8 +22,6 @@ import org.springframework.stereotype.Controller;
 
 import cn.mwee.auto.deploy.contract.template.TemplateTaskContract;
 import cn.mwee.auto.deploy.controller.IDeployController;
-import cn.mwee.auto.deploy.model.Flow;
-import cn.mwee.auto.deploy.model.TemplateTask;
 import cn.mwee.auto.deploy.service.IFlowManagerService;
 import cn.mwee.auto.deploy.service.IFlowTaskLogService;
 import cn.mwee.auto.deploy.service.ITemplateManagerService;
@@ -189,7 +189,7 @@ public class DeployController implements IDeployController {
 	public NormalReturn getZoneLogs(ServiceRequest request) {
 		ZoneStateContract req = request.getContract();
 		try {
-            List<FlowTaskLog> logs = flowTaskLogService.getZoneLogs(req.getFlowId(), req.getZone());
+            List<FlowTaskLogExtModle> logs = flowTaskLogService.getZoneLogs(req.getFlowId(), req.getZone());
             String state = flowManagerService.getZoneState(req.getFlowId(), req.getZone());
             Map<String,Object> result = new HashMap<>();
             result.put("state",state);
@@ -247,4 +247,15 @@ public class DeployController implements IDeployController {
             return new NormalReturn("500",e.getMessage());
         }
     }
+
+	@Override
+	@Contract(BaseContract.class)
+	public NormalReturn getUserTopFlows(ServiceRequest request) {
+		BaseContract req = request.getContract();
+		AuthUser currentUser = AuthUtils.getCurrentUser(req.getToken());
+		if (currentUser == null) {
+			return new NormalReturn("500","用户状态异常");
+		}
+		return new NormalReturn(flowManagerService.getUserTopFlows(currentUser.getId()));
+	}
 }

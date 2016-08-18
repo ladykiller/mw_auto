@@ -89,6 +89,16 @@ public class ZoneService implements IZoneService{
     }
 
     @Override
+    public int addZone(String ip)
+    {
+        Zone zone = new Zone();
+        zone.setCreateTime(new Date());
+        zone.setName(ip);
+        zone.setIp(ip);
+        return zoneMapper.insertSelective(zone) > 0 ? zone.getId() : 0;
+    }
+
+    @Override
     public Zone getZone(int zoneId)
     {
         return zoneMapper.selectByPrimaryKey(zoneId);

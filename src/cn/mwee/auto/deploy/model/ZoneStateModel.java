@@ -8,6 +8,10 @@ import lombok.Data;
 @Data
 public class ZoneStateModel {
     /**
+     * 模板区域Id
+     */
+    private Integer templateZoneId;
+    /**
      * 名称
      */
     private String name;

@@ -45,6 +45,15 @@
         </property>
     </bean>
 
+    <bean id="zoneMonitorMQSender" class="cn.mwee.auto.common.util.MessageUtil">
+        <property name="jmsTemplate" ref="activeMqTemplate"/>
+        <property name="destinationQueueNames">
+            <list>
+                <value>${activemq.queue.zoneMonitor}</value>
+            </list>
+        </property>
+    </bean>
+
     <!-- ================= MQ Listener Handler 监听队列配置 ================= -->
     <!-- 发送消息的目的地（一个队列） -->
     <bean id="flowDestination" class="org.apache.activemq.command.ActiveMQQueue">
@@ -68,4 +77,23 @@
     <bean id="flowTaskListener" class="cn.mwee.auto.listener.auto.FlowTaskListener"	>
         <property name="taskExecutor" ref="simpleTaskExecutor" />
     </bean>
+
+    <!-- ================= 区域状态监控 MQ Listener Handler 监听队列配置 ================= -->
+    <!-- 发送消息的目的地 -->
+    <bean id="zoneStatusDestination" class="org.apache.activemq.command.ActiveMQQueue">
+        <!-- 设置消息队列的名字 -->
+        <constructor-arg index="0" value="${activemq.queue.zoneMonitor}" />
+    </bean>
+
+    <!-- 消息监听容器 -->
+    <bean id="jmsZoneStatusContainer" class="org.springframework.jms.listener.SimpleMessageListenerContainer">
+        <property name="connectionFactory" ref="jmsFactory" />
+        <property name="destination" ref="zoneStatusDestination" />
+        <property name="messageListener" ref="zoneStatusMQMessageListener" />
+        <property name="concurrentConsumers" value="50" />
+    </bean>
+
+    <!-- 消息监听器 -->
+    <bean id="zoneStatusMQMessageListener" class="cn.mwee.auto.listener.auto.ZoneStatusMQMessageListener" />
+
 </beans>

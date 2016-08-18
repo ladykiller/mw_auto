@@ -18,6 +18,8 @@ public interface ITaskManagerService {
 
     boolean deleteTask(Integer taskId);
 
+    boolean checkTaskCanDel(Integer taskId);
+
     boolean modifyTask(AutoTask task);
 
     QueryTasksResult getAutoTasks(QueryTasksRequest request);

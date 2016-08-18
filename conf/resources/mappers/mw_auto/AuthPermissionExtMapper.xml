@@ -27,6 +27,13 @@
         parent_id = #{parentId,jdbcType=INTEGER}
     </select>
 
+    <select id="selectPermTreeByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="cn.mwee.auto.auth.dao.AuthPermissionMapper.Base_Column_List" />
+        from auth_permission
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
     <select id="selectPrivateMenu" parameterType="java.lang.Integer" resultMap="MenuResultMap" >
         SELECT
           DISTINCT p.id,p.*

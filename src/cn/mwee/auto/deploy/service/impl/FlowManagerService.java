@@ -1,5 +1,7 @@
 package cn.mwee.auto.deploy.service.impl;
 
+import cn.mwee.auto.auth.dao.ProjectUserMapper;
+import cn.mwee.auto.auth.model.AuthPermission;
 import cn.mwee.auto.auth.util.AuthUtils;
 import cn.mwee.auto.auth.util.SqlUtils;
 import cn.mwee.auto.common.db.BaseModel;
@@ -9,7 +11,9 @@ import cn.mwee.auto.deploy.contract.flow.FlowQueryContract;
 import cn.mwee.auto.deploy.dao.*;
 import cn.mwee.auto.deploy.model.*;
 import cn.mwee.auto.deploy.service.IFlowManagerService;
+import cn.mwee.auto.deploy.service.IProjectService;
 import cn.mwee.auto.deploy.service.ITemplateManagerService;
+import cn.mwee.auto.deploy.service.execute.SimpleMailSender;
 import cn.mwee.auto.deploy.service.execute.SimpleTaskExecutor;
 import cn.mwee.auto.deploy.service.execute.TaskMsgSender;
 
@@ -59,8 +63,14 @@ public class FlowManagerService implements IFlowManagerService {
     @Autowired
     private FlowStrategyMapper flowStrategyMapper;
 
+    @Autowired
+    private IProjectService projectService;
+
     @Resource
     private ITemplateManagerService templateManagerService;
+
+    @Resource
+    private SimpleMailSender simpleMailSender;
 
     @Resource
     private TaskMsgSender taskMsgSender;
@@ -78,7 +88,7 @@ public class FlowManagerService implements IFlowManagerService {
     private String localHost = "127.0.0.1";
 
     @Value("${deploy.env}")
-    private String deployEnv="";
+    private String deployEnv = "";
 
     @Override
     public Integer createFlow(FlowAddContract req) {
@@ -131,6 +141,7 @@ public class FlowManagerService implements IFlowManagerService {
             flow.setOperater(SecurityUtils.getSubject().getPrincipal() == null ? "system" : SecurityUtils.getSubject().getPrincipal().toString());
             flow.setUpdateTime(new Date());
             flowMapper.updateByPrimaryKeySelective(flow);
+            sendNoticeMail(flow,TaskState.ING.name());
             return true;
         } else {
             return false;
@@ -181,9 +192,10 @@ public class FlowManagerService implements IFlowManagerService {
             //区域组
             for (int i = 0; i < zones.length; i++) {
                 if (StringUtils.isBlank(zones[i])) continue;
+                flowParamMap.put("%zoneIndex%", (i+1)+"");
                 FlowTask flowTask = buildFlowTask(tt, flowId, zones[i], flowParamMap, userParamsMap);
                 if (flowStrategy != null) {
-                    calStrategy(flowTask,i,zoneStartTaskMap,flowStrategy);
+                    calStrategy(flowTask, i, zoneStartTaskMap, flowStrategy);
                 }
                 fts.add(flowTask);
             }
@@ -200,14 +212,14 @@ public class FlowManagerService implements IFlowManagerService {
 
     private void calStrategy(FlowTask flowTask, int index, Map<String, FlowTask> zoneStartTaskMap, FlowStrategy flowStrategy) {
         String key = flowTask.getZone();
-        if (zoneStartTaskMap.get(key)!= null) return;
+        if (zoneStartTaskMap.get(key) != null) return;
         if (flowTask.getGroup() > GroupType.PreGroup
-                && flowTask.getGroup()<GroupType.PostGroup){
-            key +=flowTask.getGroup();
-            if (zoneStartTaskMap.get(key)!= null) return;
+                && flowTask.getGroup() < GroupType.PostGroup) {
+            key += flowTask.getGroup();
+            if (zoneStartTaskMap.get(key) != null) return;
         }
-        zoneStartTaskMap.put(key,flowTask);
-        flowTask.setDelay(((index)/flowStrategy.getZonesize()) * flowStrategy.getInterval());
+        zoneStartTaskMap.put(key, flowTask);
+        flowTask.setDelay(((index) / flowStrategy.getZonesize()) * flowStrategy.getInterval());
     }
 
     /**
@@ -383,15 +395,30 @@ public class FlowManagerService implements IFlowManagerService {
         example.createCriteria().andFlowIdEqualTo(flowId);
         List<Map<String, Object>> list = flowTaskExtMapper.countState(example);
         String stateNew = calcFlowStatus(list);
-        int result = 1;
-        if (!stateNew.equals(flow.getState())) {
-            Flow flowTmp = new Flow();
-            flowTmp.setId(flow.getId());
-            flowTmp.setState(stateNew);
+        Flow flowTmp = new Flow();
+        flowTmp.setId(flow.getId());
+        flowTmp.setState(stateNew);
+        int result = flowMapper.updateByPrimaryKeySelective(flowTmp);
+        if (result > 0) {
             flowTmp.setUpdateTime(new Date());
-            result = flowMapper.updateByPrimaryKeySelective(flowTmp);
+            flowMapper.updateByPrimaryKeySelective(flowTmp);
+            if (TaskState.SUCCESS.name().equals(stateNew) ||
+                    TaskState.ERROR.name().equals(stateNew)) {
+                sendNoticeMail(flow,stateNew);
+            }
         }
-        return result > 0;
+        return true;
+    }
+
+    private void sendNoticeMail(Flow flow, String stateNew) {
+        //在成功或失败是发送邮件
+        try {
+            String contentTemp = "流程[%s],当前状态[%s]";
+            String content = String.format(contentTemp,flow.getName(),stateNew);
+            simpleMailSender.sendNotice4ProjectAsync(flow.getProjectId(), content);
+        } catch (Exception e) {
+            logger.error("sendNoticeMail error",e);
+        }
     }
 
     @Override
@@ -627,13 +654,13 @@ public class FlowManagerService implements IFlowManagerService {
     }
 
     @Override
-    public List<FlowTask> getZoneFlowTaskInfoSimple(Integer flowId, String zone) {
+    public List<FlowTaskExtModel> getZoneFlowTaskInfoSimple(Integer flowId, String zone) {
         FlowTaskExample example = new FlowTaskExample();
         example.createCriteria()
                 .andFlowIdEqualTo(flowId)
                 .andZoneEqualTo(zone);
         example.setOrderByClause("`group` ASC,priority ASC");
-        return flowTaskMapper.selectByExample(example);
+        return flowTaskExtMapper.getFlowTaskExtByExample(example);
     }
 
     @Override
@@ -745,6 +772,20 @@ public class FlowManagerService implements IFlowManagerService {
         flow.setReviewdate(new Date());
         flow.setReviewer(AuthUtils.getCurrUserName());
         return flowMapper.updateByPrimaryKeySelective(flow) > 0;
+    }
+
+    @Override
+    public List<Flow> getUserTopFlows(Integer userId) {
+        List<AuthPermission> projects =  projectService.getProjects4User(userId);
+        List<Integer> pIds = new ArrayList<>(projects.size());
+        if (CollectionUtils.isEmpty(projects)) return new ArrayList<>();
+        projects.forEach(project -> pIds.add(project.getId()));
+        FlowExample example = new FlowExample();
+        example.createCriteria().andProjectIdIn(pIds);
+        example.setOrderByClause("update_time DESC");
+        example.setLimitStart(0);
+        example.setLimitEnd(10);
+        return flowMapper.selectByExample(example);
     }
 
     public static void main(String[] args) {

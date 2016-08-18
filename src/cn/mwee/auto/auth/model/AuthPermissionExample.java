@@ -631,6 +631,66 @@ public class AuthPermissionExample {
             return (Criteria) this;
         }
 
+        public Criteria andIsprojectIsNull() {
+            addCriterion("isProject is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsprojectIsNotNull() {
+            addCriterion("isProject is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsprojectEqualTo(Boolean value) {
+            addCriterion("isProject =", value, "isproject");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsprojectNotEqualTo(Boolean value) {
+            addCriterion("isProject <>", value, "isproject");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsprojectGreaterThan(Boolean value) {
+            addCriterion("isProject >", value, "isproject");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsprojectGreaterThanOrEqualTo(Boolean value) {
+            addCriterion("isProject >=", value, "isproject");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsprojectLessThan(Boolean value) {
+            addCriterion("isProject <", value, "isproject");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsprojectLessThanOrEqualTo(Boolean value) {
+            addCriterion("isProject <=", value, "isproject");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsprojectIn(List<Boolean> values) {
+            addCriterion("isProject in", values, "isproject");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsprojectNotIn(List<Boolean> values) {
+            addCriterion("isProject not in", values, "isproject");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsprojectBetween(Boolean value1, Boolean value2) {
+            addCriterion("isProject between", value1, value2, "isproject");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsprojectNotBetween(Boolean value1, Boolean value2) {
+            addCriterion("isProject not between", value1, value2, "isproject");
+            return (Criteria) this;
+        }
+
         public Criteria andDescriptionIsNull() {
             addCriterion("description is null");
             return (Criteria) this;

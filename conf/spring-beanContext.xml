@@ -17,11 +17,20 @@
   		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
 	</bean>
 	<!-- mybatis end -->
-	
-	<bean id="springTaskExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+
+    <!-- 任务日志异步记录 -->
+	<bean id="taskLogExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
 	    <property name="corePoolSize" value="1" />
 	    <property name="maxPoolSize" value="1" />
-	    <property name="queueCapacity" value="50000" />
+	    <property name="queueCapacity" value="5000" />
 	</bean>
-	
+
+
+    <!-- 异步执行 -->
+	<bean id="simpleExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+		<property name="corePoolSize" value="1" />
+		<property name="maxPoolSize" value="5" />
+		<property name="queueCapacity" value="500" />
+	</bean>
+
 </beans>

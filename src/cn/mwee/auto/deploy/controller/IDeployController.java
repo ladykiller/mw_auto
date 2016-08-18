@@ -100,4 +100,11 @@ public interface IDeployController extends IController {
      */
     NormalReturn getFlowInfo(ServiceRequest request);
 
+	/**
+	 * 获取流程信息
+	 * @param request
+	 * @return
+	 */
+	NormalReturn getUserTopFlows(ServiceRequest request);
+
 }

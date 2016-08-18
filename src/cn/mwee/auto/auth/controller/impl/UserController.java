@@ -46,6 +46,10 @@ public class UserController implements IUserController {
             AuthUser authUser = new AuthUser();
             authUser.setUsername(req.getUserName());
             authUser.setPassword(defaultPassword);
+            authUser.setName(req.getName());
+            authUser.setEmail(req.getEmail());
+            authUser.setPhoneno(req.getPhoneNo());
+            authUser.setDepartment(req.getDepartment());
             Integer userId = userService.addUser(authUser);
             if (userId != null) {
                 return  new NormalReturn("200","success",authUser.getUsername());
@@ -149,7 +153,6 @@ public class UserController implements IUserController {
             } else {
                 return  new NormalReturn("500","error");
             }
-
         } catch (Exception e) {
             logger.error("resetPassword error",e);
             return  new NormalReturn("500",e.getMessage());

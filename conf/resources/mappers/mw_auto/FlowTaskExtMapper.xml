@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.mwee.auto.deploy.dao.FlowTaskExtMapper">
+	<resultMap id="BaseResultMap" extends="cn.mwee.auto.deploy.dao.FlowTaskMapper.BaseResultMap"
+			   type="cn.mwee.auto.deploy.model.FlowTaskExtModel">
+		<result column="name" jdbcType="VARCHAR" property="taskName" />
+	</resultMap>
+
+
 
 	<select id="getCurrentGroupNextTask" parameterType="cn.mwee.auto.deploy.model.FlowTaskExample" resultMap="cn.mwee.auto.deploy.dao.FlowTaskMapper.BaseResultMap">
 		SELECT 
@@ -76,5 +82,30 @@
 		) tmp
 		GROUP BY tmp.group
 	</select>
-	
+
+
+	<select id="getFlowTaskExtByExample" parameterType="cn.mwee.auto.deploy.model.FlowTaskExample" resultMap="BaseResultMap">
+		SELECT
+			ft.*,t.`name`
+		FROM
+			(
+				SELECT
+				<include refid="cn.mwee.auto.deploy.dao.FlowTaskMapper.Base_Column_List" />
+				FROM
+					flow_tasks
+				<if test="_parameter != null">
+					<include refid="cn.mwee.auto.deploy.dao.FlowTaskMapper.Example_Where_Clause" />
+				</if>
+				<if test="orderByClause != null">
+					order by ${orderByClause}
+				</if>
+				<if test="limitStart != null and limitStart&gt;=0">
+					limit ${limitStart} , ${limitEnd}
+				</if>
+			) ft
+			LEFT JOIN tasks t ON ft.task_id = t.id
+	</select>
+
+
+
 </mapper>

@@ -44,15 +44,15 @@
 			enableCountByExample等设为false时, 就不会生成对应的Example类了.
 		-->
 
-		<table tableName="auth_user" domainObjectName="AuthUser"
+		<!--<table tableName="auth_user" domainObjectName="AuthUser"
 			   enableCountByExample="true"
 			   enableUpdateByExample="true"
 			   enableDeleteByExample="true"
 			   enableSelectByExample="true"
 			   selectByExampleQueryId="true">
 			<generatedKey column="ID" sqlStatement="MYSQL" identity="true" />
-		</table>
-
+		</table>-->
+<!--
 		<table tableName="auth_role" domainObjectName="AuthRole"
 			   enableCountByExample="true"
 			   enableUpdateByExample="true"
@@ -61,14 +61,17 @@
 			   selectByExampleQueryId="true">
 			<generatedKey column="ID" sqlStatement="MYSQL" identity="true" />
 		</table>
-		<table tableName="auth_permission" domainObjectName="AuthPermission"
+-->
+
+		<!--<table tableName="auth_permission" domainObjectName="AuthPermission"
 			   enableCountByExample="true"
 			   enableUpdateByExample="true"
 			   enableDeleteByExample="true"
 			   enableSelectByExample="true"
 			   selectByExampleQueryId="true">
 			<generatedKey column="ID" sqlStatement="MYSQL" identity="true" />
-		</table>
+		</table>-->
+		<!--
 		<table tableName="auth_user_role" domainObjectName="AuthUserRole"
 			   enableCountByExample="true"
 			   enableUpdateByExample="true"
@@ -77,6 +80,8 @@
 			   selectByExampleQueryId="true">
 			<generatedKey column="ID" sqlStatement="MYSQL" identity="true" />
 		</table>
+		-->
+		<!--
 		<table tableName="auth_role_permission" domainObjectName="AuthRolePermission"
 			   enableCountByExample="true"
 			   enableUpdateByExample="true"
@@ -85,7 +90,14 @@
 			   selectByExampleQueryId="true">
 			<generatedKey column="ID" sqlStatement="MYSQL" identity="true" />
 		</table>
-		
-		
+		-->
+		<table tableName="project_user" domainObjectName="ProjectUser"
+			   enableCountByExample="true"
+			   enableUpdateByExample="true"
+			   enableDeleteByExample="true"
+			   enableSelectByExample="true"
+			   selectByExampleQueryId="true">
+			<generatedKey column="ID" sqlStatement="MYSQL" identity="true" />
+		</table>
 	</context>
 </generatorConfiguration>

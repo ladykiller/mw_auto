@@ -27,17 +27,18 @@ public class SSHManager
     private String strConnectionIP;
     private String strPassword;
     private Session sesConnection;
+    private Channel channel;
 
     private int intTimeOut = 60000;
     private int intConnectionPort = 22;
 
     private String prvkey;
     
-    private ThreadPoolTaskExecutor springTaskExecutor;
+    private ThreadPoolTaskExecutor taskLogExecutor;
 	private IFlowTaskLogService flowTaskLogService;
 	private Integer logId;
     public SSHManager(String userName, String prvkey,String connectionIP,
-    		IFlowTaskLogService flowTaskLogService,ThreadPoolTaskExecutor springTaskExecutor,Integer logId)
+    		IFlowTaskLogService flowTaskLogService,ThreadPoolTaskExecutor taskLogExecutor,Integer logId)
     {
         this.strUserName = userName;
         this.prvkey = prvkey;
@@ -45,7 +46,7 @@ public class SSHManager
         
         
         this.flowTaskLogService = flowTaskLogService;
-        this.springTaskExecutor = springTaskExecutor;
+        this.taskLogExecutor = taskLogExecutor;
         this.logId = logId;
 
         jschSSHChannel = new JSch();
@@ -125,7 +126,7 @@ public class SSHManager
             while ((lineStr = reader.readLine()) != null) {
             	outputBuffer.append(lineStr);
             	final String tmpLineStr = lineStr;
-            	springTaskExecutor.execute(new Runnable() {
+                taskLogExecutor.execute(new Runnable() {
 					@Override
 					public void run() {
 						flowTaskLogService.addLineLog(logId, tmpLineStr);
@@ -165,9 +166,36 @@ public class SSHManager
         return outputBuffer.toString();
     }
 
-    public void close()
-    {
-        sesConnection.disconnect();
+    public InputStream sendCmd(String command) {
+        try {
+            channel = sesConnection.openChannel("exec");
+            ((ChannelExec)channel).setCommand(command);
+            channel.connect();
+            return channel.getInputStream();
+        } catch (IOException e) {
+            logWarning(e.getMessage());
+        } catch (JSchException e) {
+            logWarning(e.getMessage());
+        }
+        return null;
+    }
+
+    public void close() {
+        if (channel != null) {
+            try {
+                channel.disconnect();
+            } catch (Exception e) {
+                logWarning(e.getMessage());
+            }
+        }
+        if (sesConnection != null) {
+            try {
+                sesConnection.disconnect();
+            } catch (Exception e) {
+                logWarning(e.getMessage());
+            }
+
+        }
     }
 
 }

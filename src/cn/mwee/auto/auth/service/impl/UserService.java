@@ -60,11 +60,11 @@ public class UserService implements IUserService {
 		//不能增加超级用户
 		if ("admin".equals(authUser.getUsername())) throw new Exception("You can not add admin user");
 		//用户已存在
-		if (queryByUserName(authUser.getUsername()) != null) throw new Exception("user exists");
+		if (queryByUserName(authUser.getUsername()) != null) throw new Exception("user ["+authUser.getUsername()+"] already exist");
 		encryptPassword(authUser);
 		authUser.setStatus(true);
 		authUser.setCreateTime(new Date());
-		authUser.setCreator(SecurityUtils.getSubject().getPrincipal().toString());
+		authUser.setCreator(AuthUtils.getCurrUserName());
 		int result = authUserMapper.insertSelective(authUser);
 		return result > 0 ? authUser.getId() : null;
 	}

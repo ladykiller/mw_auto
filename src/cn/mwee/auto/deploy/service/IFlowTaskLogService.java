@@ -10,6 +10,7 @@ import java.util.List;
 import cn.mwee.auto.deploy.model.AutoTask;
 import cn.mwee.auto.deploy.model.FlowTask;
 import cn.mwee.auto.deploy.model.FlowTaskLog;
+import cn.mwee.auto.deploy.model.FlowTaskLogExtModle;
 
 /**
  * @author mengfanyuan
@@ -58,7 +59,7 @@ public interface IFlowTaskLogService {
 	 * @param zone
 	 * @return
 	 */
-	List<FlowTaskLog> getZoneLogs(Integer flowId, String zone);
+	List<FlowTaskLogExtModle> getZoneLogs(Integer flowId, String zone);
 	
 	
 }

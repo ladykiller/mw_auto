@@ -29,4 +29,10 @@ public interface AuthPermissionExtMapper {
      */
     List<AuthMenu> selectPrivateMenu(@Param("userId") Integer userId);
 
+    /**
+     * 主键查询
+     * @param id
+     * @return
+     */
+    AuthMenu selectPermTreeByPrimaryKey(Integer id);
 }

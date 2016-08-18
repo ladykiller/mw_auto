@@ -54,7 +54,7 @@ public class PasswordHelper {
      */
     public boolean checkPassword(String salt, String password, String encryptPassword) {
         if (StringUtils.isBlank(encryptPassword)) return false;
-        return encryptPassword.equals(encryptPassword(password, salt));
+        return encryptPassword.equals(encryptPassword(salt, password));
 
     }
 
@@ -94,7 +94,7 @@ public class PasswordHelper {
     }
 
     public static void main(String[] args) {
-        System.out.println(new PasswordHelper().encryptPassword("0eb53519f55763f8391a84db0489e11f","123456"));
+        System.out.println(new PasswordHelper().encryptPassword("58e560e74d44896f4f995c605b0fc72b","paidui"));
 //        new PasswordHelper().encryptPassword("0eb53519f55763f8391a84db0489e11f","123456");
     }
 }

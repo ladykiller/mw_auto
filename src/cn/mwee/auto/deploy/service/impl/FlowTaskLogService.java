@@ -8,16 +8,13 @@ package cn.mwee.auto.deploy.service.impl;
 import java.util.Date;
 import java.util.List;
 
+import cn.mwee.auto.deploy.model.*;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import cn.mwee.auto.deploy.dao.FlowTaskLogExtMapper;
 import cn.mwee.auto.deploy.dao.FlowTaskLogMapper;
-import cn.mwee.auto.deploy.model.AutoTask;
-import cn.mwee.auto.deploy.model.FlowTask;
-import cn.mwee.auto.deploy.model.FlowTaskLog;
-import cn.mwee.auto.deploy.model.FlowTaskLogExample;
 import cn.mwee.auto.deploy.service.IFlowTaskLogService;
 
 /**
@@ -32,7 +29,8 @@ public class FlowTaskLogService implements IFlowTaskLogService {
 	
 	@Autowired
 	private FlowTaskLogExtMapper flowTaskLogExtMapper; 
-	
+
+
 	@Override
 	public Integer addLog(FlowTask flowTask,AutoTask task) {
 		FlowTaskLog flowTaskLog = new FlowTaskLog(); 
@@ -81,13 +79,13 @@ public class FlowTaskLogService implements IFlowTaskLogService {
 	}
 
 	@Override
-	public List<FlowTaskLog> getZoneLogs(Integer flowId, String zone) {
+	public List<FlowTaskLogExtModle> getZoneLogs(Integer flowId, String zone) {
 		// TODO Auto-generated method stub
 		FlowTaskLogExample example = new FlowTaskLogExample();
 		example.createCriteria()
 			.andFlowIdEqualTo(flowId)
 			.andZoneEqualTo(zone);
 		example.setOrderByClause("`group` ASC,priority ASC,create_time ASC");
-		return flowTaskLogMapper.selectByExampleWithBLOBs(example);
+		return flowTaskLogExtMapper.selectZoneLogsByExample(example);
 	}
 }

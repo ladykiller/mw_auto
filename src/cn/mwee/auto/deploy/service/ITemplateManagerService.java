@@ -70,7 +70,7 @@ public interface ITemplateManagerService {
 
     boolean addTemplateZone(TemplateZone templateZone);
 
-    boolean removeTemplateZone(int id);
+    boolean removeTemplateZone(int templateId,int zoneId);
 
     /**
      * 获取项目模板
@@ -86,4 +86,35 @@ public interface ITemplateManagerService {
      */
     List<ZoneStateModel> getTemplateZoneStatus(Integer templateId);
 
+    /**
+     * 克隆模板
+     */
+    void cloneTemplate(Integer templateId);
+
+    /**
+     * 更新模板区域状态
+     * @param templateZoneId
+     * @return
+     */
+    boolean updateTemplateZoneStatus(Integer templateZoneId, String state);
+
+    /**
+     * 获取模板监控
+     * @param templateId
+     * @return
+     */
+    List<TemplateZonesMonitor> getTemplateZoneMonitor(Integer templateId);
+
+    /**
+     * 获取使用中的模板
+     * @return
+     */
+    List<AutoTemplate> getAllInUseTemplate();
+
+    /**
+     * 获取项目可以使用模板
+     * @param projectId
+     * @return
+     */
+    List<AutoTemplate> getCanUseTemplate4Project(Integer projectId);
 }
