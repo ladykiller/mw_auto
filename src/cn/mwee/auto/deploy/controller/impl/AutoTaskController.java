@@ -62,6 +62,9 @@ public class AutoTaskController implements IAutoTaskController
     public NormalReturn deleteTask(ServiceRequest request)
     {
         TaskIdRequest contract = request.getContract();
+        if (!taskManagerService.checkTaskCanDel(contract.getTaskId())) {
+            return new NormalReturn("500","task["+contract.getTaskId()+"] is in use,can not delete ");
+        }
         boolean delSuccess = taskManagerService.deleteTask(contract.getTaskId());
         if(delSuccess)
         {

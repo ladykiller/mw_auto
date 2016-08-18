@@ -382,7 +382,7 @@ public class TemplateManagerService implements ITemplateManagerService {
         example.createCriteria()
                 .andInuseEqualTo((byte)1).andProjectIdEqualTo(projectId);
         example.or(example.createCriteria().andInuseEqualTo((byte)1)
-                .andProjectIdIsNull());
+                .andProjectIdEqualTo(projectId));
         return autoTemplateMapper.selectByExample(example);
     }
 

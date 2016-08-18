@@ -10,9 +10,12 @@ import cn.mwee.auto.common.db.BaseQueryResult;
 import cn.mwee.auto.common.util.DateUtil;
 import cn.mwee.auto.deploy.contract.task.QueryTasksRequest;
 import cn.mwee.auto.deploy.contract.task.QueryTasksResult;
+import cn.mwee.auto.deploy.dao.TemplateTaskMapper;
 import cn.mwee.auto.deploy.model.AutoTaskExample;
 import static cn.mwee.auto.deploy.util.AutoConsts.*;
 
+import cn.mwee.auto.deploy.model.TemplateTask;
+import cn.mwee.auto.deploy.model.TemplateTaskExample;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,6 +39,9 @@ public class TaskManagerService implements ITaskManagerService {
 	@Autowired
 	private AutoTaskMapper autoTaskMapper;
 
+    @Autowired
+    private TemplateTaskMapper templateTaskMapper;
+
 	@Override
 	public boolean addTask(AutoTask task)
 	{
@@ -55,6 +61,15 @@ public class TaskManagerService implements ITaskManagerService {
 		task.setInuse(InUseType.NOT_USE);
 		task.setUpdateTime(new Date());
 		return autoTaskMapper.updateByPrimaryKeySelective(task) > 0;
+	}
+
+	@Override
+	public boolean checkTaskCanDel(Integer taskId) {
+        TemplateTaskExample example = new TemplateTaskExample();
+        example.createCriteria()
+                .andInuseEqualTo(InUseType.IN_USE)
+                .andTaskIdEqualTo(taskId);
+        return templateTaskMapper.countByExample(example) == 0;
 	}
 
 	@Override

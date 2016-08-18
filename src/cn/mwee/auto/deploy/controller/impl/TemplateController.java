@@ -15,6 +15,7 @@ import cn.mwee.auto.misc.req.ServiceRequest;
 import cn.mwee.auto.misc.resp.NormalReturn;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -71,6 +72,10 @@ public class TemplateController extends AutoAbstractController implements ITempl
     public NormalReturn deleteTemplate(ServiceRequest request)
     {
         TemplateIdQuery contract = request.getContract();
+        if (CollectionUtils.isNotEmpty(templateManagerService.getTemplateTasks(contract.getTemplateId()))
+                || CollectionUtils.isNotEmpty(templateManagerService.getTemplateZones(contract.getTemplateId()))) {
+            return new NormalReturn("500","template["+contract.getTemplateId()+"] is in use, can not delete");
+        }
         templateManagerService.deleteTemplate(contract.getTemplateId());
         return new NormalReturn("success");
     }
