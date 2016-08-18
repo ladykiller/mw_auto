@@ -78,25 +78,6 @@
         <property name="taskExecutor" ref="simpleTaskExecutor" />
     </bean>
 
-    <!-- ================= 邮件 MQ Listener Handler 监听队列配置 ================= -->
-    <!-- 发送消息的目的地 -->
-    <bean id="mailDestination" class="org.apache.activemq.command.ActiveMQQueue">
-        <!-- 设置消息队列的名字 -->
-        <constructor-arg index="0" value="${activemq.queue.mail}" />
-    </bean>
-
-    <!-- 消息监听容器 -->
-    <bean id="jmsMailContainer" class="org.springframework.jms.listener.SimpleMessageListenerContainer">
-        <property name="connectionFactory" ref="jmsFactory" />
-        <property name="destination" ref="mailDestination" />
-        <property name="messageListener" ref="mailMQMessageListener" />
-        <property name="concurrentConsumers" value="50" />
-    </bean>
-
-    <!-- 消息监听器 -->
-    <bean id="mailMQMessageListener" class="cn.mwee.auto.listener.auto.MailMQMessageListener" />
-
-
     <!-- ================= 区域状态监控 MQ Listener Handler 监听队列配置 ================= -->
     <!-- 发送消息的目的地 -->
     <bean id="zoneStatusDestination" class="org.apache.activemq.command.ActiveMQQueue">
