@@ -55,9 +55,6 @@ public class FlowManagerService implements IFlowManagerService {
     private TemplateTaskExtMapper templateTaskExtMapper;
 
     @Autowired
-    private TemplateTaskMapper templateTaskMapper;
-
-    @Autowired
     private AutoTaskMapper autoTaskMapper;
 
     @Autowired
@@ -74,15 +71,6 @@ public class FlowManagerService implements IFlowManagerService {
 
     @Resource
     private TaskMsgSender taskMsgSender;
-
-    @Value(value = "${prepare.update.shell}")
-    private String updateShell;
-
-    @Value(value = "${prepare.build.shell}")
-    private String buildShell;
-
-    @Value(value = "${prepare.deploy.shell}")
-    private String deployShell;
 
     @Value("${localhost.name}")
     private String localHost = "127.0.0.1";
@@ -268,95 +256,6 @@ public class FlowManagerService implements IFlowManagerService {
                 paramStr = paramStr.replaceAll(paramKey, paramMap.get(key));
             }
             ft.setTaskParam(paramStr);
-        }
-    }
-
-    /**
-     * 构建prepare组的任务
-     *
-     * @param flow
-     * @param template
-     * @return
-     */
-    private List<FlowTask> buildPrepareTasks(Flow flow, AutoTemplate template) {
-        List<FlowTask> list = new ArrayList<>();
-        for (short i = 1; i < 3; i++) {
-            if (i == 2 && flow.getNeedbuild() == 0) continue;
-            FlowTask ft = new FlowTask();
-            ft.setGroup(GroupType.PrepareGroup);
-            ft.setPriority(i);
-            ft.setTaskId(0);
-            ft.setTaskType(TaskType.AUTO.name());
-            ft.setFlowId(flow.getId());
-            ft.setZone(localHost);
-            switch (i) {
-                case 1:
-                    ft.setTaskParam(updateShell);
-                    setPullShell(template, flow, ft);
-                    break;
-                case 2:
-                    ft.setTaskParam(buildShell);
-                    setBuildShell(template, ft);
-                    break;
-                /*case 3:
-                    ft.setTaskParam(deployShell);
-                    setDeployShell(template,flow,ft);
-                    break;*/
-            }
-            ft.setState(TaskState.INIT.name());
-            ft.setCreateTime(new Date());
-            list.add(ft);
-        }
-        return list;
-    }
-
-    /**
-     * 代码更新脚本
-     *
-     * @param template
-     * @param flow
-     * @param ft
-     */
-    private void setPullShell(AutoTemplate template, Flow flow, FlowTask ft) {
-        String repUrl = template.getVcsRep();
-        if (StringUtils.isNotBlank(repUrl)
-                && StringUtils.isNotBlank(flow.getVcsBranch())) {
-            String vcsType = template.getVcsType();
-            String vcsRep = template.getVcsRep();
-            String vcsBranch = flow.getVcsBranch();
-            String projectName = repUrl.substring(repUrl.lastIndexOf('/') + 1, repUrl.lastIndexOf('.'));
-            ft.setTaskParam(String.format(updateShell, vcsType, vcsRep, vcsBranch, projectName));
-        }
-    }
-
-    /**
-     * 构建脚本
-     *
-     * @param template
-     * @param ft
-     */
-    private void setBuildShell(AutoTemplate template, FlowTask ft) {
-        String repUrl = template.getVcsRep();
-        if (StringUtils.isNotBlank(repUrl)) {
-            String projectName = repUrl.substring(repUrl.lastIndexOf('/') + 1, repUrl.lastIndexOf('.'));
-            ft.setTaskParam(String.format(buildShell, projectName));
-        }
-    }
-
-    /**
-     * 部署脚本
-     *
-     * @param template
-     * @param flow
-     * @param ft
-     */
-    private void setDeployShell(AutoTemplate template, Flow flow, FlowTask ft) {
-        String repUrl = template.getVcsRep();
-        if (StringUtils.isNotBlank(repUrl)
-                && StringUtils.isNotBlank(flow.getVcsBranch())) {
-            String projectName = repUrl.substring(repUrl.lastIndexOf('/') + 1, repUrl.lastIndexOf('.'));
-            String zones = flow.getZones();
-            ft.setTaskParam(String.format(deployShell, projectName, projectName, zones));
         }
     }
 
