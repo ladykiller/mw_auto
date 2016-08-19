@@ -144,6 +144,11 @@ public class TemplateManagerService implements ITemplateManagerService {
 
             Date end = DateUtil.parseDate(req.getCreateTimeE());
 
+            if(req.getProjectId() != null)
+            {
+                c.andProjectIdEqualTo(req.getProjectId());
+            }
+
             if (start != null) {
                 c.andCreateTimeGreaterThanOrEqualTo(start);
             }
