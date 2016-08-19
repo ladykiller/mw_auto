@@ -76,7 +76,7 @@ public class TemplateManagerService implements ITemplateManagerService {
     @Override
     public boolean addTemplate(AutoTemplate template) {
         template.setCreateTime(new Date());
-        template.setCreator("root-creator");
+        template.setCreator(AuthUtils.getCurrUserName());
         return autoTemplateMapper.insertSelective(template) > 0;
     }
 
@@ -86,14 +86,14 @@ public class TemplateManagerService implements ITemplateManagerService {
         template.setUpdateTime(new Date());
         template.setId(templateId);
         template.setInuse(InUseType.NOT_USE);
-        template.setOperater("root-del");
+        template.setOperater(AuthUtils.getCurrUserName());
         return autoTemplateMapper.updateByPrimaryKeySelective(template) > 0;
     }
 
     @Override
     public boolean modifyTemplate(AutoTemplate template) {
         template.setUpdateTime(new Date());
-        template.setOperater("root-update");
+        template.setOperater(AuthUtils.getCurrUserName());
         return autoTemplateMapper.updateByPrimaryKeySelective(template) > 0;
     }
 
@@ -101,7 +101,7 @@ public class TemplateManagerService implements ITemplateManagerService {
     public boolean addTask2Template(int templateId, TemplateTask task) {
         task.setTemplateId(templateId);
         task.setCreateTime(new Date());
-        task.setCreator("root-creator");
+        task.setCreator(AuthUtils.getCurrUserName());
         return templateTaskMapper.insertSelective(task) > 0;
     }
 
@@ -110,7 +110,7 @@ public class TemplateManagerService implements ITemplateManagerService {
         TemplateTask task = new TemplateTask();
         task.setInuse(InUseType.NOT_USE);
         task.setId(templateTaskId);
-        task.setOperater("root-remove");
+        task.setOperater(AuthUtils.getCurrUserName());
         return templateTaskMapper.updateByPrimaryKeySelective(task) > 0;
     }
 
@@ -118,7 +118,7 @@ public class TemplateManagerService implements ITemplateManagerService {
     public boolean modifyTemplateTask(TemplateTask task) {
         task.setCreateTime(null);
         task.setUpdateTime(new Date());
-        task.setOperater("root-modify");
+        task.setOperater(AuthUtils.getCurrUserName());
         return templateTaskMapper.updateByPrimaryKeySelective(task) > 0;
     }
 
