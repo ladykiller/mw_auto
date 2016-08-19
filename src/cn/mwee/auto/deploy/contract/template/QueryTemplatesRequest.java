@@ -22,4 +22,6 @@ public class QueryTemplatesRequest {
     private String createTimeS;
 
     private String createTimeE;
+
+    private Integer projectId;
 }
