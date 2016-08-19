@@ -22,6 +22,13 @@ public interface IUserController extends IController {
      */
 	NormalReturn userAdd(ServiceRequest request);
 
+    /**
+     * 新增用户
+     * @param request
+     * @return
+     */
+    NormalReturn userUpdate(ServiceRequest request);
+
 	/**
 	 * 新增用户
 	 * @param request

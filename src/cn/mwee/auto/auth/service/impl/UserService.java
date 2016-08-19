@@ -71,6 +71,7 @@ public class UserService implements IUserService {
 
 	@Override
 	public boolean updateUser(AuthUser authUser) {
+		authUser.setUpdateTime(new Date());
 		int result = authUserMapper.updateByPrimaryKeySelective(authUser);
 		return result > 0;
 	}

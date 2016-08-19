@@ -38,7 +38,7 @@ public class UserController implements IUserController {
     private String defaultPassword;
 
     @Override
-    @RequiresPermissions(value = {"/user/addUser"},logical = Logical.OR)
+    @RequiresPermissions(value = {"/user/addUser"}, logical = Logical.OR)
     @Contract(UserAddContract.class)
     public NormalReturn userAdd(ServiceRequest request) {
         UserAddContract req = request.getContract();
@@ -52,12 +52,35 @@ public class UserController implements IUserController {
             authUser.setDepartment(req.getDepartment());
             Integer userId = userService.addUser(authUser);
             if (userId != null) {
-                return  new NormalReturn("200","success",authUser.getUsername());
+                return new NormalReturn("200", "success", authUser.getUsername());
             }
-            return  new NormalReturn("500","error");
+            return new NormalReturn("500", "error");
         } catch (Exception e) {
-            logger.error("",e);
-            return  new NormalReturn("500",e.getMessage());
+            logger.error("", e);
+            return new NormalReturn("500", e.getMessage());
+        }
+    }
+
+    @Override
+    @Contract(UserAddContract.class)
+    public NormalReturn userUpdate(ServiceRequest request) {
+        UserAddContract req = request.getContract();
+        try {
+            AuthUser user = userService.queryByUserName(req.getUserName());
+            if (user == null) {
+                return new NormalReturn("500", "user["+req.getUserName()+"] not exist");
+            }
+            AuthUser authUser = new AuthUser();
+            authUser.setId(user.getId());
+            authUser.setName(req.getName());
+            authUser.setEmail(req.getEmail());
+            authUser.setPhoneno(req.getPhoneNo());
+            authUser.setDepartment(req.getDepartment());
+            userService.updateUser(authUser);
+            return new NormalReturn();
+        } catch (Exception e) {
+            logger.error("", e);
+            return new NormalReturn("500", e.getMessage());
         }
     }
 
@@ -67,29 +90,29 @@ public class UserController implements IUserController {
     public NormalReturn userInfo(ServiceRequest request) {
         UserDelContract req = request.getContract();
         try {
-            Map<String,Object> result = new HashMap<>();
+            Map<String, Object> result = new HashMap<>();
             AuthUser userInfo = userService.queryByUserName(req.getUserName());
-            result.put("userInfo",userInfo);
+            result.put("userInfo", userInfo);
             List<AuthRole> authRoles = userService.queryRoles(userInfo.getId());
-            result.put("authRoles",authRoles);
-            result.put("unAuthRoles",userService.queryUnAuthRoles(userInfo.getId(),authRoles));
-            return  new NormalReturn("200","success",result);
+            result.put("authRoles", authRoles);
+            result.put("unAuthRoles", userService.queryUnAuthRoles(userInfo.getId(), authRoles));
+            return new NormalReturn("200", "success", result);
         } catch (Exception e) {
-            logger.error("",e);
-            return  new NormalReturn("500",e.getMessage());
+            logger.error("", e);
+            return new NormalReturn("500", e.getMessage());
         }
     }
 
     @Override
-    @RequiresPermissions(value = {"/user/userList"},logical = Logical.OR)
+    @RequiresPermissions(value = {"/user/userList"}, logical = Logical.OR)
     @Contract(UserQueryContract.class)
     public NormalReturn userList(ServiceRequest request) {
         UserQueryContract req = request.getContract();
         try {
-            return  new NormalReturn("200","success",userService.queryUsers(req));
+            return new NormalReturn("200", "success", userService.queryUsers(req));
         } catch (Exception e) {
-            logger.error("",e);
-            return  new NormalReturn("500",e.getMessage());
+            logger.error("", e);
+            return new NormalReturn("500", e.getMessage());
         }
     }
 
@@ -99,47 +122,47 @@ public class UserController implements IUserController {
     public NormalReturn updatePassword(ServiceRequest request) {
         PassWordContract req = request.getContract();
         try {
-            if (userService.updatePassword(req.getOldPassword(),req.getNewPassword())) {
-                return  new NormalReturn("200","success");
+            if (userService.updatePassword(req.getOldPassword(), req.getNewPassword())) {
+                return new NormalReturn("200", "success");
             } else {
-                return  new NormalReturn("500","Can not find User");
+                return new NormalReturn("500", "Can not find User");
             }
 
         } catch (Exception e) {
-            logger.error("updatePassword error",e);
-            return  new NormalReturn("500",e.getMessage());
+            logger.error("updatePassword error", e);
+            return new NormalReturn("500", e.getMessage());
         }
     }
 
     @Override
-    @RequiresPermissions(value = "/user/userGrant",logical = Logical.OR)
+    @RequiresPermissions(value = "/user/userGrant", logical = Logical.OR)
     @Contract(UserGrantContract.class)
     public NormalReturn userGrant(ServiceRequest request) {
         UserGrantContract req = request.getContract();
         try {
             AuthUser authUser = userService.queryByUserName(req.getUserName());
             if (authUser == null) {
-                return  new NormalReturn("500","Can not find User:"+req.getUserName());
+                return new NormalReturn("500", "Can not find User:" + req.getUserName());
             }
-            userService.updateUserGrant(authUser,req.getRoleIds());
-            return  new NormalReturn("200","success");
+            userService.updateUserGrant(authUser, req.getRoleIds());
+            return new NormalReturn("200", "success");
         } catch (Exception e) {
-            logger.error("userGrant error",e);
-            return  new NormalReturn("500",e.getMessage());
+            logger.error("userGrant error", e);
+            return new NormalReturn("500", e.getMessage());
         }
     }
 
     @Override
-    @RequiresPermissions(value = "/user/userDel",logical = Logical.OR)
+    @RequiresPermissions(value = "/user/userDel", logical = Logical.OR)
     @Contract(UserDelContract.class)
     public NormalReturn userDel(ServiceRequest request) {
         UserDelContract req = request.getContract();
         try {
             userService.delUserLogic(req.getUserName());
-            return  new NormalReturn("200","success");
+            return new NormalReturn("200", "success");
         } catch (Exception e) {
-            logger.error("",e);
-            return  new NormalReturn("500",e.getMessage());
+            logger.error("", e);
+            return new NormalReturn("500", e.getMessage());
         }
     }
 
@@ -148,14 +171,14 @@ public class UserController implements IUserController {
     public NormalReturn resetPassword(ServiceRequest request) {
         UserAddContract req = request.getContract();
         try {
-            if (userService.resetPassword(req.getUserName(),req.getPassword())) {
-                return  new NormalReturn("200","success");
+            if (userService.resetPassword(req.getUserName(), req.getPassword())) {
+                return new NormalReturn("200", "success");
             } else {
-                return  new NormalReturn("500","error");
+                return new NormalReturn("500", "error");
             }
         } catch (Exception e) {
-            logger.error("resetPassword error",e);
-            return  new NormalReturn("500",e.getMessage());
+            logger.error("resetPassword error", e);
+            return new NormalReturn("500", e.getMessage());
         }
     }
 }
