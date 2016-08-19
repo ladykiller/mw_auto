@@ -170,7 +170,8 @@ public class TemplateController extends AutoAbstractController implements ITempl
             result.put("zones", templateManagerService.getTemplateZones(req.getTemplateId()));
             //任务信息
             result.put("templateTasks", templateManagerService.getTemplateTasks(req.getTemplateId()));
-
+            //监控配置
+            result.put("monitorInfo", templateManagerService.getTemplateZoneMonitor(req.getTemplateId()));
             return new NormalReturn(result);
         }
         catch (Exception e)
@@ -255,6 +256,25 @@ public class TemplateController extends AutoAbstractController implements ITempl
     {
         CloneTemplateRequest req = request.getContract();
         templateManagerService.cloneTemplate(req.getTemplateId());
+        return new NormalReturn("success");
+    }
+
+    @Override
+    @Contract(AddTemplateZoneMonitorRequest.class)
+    public NormalReturn addTempZoneMonitor(ServiceRequest request) {
+        AddTemplateZoneMonitorRequest req = request.getContract();
+        if (CollectionUtils.isNotEmpty(templateManagerService.getTemplateZoneMonitor(req.getTemplateId()))) {
+            return new NormalReturn("500","template["+req.getTemplateId()+"] monitor exist already");
+        }
+        templateManagerService.addTemplateZoneMonitor(req.getTemplateId(),req.getMonitorType(),req.getMonitorParam(),req.getInUse());
+        return new NormalReturn("success");
+    }
+
+    @Override
+    @Contract(AddTemplateZoneMonitorRequest.class)
+    public NormalReturn updateTempZoneMonitor(ServiceRequest request) {
+        AddTemplateZoneMonitorRequest req = request.getContract();
+        templateManagerService.updateTemplateZoneMonitor(req.getTemplateId(),req.getMonitorType(),req.getMonitorParam(),req.getInUse());
         return new NormalReturn("success");
     }
 }

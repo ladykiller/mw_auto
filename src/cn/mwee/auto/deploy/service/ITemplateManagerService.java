@@ -117,4 +117,18 @@ public interface ITemplateManagerService {
      * @return
      */
     List<AutoTemplate> getCanUseTemplate4Project(Integer projectId);
+
+    /**
+     * 新增模板区域监控配置
+     * @param templateId
+     * @return
+     */
+    boolean addTemplateZoneMonitor(Integer templateId,Byte monitorType,String monitorParam,Byte inUse);
+
+    /**
+     * 更新模板区域监控配置
+     * @param templateId
+     * @return
+     */
+    boolean updateTemplateZoneMonitor(Integer templateId,Byte monitorType,String monitorParam,Byte inUse);
 }

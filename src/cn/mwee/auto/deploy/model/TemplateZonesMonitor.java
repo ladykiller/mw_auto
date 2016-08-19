@@ -43,6 +43,30 @@ public class TemplateZonesMonitor {
     private String monitorreq;
 
     /**
+     * 监控类型：1，url；2，端口；3，进程名
+     * template_zones_monitor.monitorType
+     *
+     * @mbggenerated
+     */
+    private Byte monitortype;
+
+    /**
+     * 监控参数
+     * template_zones_monitor.monitorParam
+     *
+     * @mbggenerated
+     */
+    private String monitorparam;
+
+    /**
+     * 是否启用：0，不启用；1，启用
+     * template_zones_monitor.inUse
+     *
+     * @mbggenerated
+     */
+    private Byte inuse;
+
+    /**
      * template_zones_monitor.createTime
      *
      * @mbggenerated
@@ -172,6 +196,78 @@ public class TemplateZonesMonitor {
      */
     public void setMonitorreq(String monitorreq) {
         this.monitorreq = monitorreq;
+    }
+
+    /**
+     * 监控类型：1，url；2，端口；3，进程名
+     * This method returns the value of the database column template_zones_monitor.monitorType
+     *
+     * @return the value of template_zones_monitor.monitorType
+     *
+     * @mbggenerated
+     */
+    public Byte getMonitortype() {
+        return monitortype;
+    }
+
+    /**
+     * 监控类型：1，url；2，端口；3，进程名
+     * This method sets the value of the database column template_zones_monitor.monitorType
+     *
+     * @param monitortype the value for template_zones_monitor.monitorType
+     *
+     * @mbggenerated
+     */
+    public void setMonitortype(Byte monitortype) {
+        this.monitortype = monitortype;
+    }
+
+    /**
+     * 监控参数
+     * This method returns the value of the database column template_zones_monitor.monitorParam
+     *
+     * @return the value of template_zones_monitor.monitorParam
+     *
+     * @mbggenerated
+     */
+    public String getMonitorparam() {
+        return monitorparam;
+    }
+
+    /**
+     * 监控参数
+     * This method sets the value of the database column template_zones_monitor.monitorParam
+     *
+     * @param monitorparam the value for template_zones_monitor.monitorParam
+     *
+     * @mbggenerated
+     */
+    public void setMonitorparam(String monitorparam) {
+        this.monitorparam = monitorparam;
+    }
+
+    /**
+     * 是否启用：0，不启用；1，启用
+     * This method returns the value of the database column template_zones_monitor.inUse
+     *
+     * @return the value of template_zones_monitor.inUse
+     *
+     * @mbggenerated
+     */
+    public Byte getInuse() {
+        return inuse;
+    }
+
+    /**
+     * 是否启用：0，不启用；1，启用
+     * This method sets the value of the database column template_zones_monitor.inUse
+     *
+     * @param inuse the value for template_zones_monitor.inUse
+     *
+     * @mbggenerated
+     */
+    public void setInuse(Byte inuse) {
+        this.inuse = inuse;
     }
 
     /**

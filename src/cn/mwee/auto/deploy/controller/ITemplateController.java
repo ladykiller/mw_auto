@@ -53,4 +53,8 @@ public interface ITemplateController extends IController  {
 
     NormalReturn cloneTemplate(ServiceRequest request);
 
+    NormalReturn addTempZoneMonitor(ServiceRequest request);
+
+    NormalReturn updateTempZoneMonitor(ServiceRequest request);
+
 }

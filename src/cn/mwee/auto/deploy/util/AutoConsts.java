@@ -58,6 +58,13 @@ public class AutoConsts {
 		public static final Byte IN_USE			= 1;
 		public static final Byte NOT_USE 		= 0;
 	}
+    /** 监控类型 **/
+	public static class MonitorType {
+        public static final byte MONITOR_URL          = 1;
+        public static final byte MONITOR_PORT         = 2;
+        public static final byte MONITOR_PROCESS      = 3;
+
+    }
 
 	public enum TaskState
 	{

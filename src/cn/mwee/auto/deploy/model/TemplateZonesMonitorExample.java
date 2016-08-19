@@ -581,6 +581,196 @@ public class TemplateZonesMonitorExample {
             return (Criteria) this;
         }
 
+        public Criteria andMonitortypeIsNull() {
+            addCriterion("monitorType is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMonitortypeIsNotNull() {
+            addCriterion("monitorType is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMonitortypeEqualTo(Byte value) {
+            addCriterion("monitorType =", value, "monitortype");
+            return (Criteria) this;
+        }
+
+        public Criteria andMonitortypeNotEqualTo(Byte value) {
+            addCriterion("monitorType <>", value, "monitortype");
+            return (Criteria) this;
+        }
+
+        public Criteria andMonitortypeGreaterThan(Byte value) {
+            addCriterion("monitorType >", value, "monitortype");
+            return (Criteria) this;
+        }
+
+        public Criteria andMonitortypeGreaterThanOrEqualTo(Byte value) {
+            addCriterion("monitorType >=", value, "monitortype");
+            return (Criteria) this;
+        }
+
+        public Criteria andMonitortypeLessThan(Byte value) {
+            addCriterion("monitorType <", value, "monitortype");
+            return (Criteria) this;
+        }
+
+        public Criteria andMonitortypeLessThanOrEqualTo(Byte value) {
+            addCriterion("monitorType <=", value, "monitortype");
+            return (Criteria) this;
+        }
+
+        public Criteria andMonitortypeIn(List<Byte> values) {
+            addCriterion("monitorType in", values, "monitortype");
+            return (Criteria) this;
+        }
+
+        public Criteria andMonitortypeNotIn(List<Byte> values) {
+            addCriterion("monitorType not in", values, "monitortype");
+            return (Criteria) this;
+        }
+
+        public Criteria andMonitortypeBetween(Byte value1, Byte value2) {
+            addCriterion("monitorType between", value1, value2, "monitortype");
+            return (Criteria) this;
+        }
+
+        public Criteria andMonitortypeNotBetween(Byte value1, Byte value2) {
+            addCriterion("monitorType not between", value1, value2, "monitortype");
+            return (Criteria) this;
+        }
+
+        public Criteria andMonitorparamIsNull() {
+            addCriterion("monitorParam is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMonitorparamIsNotNull() {
+            addCriterion("monitorParam is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMonitorparamEqualTo(String value) {
+            addCriterion("monitorParam =", value, "monitorparam");
+            return (Criteria) this;
+        }
+
+        public Criteria andMonitorparamNotEqualTo(String value) {
+            addCriterion("monitorParam <>", value, "monitorparam");
+            return (Criteria) this;
+        }
+
+        public Criteria andMonitorparamGreaterThan(String value) {
+            addCriterion("monitorParam >", value, "monitorparam");
+            return (Criteria) this;
+        }
+
+        public Criteria andMonitorparamGreaterThanOrEqualTo(String value) {
+            addCriterion("monitorParam >=", value, "monitorparam");
+            return (Criteria) this;
+        }
+
+        public Criteria andMonitorparamLessThan(String value) {
+            addCriterion("monitorParam <", value, "monitorparam");
+            return (Criteria) this;
+        }
+
+        public Criteria andMonitorparamLessThanOrEqualTo(String value) {
+            addCriterion("monitorParam <=", value, "monitorparam");
+            return (Criteria) this;
+        }
+
+        public Criteria andMonitorparamLike(String value) {
+            addCriterion("monitorParam like", value, "monitorparam");
+            return (Criteria) this;
+        }
+
+        public Criteria andMonitorparamNotLike(String value) {
+            addCriterion("monitorParam not like", value, "monitorparam");
+            return (Criteria) this;
+        }
+
+        public Criteria andMonitorparamIn(List<String> values) {
+            addCriterion("monitorParam in", values, "monitorparam");
+            return (Criteria) this;
+        }
+
+        public Criteria andMonitorparamNotIn(List<String> values) {
+            addCriterion("monitorParam not in", values, "monitorparam");
+            return (Criteria) this;
+        }
+
+        public Criteria andMonitorparamBetween(String value1, String value2) {
+            addCriterion("monitorParam between", value1, value2, "monitorparam");
+            return (Criteria) this;
+        }
+
+        public Criteria andMonitorparamNotBetween(String value1, String value2) {
+            addCriterion("monitorParam not between", value1, value2, "monitorparam");
+            return (Criteria) this;
+        }
+
+        public Criteria andInuseIsNull() {
+            addCriterion("inUse is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andInuseIsNotNull() {
+            addCriterion("inUse is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andInuseEqualTo(Byte value) {
+            addCriterion("inUse =", value, "inuse");
+            return (Criteria) this;
+        }
+
+        public Criteria andInuseNotEqualTo(Byte value) {
+            addCriterion("inUse <>", value, "inuse");
+            return (Criteria) this;
+        }
+
+        public Criteria andInuseGreaterThan(Byte value) {
+            addCriterion("inUse >", value, "inuse");
+            return (Criteria) this;
+        }
+
+        public Criteria andInuseGreaterThanOrEqualTo(Byte value) {
+            addCriterion("inUse >=", value, "inuse");
+            return (Criteria) this;
+        }
+
+        public Criteria andInuseLessThan(Byte value) {
+            addCriterion("inUse <", value, "inuse");
+            return (Criteria) this;
+        }
+
+        public Criteria andInuseLessThanOrEqualTo(Byte value) {
+            addCriterion("inUse <=", value, "inuse");
+            return (Criteria) this;
+        }
+
+        public Criteria andInuseIn(List<Byte> values) {
+            addCriterion("inUse in", values, "inuse");
+            return (Criteria) this;
+        }
+
+        public Criteria andInuseNotIn(List<Byte> values) {
+            addCriterion("inUse not in", values, "inuse");
+            return (Criteria) this;
+        }
+
+        public Criteria andInuseBetween(Byte value1, Byte value2) {
+            addCriterion("inUse between", value1, value2, "inuse");
+            return (Criteria) this;
+        }
+
+        public Criteria andInuseNotBetween(Byte value1, Byte value2) {
+            addCriterion("inUse not between", value1, value2, "inuse");
+            return (Criteria) this;
+        }
+
         public Criteria andCreatetimeIsNull() {
             addCriterion("createTime is null");
             return (Criteria) this;

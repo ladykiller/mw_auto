@@ -65,8 +65,15 @@ public class TemplateManagerService implements ITemplateManagerService {
 
     @Value(value = "${git.username}")
     private String gitUserName;
+
     @Value(value = "${git.password}")
     private String gitPassword;
+
+    @Value(value = "${mw.monitor.shell}")
+    private String defaultMonitorShell;
+
+    @Value(value = "${mw.monitor.user}")
+    private String defaultMonitorUser;
 
     @Override
     public AutoTemplate getTemplate(int templateId) {
@@ -304,12 +311,12 @@ public class TemplateManagerService implements ITemplateManagerService {
         List<AutoTask> taskList = getTasks4TemplateTaskList(ttList);
         Integer newTemplateid = cloneTemplate(template);
         Map<Integer, Integer> taskIdMap = cloneTasks(taskList);
-        cloneTemplateTasks(ttList,newTemplateid,taskIdMap);
+        cloneTemplateTasks(ttList, newTemplateid, taskIdMap);
     }
 
     private Integer cloneTemplate(AutoTemplate template) {
         AutoTemplate templateClone = new AutoTemplate();
-        templateClone.setName(template.getName()+"-copy");
+        templateClone.setName(template.getName() + "-copy");
         templateClone.setProjectId(template.getProjectId());
         templateClone.setVcsType(template.getVcsType());
         templateClone.setVcsRep(template.getVcsRep());
@@ -337,7 +344,8 @@ public class TemplateManagerService implements ITemplateManagerService {
         });
         return taskIdMap;
     }
-    private void cloneTemplateTasks(List<TemplateTask> ttList,Integer newTemplateId,Map<Integer, Integer> taskIdMap) {
+
+    private void cloneTemplateTasks(List<TemplateTask> ttList, Integer newTemplateId, Map<Integer, Integer> taskIdMap) {
         if (CollectionUtils.isEmpty(ttList)) return;
         ttList.forEach(templateTask -> {
             TemplateTask templateTaskClone = new TemplateTask();
@@ -347,7 +355,7 @@ public class TemplateManagerService implements ITemplateManagerService {
             templateTaskClone.setTaskId(taskIdMap.get(templateTask.getTaskId()));
             templateTaskClone.setTaskType(templateTask.getTaskType());
             templateTaskClone.setCreator(AuthUtils.getCurrUserName());
-            addTask2Template(newTemplateId,templateTaskClone);
+            addTask2Template(newTemplateId, templateTaskClone);
         });
     }
 
@@ -359,7 +367,7 @@ public class TemplateManagerService implements ITemplateManagerService {
         templateZone.setState(state);
         templateZone.setUpdateTime(new Date());
         int result = templateZoneMapper.updateByPrimaryKeySelective(templateZone);
-        return result >0;
+        return result > 0;
     }
 
     @Override
@@ -372,7 +380,7 @@ public class TemplateManagerService implements ITemplateManagerService {
     @Override
     public List<AutoTemplate> getAllInUseTemplate() {
         AutoTemplateExample example = new AutoTemplateExample();
-        example.createCriteria().andInuseEqualTo((byte)1);
+        example.createCriteria().andInuseEqualTo((byte) 1);
         return autoTemplateMapper.selectByExample(example);
     }
 
@@ -380,10 +388,52 @@ public class TemplateManagerService implements ITemplateManagerService {
     public List<AutoTemplate> getCanUseTemplate4Project(Integer projectId) {
         AutoTemplateExample example = new AutoTemplateExample();
         example.createCriteria()
-                .andInuseEqualTo((byte)1).andProjectIdEqualTo(projectId);
-        example.or(example.createCriteria().andInuseEqualTo((byte)1)
+                .andInuseEqualTo((byte) 1).andProjectIdEqualTo(projectId);
+        example.or(example.createCriteria().andInuseEqualTo((byte) 1)
                 .andProjectIdEqualTo(projectId));
         return autoTemplateMapper.selectByExample(example);
+    }
+
+    @Override
+    public boolean addTemplateZoneMonitor(Integer templateId, Byte monitorType, String monitorParam, Byte inUse) {
+        TemplateZonesMonitor monitor = new TemplateZonesMonitor();
+        monitor.setTemplateid(templateId);
+        monitor.setMonitorshell(defaultMonitorShell);
+        monitor.setMonitoruser(defaultMonitorUser);
+        monitor.setMonitorreq(buildMonitorReq(monitorType,monitorParam));
+        monitor.setInuse(inUse);
+        monitor.setMonitortype(monitorType);
+        monitor.setMonitorparam(monitorParam);
+        monitor.setCreatetime(new Date());
+        return templateZonesMonitorMapper.insertSelective(monitor) > 0;
+    }
+
+    @Override
+    public boolean updateTemplateZoneMonitor(Integer templateId, Byte monitorType, String monitorParam, Byte inUse) {
+        TemplateZonesMonitor monitor = new TemplateZonesMonitor();
+        monitor.setMonitorreq(buildMonitorReq(monitorType,monitorParam));
+        monitor.setInuse(inUse);
+        monitor.setMonitortype(monitorType);
+        monitor.setMonitorparam(monitorParam);
+        monitor.setUpdatetime(new Date());
+        TemplateZonesMonitorExample example = new TemplateZonesMonitorExample();
+        example.createCriteria().andTemplateidEqualTo(templateId);
+        return templateZonesMonitorMapper.updateByExampleSelective(monitor,example) > 0;
+    }
+
+    private String buildMonitorReq(Byte monitorType, String param) {
+        String monitorReq = "";
+        switch (monitorType) {
+            case MonitorType.MONITOR_URL:
+                monitorReq = "-a %zone% -u "+param;
+                break;
+            case MonitorType.MONITOR_PORT:
+                monitorReq = "-a %zone% -p "+param;
+                break;
+            case MonitorType.MONITOR_PROCESS:
+                monitorReq = "-a %zone% -n "+param;
+        }
+        return monitorReq;
     }
 
     public static void main(String[] args) {
