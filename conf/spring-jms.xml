@@ -82,7 +82,7 @@
     <!-- 发送消息的目的地 -->
     <bean id="zoneStatusDestination" class="org.apache.activemq.command.ActiveMQQueue">
         <!-- 设置消息队列的名字 -->
-        <constructor-arg index="0" value="${activemq.queue.zoneMonitor}" />
+        <constructor-arg index="0" value="${activemq.queue.zoneMonitor.schedule}" />
     </bean>
 
     <!-- 消息监听容器 -->

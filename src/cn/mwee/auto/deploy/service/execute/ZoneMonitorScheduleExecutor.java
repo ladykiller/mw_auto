@@ -17,7 +17,7 @@ public class ZoneMonitorScheduleExecutor {
     @Resource
     private IZoneMonitorService zoneMonitorService;
 
-    @Scheduled(cron = "0 0/2 * * * ?")
+//    @Scheduled(cron = "0 0/2 * * * ?")
     public void execute() {
         try {
             logger.info(">>>>>>>>>>>>>>>>>>>> start send zone status monitor task");
