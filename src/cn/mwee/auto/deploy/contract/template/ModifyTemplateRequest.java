@@ -37,4 +37,5 @@ public class ModifyTemplateRequest {
      */
     private String vcsRep;
 
+    private Integer projectId;
 }
