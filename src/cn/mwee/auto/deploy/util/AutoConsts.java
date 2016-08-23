@@ -43,6 +43,9 @@ public class AutoConsts {
 		public static final Byte PrepareGroup   = -1;
 		public static final Byte PreGroup		= 0;
 		public static final Byte PostGroup 		= Byte.MAX_VALUE;
+
+		public static final Byte RollbackGroup   = -2;
+
 	}
 
     public static class FlowReviewType {

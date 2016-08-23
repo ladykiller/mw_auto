@@ -25,9 +25,13 @@ public interface ITemplateManagerService {
      */
     QueryTemplatesResult getTemplates(QueryTemplatesRequest request);
 
-
+    boolean addTask2RollbackTemplate(int templateId,TemplateTask task);
 
     boolean addTask2Template(int templateId,TemplateTask task);
+
+    AutoTemplate getSubTemplate(int templateId);
+
+    AutoTemplate createSubTemplate(int templateId);
 
     boolean removeTemplateTask(int templateTaskId);
 
@@ -38,6 +42,13 @@ public interface ITemplateManagerService {
 	 * @return
 	 */
 	List<TemplateTask> getTemplateTasks(int templateId);
+
+
+    /**
+     * 获取-回滚模板-任务信息
+     * @return
+     */
+    List<TemplateTask> getRollbackTemplateTasks(int templateId);
 
     /**
      * 获取模板区域信息

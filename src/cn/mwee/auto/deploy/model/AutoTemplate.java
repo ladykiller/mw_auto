@@ -91,6 +91,14 @@ public class AutoTemplate {
     private Date updateTime;
 
     /**
+     * 父模板
+     * templates.pid
+     *
+     * @mbggenerated
+     */
+    private Integer pid;
+
+    /**
      * This method returns the value of the database column templates.id
      *
      * @return the value of templates.id
@@ -350,5 +358,29 @@ public class AutoTemplate {
      */
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    /**
+     * 父模板
+     * This method returns the value of the database column templates.pid
+     *
+     * @return the value of templates.pid
+     *
+     * @mbggenerated
+     */
+    public Integer getPid() {
+        return pid;
+    }
+
+    /**
+     * 父模板
+     * This method sets the value of the database column templates.pid
+     *
+     * @param pid the value for templates.pid
+     *
+     * @mbggenerated
+     */
+    public void setPid(Integer pid) {
+        this.pid = pid;
     }
 }

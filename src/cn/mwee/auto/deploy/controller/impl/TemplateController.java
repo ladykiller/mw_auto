@@ -8,6 +8,7 @@ import cn.mwee.auto.deploy.model.TemplateTask;
 import cn.mwee.auto.deploy.model.TemplateZone;
 import cn.mwee.auto.deploy.service.ITemplateManagerService;
 import cn.mwee.auto.deploy.service.IZoneService;
+import cn.mwee.auto.deploy.util.AutoConsts;
 import cn.mwee.auto.misc.aspect.contract.Contract;
 import cn.mwee.auto.misc.aspect.contract.Model;
 import cn.mwee.auto.misc.common.util.Utilities;
@@ -94,7 +95,17 @@ public class TemplateController extends AutoAbstractController implements ITempl
     public NormalReturn addTask2Template(ServiceRequest request)
     {
         TemplateTask task = request.getModel();
-        templateManagerService.addTask2Template(task.getTemplateId(),task);
+
+        if(task.getGroup() == AutoConsts.GroupType.RollbackGroup)
+        {
+            // 回滚组, init ? 初始化回滚组模板 : 添加回滚模板任务
+            templateManagerService.addTask2RollbackTemplate(task.getTemplateId(),task);
+        }
+        else
+        {
+            templateManagerService.addTask2Template(task.getTemplateId(),task);
+        }
+
         return new NormalReturn("success");
     }
 
@@ -164,14 +175,20 @@ public class TemplateController extends AutoAbstractController implements ITempl
             }
 
             Map<String,Object> result = new HashMap<>();
+
+            Integer templateId = req.getTemplateId();
+
             //基础信息
-            result.put("baseInfo",templateManagerService.getTemplate(req.getTemplateId()));
+            result.put("baseInfo",templateManagerService.getTemplate(templateId));
             //区信息
-            result.put("zones", templateManagerService.getTemplateZones(req.getTemplateId()));
+            result.put("zones", templateManagerService.getTemplateZones(templateId));
             //任务信息
-            result.put("templateTasks", templateManagerService.getTemplateTasks(req.getTemplateId()));
+            result.put("templateTasks", templateManagerService.getTemplateTasks(templateId));
             //监控配置
-            result.put("monitorInfo", templateManagerService.getTemplateZoneMonitor(req.getTemplateId()));
+            result.put("monitorInfo", templateManagerService.getTemplateZoneMonitor(templateId));
+            //回滚模板数据
+            result.put("rollbackTemplate", templateManagerService.getRollbackTemplateTasks(templateId));
+
             return new NormalReturn(result);
         }
         catch (Exception e)

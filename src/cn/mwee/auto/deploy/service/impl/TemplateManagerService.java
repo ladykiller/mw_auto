@@ -21,6 +21,7 @@ import cn.mwee.auto.deploy.model.*;
 import static cn.mwee.auto.deploy.util.AutoConsts.*;
 
 import cn.mwee.auto.deploy.service.ITaskManagerService;
+import com.google.common.collect.Lists;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -135,6 +136,7 @@ public class TemplateManagerService implements ITemplateManagerService {
         AutoTemplateExample.Criteria c = e.createCriteria();
 
         c.andInuseEqualTo(InUseType.IN_USE);
+        c.andPidEqualTo(0);
         e.setOrderByClause("id desc");
 
         if (req.getId() != null) {
@@ -180,6 +182,60 @@ public class TemplateManagerService implements ITemplateManagerService {
     }
 
     @Override
+    public boolean addTask2RollbackTemplate(int templateId, TemplateTask task)
+    {
+        AutoTemplate rollbackTemplate = getSubTemplate(templateId);
+
+        if(rollbackTemplate == null)
+        {
+            rollbackTemplate = createSubTemplate(templateId);
+        }
+
+        int rollbackId = rollbackTemplate.getId();
+
+        task.setGroup((byte)1);
+
+        return addTask2Template(rollbackId,task);
+    }
+
+    @Override
+    public AutoTemplate getSubTemplate(int templateId)
+    {
+        // 判断是否已有子模板
+        AutoTemplateExample example = new AutoTemplateExample();
+        AutoTemplateExample.Criteria c = example.createCriteria();
+
+        c.andPidEqualTo(templateId);
+
+        List<AutoTemplate> templates = autoTemplateMapper.selectByExample(example);
+
+        return templates.size() > 0 ? templates.get(0) : null;
+    }
+
+    @Override
+    public AutoTemplate createSubTemplate(int templateId)
+    {
+        AutoTemplate autoTemplate = getTemplate(templateId);
+
+        AutoTemplate rollbackTemplate = new AutoTemplate();
+
+        rollbackTemplate.setPid(templateId);
+
+        rollbackTemplate.setName("回滚-".concat(autoTemplate.getName()));
+
+        rollbackTemplate.setProjectId(autoTemplate.getProjectId());
+
+        rollbackTemplate.setCreateTime(new Date());
+
+        rollbackTemplate.setCreator(AuthUtils.getCurrUserName());
+
+        autoTemplateMapper.insertSelective(rollbackTemplate);
+
+        return rollbackTemplate;
+    }
+
+
+    @Override
     public List<TemplateTask> getTemplateTasks(int templateId) {
         TemplateTaskExample example = new TemplateTaskExample();
         TemplateTaskExample.Criteria c = example.createCriteria();
@@ -188,6 +244,20 @@ public class TemplateManagerService implements ITemplateManagerService {
         example.setOrderByClause("`group` ASC,priority ASC");
         return templateTaskMapper.selectByExample(example);
     }
+
+    @Override
+    public List<TemplateTask> getRollbackTemplateTasks(int templateId)
+    {
+        AutoTemplate rollbackTemplate = getSubTemplate(templateId);
+
+        if(rollbackTemplate == null)
+        {
+            return Lists.newArrayList();
+        }
+
+        return getTemplateTasks(rollbackTemplate.getId());
+    }
+
 
     @Override
     public List<Zone> getTemplateZones(Integer templateId) {
