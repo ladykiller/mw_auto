@@ -236,9 +236,12 @@ public class DeployController implements IDeployController {
     public NormalReturn getFlowInfo(ServiceRequest request) {
         FlowStartContract req = request.getContract();
         try {
-            Flow flow = flowManagerService.getFlow(req.getFlowId());
+			Flow flow = flowManagerService.getFlow(req.getFlowId());
             if (flow != null) {
-                return new NormalReturn("200","success",flow);
+				Map<String,Object> result = new HashMap<>();
+				result.put("flowInfo",flow);
+				result.put("strategyInfo",flowManagerService.getFlowStrategy(req.getFlowId()));
+                return new NormalReturn("200","success",result);
             } else {
                 return new NormalReturn("500","flow not exists for id["+req.getFlowId()+"]");
             }

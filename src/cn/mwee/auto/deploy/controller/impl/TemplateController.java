@@ -280,7 +280,7 @@ public class TemplateController extends AutoAbstractController implements ITempl
     @Contract(AddTemplateZoneMonitorRequest.class)
     public NormalReturn addTempZoneMonitor(ServiceRequest request) {
         AddTemplateZoneMonitorRequest req = request.getContract();
-        if (CollectionUtils.isNotEmpty(templateManagerService.getTemplateZoneMonitor(req.getTemplateId()))) {
+        if (templateManagerService.getTemplateZoneMonitor(req.getTemplateId()) != null) {
             return new NormalReturn("500","template["+req.getTemplateId()+"] monitor exist already");
         }
         templateManagerService.addTemplateZoneMonitor(req.getTemplateId(),req.getMonitorType(),req.getMonitorParam(),req.getInUse());

@@ -663,6 +663,14 @@ public class FlowManagerService implements IFlowManagerService {
     }
 
     @Override
+    public FlowStrategy getFlowStrategy(Integer flowId) {
+        FlowStrategyExample example = new FlowStrategyExample();
+        example.createCriteria().andFlowIdEqualTo(flowId);
+        List<FlowStrategy> list = flowStrategyMapper.selectByExample(example);
+        return CollectionUtils.isEmpty(list) ? null : list.get(0);
+    }
+
+    @Override
     public boolean reviewFlow(Integer flowId, Byte isReview) {
         Flow flow = new Flow();
         flow.setId(flowId);

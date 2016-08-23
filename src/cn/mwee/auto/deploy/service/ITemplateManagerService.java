@@ -114,7 +114,7 @@ public interface ITemplateManagerService {
      * @param templateId
      * @return
      */
-    List<TemplateZonesMonitor> getTemplateZoneMonitor(Integer templateId);
+    TemplateZonesMonitor getTemplateZoneMonitor(Integer templateId);
 
     /**
      * 获取使用中的模板

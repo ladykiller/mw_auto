@@ -142,6 +142,13 @@ public interface IFlowManagerService {
      */
     Flow getFlow(Integer flowId);
 
+	/**
+	 * 获取流程执行策略
+	 * @param flowId 流程Id
+	 * @return
+     */
+	FlowStrategy getFlowStrategy(Integer flowId);
+
     /**
      * 审核流程
      * @param flowId

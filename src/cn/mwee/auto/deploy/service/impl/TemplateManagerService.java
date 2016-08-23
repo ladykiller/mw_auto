@@ -446,10 +446,11 @@ public class TemplateManagerService implements ITemplateManagerService {
     }
 
     @Override
-    public List<TemplateZonesMonitor> getTemplateZoneMonitor(Integer templateId) {
+    public TemplateZonesMonitor getTemplateZoneMonitor(Integer templateId) {
         TemplateZonesMonitorExample example = new TemplateZonesMonitorExample();
         example.createCriteria().andTemplateidEqualTo(templateId);
-        return templateZonesMonitorMapper.selectByExample(example);
+        List<TemplateZonesMonitor> list = templateZonesMonitorMapper.selectByExample(example);
+        return CollectionUtils.isEmpty(list) ? null : list.get(0);
     }
 
     @Override
