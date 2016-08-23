@@ -107,4 +107,11 @@ public interface IDeployController extends IController {
 	 */
 	NormalReturn getUserTopFlows(ServiceRequest request);
 
+	/**
+	 * 回滚到当前流程
+	 * @param request
+	 * @return
+	 */
+	NormalReturn rollBackFlow(ServiceRequest request);
+
 }

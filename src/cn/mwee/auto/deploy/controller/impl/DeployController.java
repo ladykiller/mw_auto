@@ -15,6 +15,7 @@ import cn.mwee.auto.deploy.contract.flow.*;
 import cn.mwee.auto.deploy.model.*;
 import cn.mwee.auto.deploy.service.ITaskManagerService;
 import cn.mwee.auto.misc.aspect.contract.Model;
+import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -261,4 +262,21 @@ public class DeployController implements IDeployController {
 		}
 		return new NormalReturn(flowManagerService.getUserTopFlows(currentUser.getId()));
 	}
+
+    @Override
+    @RequiresAuthentication
+    @Contract(FlowStartContract.class)
+    public NormalReturn rollBackFlow(ServiceRequest request) {
+        FlowStartContract req = request.getContract();
+        try {
+            if (flowManagerService.rollBackFlow(req.getFlowId())) {
+                return new NormalReturn();
+            } else {
+                return new NormalReturn("500","回滚失败");
+            }
+        } catch (Exception e) {
+            return new NormalReturn("500",e.getMessage());
+        }
+
+    }
 }

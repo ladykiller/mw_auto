@@ -162,5 +162,12 @@ public interface IFlowManagerService {
 	 * @return
      */
 	List<Flow> getUserTopFlows (Integer userId);
-	
+
+    /**
+     * 回滚流程
+     * @param flowId
+     * @return
+     */
+	boolean rollBackFlow(Integer flowId) throws Exception;
+
 }

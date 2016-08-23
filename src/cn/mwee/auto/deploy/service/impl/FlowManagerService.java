@@ -695,6 +695,24 @@ public class FlowManagerService implements IFlowManagerService {
         return flowMapper.selectByExample(example);
     }
 
+    @Override
+    public boolean rollBackFlow(Integer flowId) throws Exception {
+        Flow flow = getFlow(flowId);
+        Integer templateId = flow.getTemplateId();
+        AutoTemplate subTemplate = templateManagerService.getSubTemplate(templateId);
+        if (subTemplate == null) throw new Exception("模板["+templateId+"]未配置回滚模板");
+        Flow rollBackFlow = new Flow();
+        rollBackFlow.setName(flow.getName()+"-回滚");
+        rollBackFlow.setTemplateId(subTemplate.getId());
+        rollBackFlow.setProjectId(flow.getProjectId());
+        rollBackFlow.setZones(flow.getZones());
+        rollBackFlow.setIsreview(subTemplate.getReview());
+        rollBackFlow.setState(TaskState.INIT.name());
+        rollBackFlow.setCreator(AuthUtils.getCurrUserName());
+        rollBackFlow.setCreateTime(new Date());
+        return flowMapper.insertSelective(rollBackFlow) > 0;
+    }
+
     public static void main(String[] args) {
         /*
         String str = "i am /#p#/#p#";
