@@ -95,4 +95,12 @@ public interface IPermissionService {
      */
 	List<AuthMenu> queryPermTree() ;
 
+	/**
+	 * 获取页面下的按钮权限
+	 * @param pageUrl 页面地址
+	 * @param userId 用户Id
+     * @return
+     */
+    List<AuthPermission> getBtnPerms4Page(String pageUrl,Integer userId);
+
 }

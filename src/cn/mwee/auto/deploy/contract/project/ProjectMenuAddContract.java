@@ -13,6 +13,8 @@ public class ProjectMenuAddContract {
     @NotNull(message = "未指定项目")
     private Integer projectId;
 
+    private Integer templateId;
+
     @NotBlank(message = "未指定菜单标题")
     private String menuName;
 

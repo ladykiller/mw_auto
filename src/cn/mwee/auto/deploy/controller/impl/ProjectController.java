@@ -127,7 +127,8 @@ public class ProjectController implements IProjectController {
     @Contract(ProjectMenuAddContract.class)
     public NormalReturn projectMenuAdd(ServiceRequest request) {
         ProjectMenuAddContract req = request.getContract();
-        projectService.addProjectMenu(req.getProjectId(),req.getMenuName(),req.getMenuUrl(),req.getDesc());
+        projectService.addProjectMenu(req.getProjectId(),req.getTemplateId(),
+                req.getMenuName(),req.getMenuUrl(),req.getTemplateId()!=null,req.getDesc());
         return new NormalReturn();
     }
 

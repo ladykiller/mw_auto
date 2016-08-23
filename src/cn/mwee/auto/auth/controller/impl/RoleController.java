@@ -9,6 +9,7 @@ import cn.mwee.auto.misc.req.ServiceRequest;
 import cn.mwee.auto.misc.resp.NormalReturn;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.Logical;
+import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,7 +54,7 @@ public class RoleController implements IRoleController {
     }
 
     @Override
-//    @RequiresPermissions(value = "/role/getRole",logical = Logical.OR)
+    @RequiresAuthentication
     @Contract(RoleIdContract.class)
     public NormalReturn getRole(ServiceRequest request) {
         RoleIdContract req = request.getContract();
@@ -101,7 +102,8 @@ public class RoleController implements IRoleController {
     }
 
     @Override
-    @RequiresPermissions(value = "/role/queryRole",logical = Logical.OR)
+//    @RequiresPermissions(value = "/role/queryRole",logical = Logical.OR)
+    @RequiresAuthentication
     @Contract(RoleQueryContract.class)
     public NormalReturn queryRole(ServiceRequest request) {
         RoleQueryContract req = request.getContract();
@@ -131,7 +133,8 @@ public class RoleController implements IRoleController {
     }
 
     @Override
-    @RequiresPermissions(value = "/role/getRoleAuths",logical = Logical.OR)
+//    @RequiresPermissions(value = "/role/getRoleAuths",logical = Logical.OR)
+    @RequiresAuthentication
     @Contract(RoleUpdateContract.class)
     public NormalReturn getRoleAuths(ServiceRequest request) {
         RoleUpdateContract req = request.getContract();

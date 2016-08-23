@@ -52,7 +52,7 @@ public class PermissionController implements IPermissionController {
     }
 
     @Override
-//    @RequiresPermissions(value = "/permission/getPermission",logical = Logical.OR)
+    @RequiresAuthentication
     @Contract(PermissionIdContract.class)
     public NormalReturn getPermission(ServiceRequest request) {
         PermissionIdContract req = request.getContract();
@@ -101,8 +101,8 @@ public class PermissionController implements IPermissionController {
     }
 
     @Override
-    @RequiresPermissions(value = "/permission/queryPermission",logical = Logical.OR)
     @Contract(PermissionQueryContract.class)
+    @RequiresAuthentication
     public NormalReturn queryPermission(ServiceRequest request) {
         PermissionQueryContract req = request.getContract();
         try {
@@ -114,7 +114,7 @@ public class PermissionController implements IPermissionController {
     }
 
     @Override
-//    @RequiresAuthentication
+    @RequiresAuthentication
     @Contract(BaseContract.class)
     public NormalReturn queryPermTree(ServiceRequest request) {
         try {

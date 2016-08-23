@@ -13,6 +13,7 @@ import cn.mwee.auto.deploy.dao.ProjectUserExtMapper;
 import cn.mwee.auto.deploy.model.AutoTemplate;
 import cn.mwee.auto.deploy.service.IProjectService;
 import cn.mwee.auto.deploy.service.ITemplateManagerService;
+import cn.mwee.auto.deploy.util.AutoConsts.PermConst;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,7 +76,9 @@ public class ProjectService implements IProjectService {
         flowListMenu.setType((byte) 1);
         flowListMenu.setDescription("项目["+projectId+"]流程列表菜单");
         flowListMenu.setIsproject(true);
-        permissionService.add(flowListMenu);
+        if (permissionService.add(flowListMenu)) {
+            addDefaultBtn(flowListMenu.getId(),"流程审核","flowReview-"+projectId);
+        }
         AuthPermission zoneStatusMenu = new AuthPermission();
         zoneStatusMenu.setParentId(projectId);
         zoneStatusMenu.setName("服务器状态");
@@ -186,7 +189,7 @@ public class ProjectService implements IProjectService {
     }
 
     @Override
-    public boolean addProjectMenu(Integer projectId, String menuName, String menuUrl, String desc) {
+    public boolean addProjectMenu(Integer projectId,Integer templateId, String menuName, String menuUrl, boolean isDeploy, String desc) {
         AuthPermission projectMenu = new AuthPermission();
         projectMenu.setParentId(projectId);
         projectMenu.setName(menuName);
@@ -195,7 +198,24 @@ public class ProjectService implements IProjectService {
         projectMenu.setType((byte) 1);
         projectMenu.setDescription(desc);
         projectMenu.setIsproject(true);
-        return permissionService.add(projectMenu);
+        boolean result = permissionService.add(projectMenu);
+        if (result && isDeploy) {
+            addDefaultBtn(projectMenu.getId(),menuName+"新增流程区",
+                    "addFlowZone"+projectId+"-"+templateId);
+        }
+        return result;
+    }
+
+    private boolean addDefaultBtn(Integer parentId, String name, String code) {
+        AuthPermission defaultBtn = new AuthPermission();
+        defaultBtn.setParentId(parentId);
+        defaultBtn.setName(name);
+        defaultBtn.setCode(code);
+        defaultBtn.setLevel((byte) 2);
+        defaultBtn.setType(PermConst.TYPE_BTN);
+        defaultBtn.setDescription(name+"按钮权限");
+        defaultBtn.setIsproject(true);
+        return permissionService.add(defaultBtn);
     }
 
     @Override

@@ -12,12 +12,12 @@ import java.util.List;
 import cn.mwee.auto.auth.contract.permission.PermissionQueryContract;
 import cn.mwee.auto.auth.dao.AuthPermissionExtMapper;
 import cn.mwee.auto.auth.dao.AuthRolePermissionExtMapper;
-import cn.mwee.auto.auth.dao.ProjectUserMapper;
 import cn.mwee.auto.auth.model.AuthMenu;
 import cn.mwee.auto.auth.util.SqlUtils;
 import cn.mwee.auto.common.db.BaseModel;
 import cn.mwee.auto.common.db.BaseQueryResult;
 import cn.mwee.auto.deploy.service.IProjectService;
+import cn.mwee.auto.deploy.util.AutoConsts.PermConst;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +34,7 @@ import javax.annotation.Resource;
  * manage permission info
  *
  * @author mengfanyuan
- * 2016年6月29日下午1:38:05
+ *         2016年6月29日下午1:38:05
  */
 @Service
 public class PermissionService implements IPermissionService {
@@ -89,7 +89,7 @@ public class PermissionService implements IPermissionService {
     }
 
     @Override
-    public AuthPermission selectByName(String name,boolean isProject) {
+    public AuthPermission selectByName(String name, boolean isProject) {
         AuthPermissionExample example = new AuthPermissionExample();
         example.createCriteria().andNameEqualTo(name).andIsprojectEqualTo(isProject);
         List<AuthPermission> list = authPermissionMapper.selectByExample(example);
@@ -133,9 +133,9 @@ public class PermissionService implements IPermissionService {
                 menu.setChildMenu(getChildMenu(menus, menu));
             }
         }
-        List<AuthPermission> projectList =  projectService.getProjects4User(userId);
+        List<AuthPermission> projectList = projectService.getProjects4User(userId);
         projectList.forEach(project -> {
-            if (!isExist(project,topMenus)) {
+            if (!isExist(project, topMenus)) {
                 topMenus.add(authPermissionExtMapper.selectPermTreeByPrimaryKey(project.getId()));
             }
         });
@@ -153,7 +153,7 @@ public class PermissionService implements IPermissionService {
         return childMenu;
     }
 
-    private boolean isExist(AuthPermission authPermission , List<AuthMenu> topMenus) {
+    private boolean isExist(AuthPermission authPermission, List<AuthMenu> topMenus) {
         for (AuthMenu authMenu : topMenus) {
             if (authMenu.getId().intValue() == authPermission.getId()) {
                 return true;
@@ -177,5 +177,13 @@ public class PermissionService implements IPermissionService {
     public List<AuthMenu> queryPermTree() {
         List<AuthMenu> list = authPermissionExtMapper.selectPermTree(-1);
         return list;
+    }
+
+    @Override
+    public List<AuthPermission> getBtnPerms4Page(String pageUrl, Integer userId) {
+        if (StringUtils.isBlank(pageUrl)) return new ArrayList<>();
+        AuthPermission perm = selectByCode(pageUrl);
+        if (null == perm) return new ArrayList<>();
+        return authPermissionExtMapper.selectPrivatePerm(PermConst.TYPE_BTN, userId, perm.getId());
     }
 }

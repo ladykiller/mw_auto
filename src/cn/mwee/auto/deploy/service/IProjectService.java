@@ -101,7 +101,7 @@ public interface IProjectService {
      * @param projectId 项目Id
      * @return
      */
-    boolean addProjectMenu(Integer projectId, String menuName,String menuUrl,String desc);
+    boolean addProjectMenu(Integer projectId, Integer templateId, String menuName,String menuUrl,  boolean isDeploy, String desc);
 
     /**
      * 查看项目子菜单

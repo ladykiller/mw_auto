@@ -27,11 +27,13 @@ public class BaseContract {
 	private String token;
 
 	/**
+	 * 当前页面url
+	 */
+	private String currentPageUrl;
+
+	/**
 	 * 分页信息
 	 */
 	private PageInfo page;
 
-
-	
-	
 }

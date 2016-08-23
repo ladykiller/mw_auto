@@ -1,6 +1,7 @@
 package cn.mwee.auto.auth.dao;
 
 import cn.mwee.auto.auth.model.AuthMenu;
+import cn.mwee.auto.auth.model.AuthPermission;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -35,4 +36,16 @@ public interface AuthPermissionExtMapper {
      * @return
      */
     AuthMenu selectPermTreeByPrimaryKey(Integer id);
+
+
+    /**
+     * 查询用户权限
+     * @param type 权限类型
+     * @param userId 用户Id
+     * @param parentId 父级权限Id
+     * @return
+     */
+    List<AuthPermission> selectPrivatePerm(@Param("type") Byte type
+            ,@Param("userId")Integer userId,@Param("parentId")Integer parentId);
+
 }

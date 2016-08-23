@@ -42,4 +42,11 @@ public interface IAuthController extends IController {
 	 */
 	NormalReturn leftMenu(ServiceRequest request);
 
+	/**
+	 * 当前页中的按钮权限
+	 * @param request
+	 * @return
+	 */
+	NormalReturn getCurrPageBtnPerm(ServiceRequest request);
+
 }

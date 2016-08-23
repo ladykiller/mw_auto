@@ -62,6 +62,8 @@ public class UserController implements IUserController {
     }
 
     @Override
+//    @RequiresPermissions(value = {"/user/userUpdate"}, logical = Logical.OR)
+    @RequiresAuthentication
     @Contract(UserAddContract.class)
     public NormalReturn userUpdate(ServiceRequest request) {
         UserAddContract req = request.getContract();
@@ -86,6 +88,7 @@ public class UserController implements IUserController {
 
     @Override
 //    @RequiresPermissions(value = "/user/userInfo",logical = Logical.OR)
+    @RequiresAuthentication
     @Contract(UserDelContract.class)
     public NormalReturn userInfo(ServiceRequest request) {
         UserDelContract req = request.getContract();
@@ -104,7 +107,8 @@ public class UserController implements IUserController {
     }
 
     @Override
-    @RequiresPermissions(value = {"/user/userList"}, logical = Logical.OR)
+//    @RequiresPermissions(value = {"/user/userList"}, logical = Logical.OR)
+    @RequiresAuthentication
     @Contract(UserQueryContract.class)
     public NormalReturn userList(ServiceRequest request) {
         UserQueryContract req = request.getContract();
@@ -167,6 +171,7 @@ public class UserController implements IUserController {
     }
 
     @Override
+    @RequiresPermissions(value = "/user/resetPassword", logical = Logical.OR)
     @Contract(UserAddContract.class)
     public NormalReturn resetPassword(ServiceRequest request) {
         UserAddContract req = request.getContract();

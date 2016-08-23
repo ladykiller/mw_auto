@@ -9,6 +9,7 @@ import cn.mwee.auto.auth.contract.*;
 import cn.mwee.auto.auth.model.AuthUser;
 import cn.mwee.auto.auth.service.IPermissionService;
 import cn.mwee.auto.auth.service.IUserService;
+import cn.mwee.auto.auth.util.AuthUtils;
 import cn.mwee.auto.deploy.contract.commom.BaseContract;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
@@ -101,7 +102,7 @@ public class AuthController implements IAuthController {
     @RequiresAuthentication
     public NormalReturn leftMenu(ServiceRequest request) {
         try {
-            String currUser = SecurityUtils.getSubject().getPrincipal().toString();
+            String currUser = AuthUtils.getCurrUserName();
             AuthUser authUser = userService.queryByUserName(currUser);
             if (authUser == null) {
                 SecurityUtils.getSubject().logout();
@@ -115,6 +116,20 @@ public class AuthController implements IAuthController {
         } catch (Exception e) {
             logger.error("",e);
             return new NormalReturn("500","error",e.getMessage());
+        }
+    }
+
+    @Override
+    @Contract(BaseContract.class)
+    @RequiresAuthentication
+    public NormalReturn getCurrPageBtnPerm(ServiceRequest request) {
+        BaseContract req = request.getContract();
+        String currentUserName = AuthUtils.getCurrUserName();
+        if ("admin".equals(currentUserName)) {
+            return new NormalReturn(permissionService.getBtnPerms4Page(req.getCurrentPageUrl(),null));
+        } else {
+            AuthUser currentUser = AuthUtils.getCurrentUser(req.getToken());
+            return new NormalReturn(permissionService.getBtnPerms4Page(req.getCurrentPageUrl(),currentUser.getId()));
         }
     }
 }

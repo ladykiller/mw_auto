@@ -66,6 +66,12 @@ public class AutoConsts {
 
     }
 
+	/** 监控类型 **/
+	public static class PermConst {
+		public static final byte TYPE_MENU              = 1;
+		public static final byte TYPE_BTN               = -1;
+	}
+
 	public enum TaskState
 	{
 		INIT,ING,MANUAL,ERROR,TIMER,SUCCESS
