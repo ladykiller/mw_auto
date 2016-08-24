@@ -709,6 +709,7 @@ public class FlowManagerService implements IFlowManagerService {
         rollBackFlow.setTemplateId(subTemplate.getId());
         rollBackFlow.setProjectId(flow.getProjectId());
         rollBackFlow.setZones(flow.getZones());
+        rollBackFlow.setParams("{}");
         rollBackFlow.setIsreview(subTemplate.getReview());
         rollBackFlow.setState(TaskState.INIT.name());
         rollBackFlow.setCreator(AuthUtils.getCurrUserName());
