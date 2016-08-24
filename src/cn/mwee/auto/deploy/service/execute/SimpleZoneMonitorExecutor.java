@@ -39,10 +39,12 @@ public class SimpleZoneMonitorExecutor {
 
     @PostConstruct
     public void init() {
+        logger.info("sshAuthStrs:{}",sshAuthStrs);
         String[] sshAuths = sshAuthStrs.split(";");
         for (String sshAuth : sshAuths) {
             if (StringUtils.isEmpty(sshAuth)) continue;
             String[] sshAuthInfo = sshAuth.split("@");
+            logger.info("sshAuthInfo[0]:{}",sshAuthStrs);
             sshAuthMap.put(sshAuthInfo[0], sshAuthInfo[1]);
         }
     }
