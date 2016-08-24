@@ -42,7 +42,7 @@ public class SimpleZoneMonitorExecutor {
         String[] sshAuths = sshAuthStrs.split(";");
         for (String sshAuth : sshAuths) {
             if (StringUtils.isEmpty(sshAuth)) continue;
-            String[] sshAuthInfo = sshAuth.split(":");
+            String[] sshAuthInfo = sshAuth.split("@");
             sshAuthMap.put(sshAuthInfo[0], sshAuthInfo[1]);
         }
     }
@@ -54,6 +54,7 @@ public class SimpleZoneMonitorExecutor {
             String sshShellUser = zoneMonitorTask.getMonitorUser();
             String sshPriAddr = sshAuthMap.get(sshShellUser);
             String exeTargetHost = zoneMonitorTask.getExeTargetHost();
+            logger.info("Monitor task user:[{}],host:[{}],command:[{}]",sshShellUser,exeTargetHost,command);
             instance = new SSHManager(sshShellUser, sshPriAddr, exeTargetHost,null,null,null);
             String errMsg = instance.connect();
             if (errMsg != null) throw new Exception(errMsg);
@@ -68,9 +69,9 @@ public class SimpleZoneMonitorExecutor {
             } else {
                 return ZoneState.ERROR.name();
             }
-
         } catch (Exception e) {
             logger.error("",e);
+            return ZoneState.UNKNOWN.name();
         } finally {
             try {
                 if (instance !=null) instance.close();
@@ -78,7 +79,6 @@ public class SimpleZoneMonitorExecutor {
                 logger.error("",e);
             }
         }
-        return ZoneState.UNKNOWN.name();
     }
 
 }
