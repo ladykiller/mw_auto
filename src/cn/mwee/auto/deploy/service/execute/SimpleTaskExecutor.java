@@ -65,7 +65,7 @@ public class SimpleTaskExecutor implements TaskExecutor {
         String[] sshAuths = sshAuthStrs.split(";");
         for (String sshAuth : sshAuths) {
             if (StringUtils.isEmpty(sshAuth)) continue;
-            String[] sshAuthInfo = sshAuth.split(":");
+            String[] sshAuthInfo = sshAuth.split("@");
             sshAuthMap.put(sshAuthInfo[0], sshAuthInfo[1]);
         }
     }
