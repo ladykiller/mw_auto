@@ -194,6 +194,9 @@ public class FlowManagerService implements IFlowManagerService {
             }
             */
         }
+        if (CollectionUtils.isEmpty(fts)) {
+            return false;
+        }
         int result = flowTaskExtMapper.insertBatch(fts);
         return result > 0;
     }

@@ -63,8 +63,12 @@ public class SimpleZoneMonitorExecutor {
             while ((lineStr = reader.readLine()) != null) {
                 outputBuffer.append(lineStr);
             }
-            if (outputBuffer.toString().contains("MW_SUCCESS"))
+            if (outputBuffer.toString().contains("MW_SUCCESS")){
                 return ZoneState.RUNNING.name();
+            } else {
+                return ZoneState.ERROR.name();
+            }
+
         } catch (Exception e) {
             logger.error("",e);
         } finally {
