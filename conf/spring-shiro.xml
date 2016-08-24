@@ -31,7 +31,7 @@
         <property name="userService" ref="userService"/>
         <property name="credentialsMatcher" ref="credentialsMatcher"/>
         <property name="cachingEnabled" value="true"/>
-        <property name="authenticationCachingEnabled" value="true"/>
+        <property name="authenticationCachingEnabled" value="false"/>
         <property name="authenticationCacheName" value="authenticationCache"/>
         <property name="authorizationCachingEnabled" value="true"/>
         <property name="authorizationCacheName" value="authorizationCache"/>
