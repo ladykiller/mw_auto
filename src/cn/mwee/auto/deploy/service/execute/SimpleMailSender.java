@@ -46,7 +46,7 @@ public class SimpleMailSender {
             users.forEach(authUser -> {
                 if (StringUtils.isNotBlank(authUser.getEmail())) {
                     Mail mail = new Mail();
-                    mail.setBccReceiveUser(authUser.getEmail());
+                    mail.setReceiveUser(authUser.getEmail());
                     mail.setSubject("美味自动化提醒");
                     mail.setSenderNickName("美味自动化");
                     mail.setMailBody(content);

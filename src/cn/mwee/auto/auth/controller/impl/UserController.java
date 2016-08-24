@@ -172,9 +172,9 @@ public class UserController implements IUserController {
 
     @Override
     @RequiresPermissions(value = "/user/resetPassword", logical = Logical.OR)
-    @Contract(UserAddContract.class)
+    @Contract(PassWordResetContract.class)
     public NormalReturn resetPassword(ServiceRequest request) {
-        UserAddContract req = request.getContract();
+        PassWordResetContract req = request.getContract();
         try {
             if (userService.resetPassword(req.getUserName(), req.getPassword())) {
                 return new NormalReturn("200", "success");
