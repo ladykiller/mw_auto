@@ -78,6 +78,9 @@ public class FlowManagerService implements IFlowManagerService {
     @Value("${deploy.env}")
     private String deployEnv = "";
 
+    @Value("${auto.bak.dir}")
+    private String autoBakDir;
+
     @Override
     public Integer createFlow(FlowAddContract req) {
         Flow flow = createFlowSimple(req);
@@ -264,6 +267,7 @@ public class FlowManagerService implements IFlowManagerService {
 
     private Map<String, String> initFlowParams(AutoTemplate template, Flow flow) {
         Map<String, String> flowParamMap = new HashMap<>();
+        flowParamMap.put("%bakDir%",autoBakDir);
         flowParamMap.put("%flowId%",flow.getId()+"");
         flowParamMap.put("%env%", deployEnv);
         flowParamMap.put("%vcsType%", template.getVcsType());
@@ -273,6 +277,8 @@ public class FlowManagerService implements IFlowManagerService {
         if (StringUtils.isNotBlank(repUrl)
                 && StringUtils.isNotBlank(flow.getVcsBranch())) {
             flowParamMap.put("%projectName%", repUrl.substring(repUrl.lastIndexOf('/') + 1, repUrl.lastIndexOf('.')));
+        } else {
+            flowParamMap.put("%projectName%", "");
         }
         return flowParamMap;
     }
