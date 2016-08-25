@@ -178,7 +178,7 @@ public class FlowManagerService implements IFlowManagerService {
             userParamsMap = JSON.parseObject(flow.getParams(), Map.class);
         }
         //流程变量
-        Map<String, String> flowParamMap = initFlowParams(template, flow);
+        Map<String, String> flowParamMap = initFlowParams(template, flow, userParamsMap);
         //复制任务
         List<FlowTask> fts = new ArrayList<>();
         Map<String, FlowTask> zoneStartTaskMap = new HashMap<>();
@@ -283,7 +283,7 @@ public class FlowManagerService implements IFlowManagerService {
         }
     }
 
-    private Map<String, String> initFlowParams(AutoTemplate template, Flow flow) {
+    private Map<String, String> initFlowParams(AutoTemplate template, Flow flow, Map<String, String> userParamsMap) {
         Map<String, String> flowParamMap = new HashMap<>();
         flowParamMap.put("%bakDir%", autoBakDir);
         flowParamMap.put("%flowId%", flow.getId() + "");
@@ -298,6 +298,8 @@ public class FlowManagerService implements IFlowManagerService {
         } else {
             flowParamMap.put("%projectName%", "");
         }
+        String version = userParamsMap.get("version") == null ? "" : userParamsMap.get("version");
+        flowParamMap.put("%projectBackupPath%", autoBakDir + "/" + flowParamMap.get("%projectName%") + "_" + version);
         return flowParamMap;
     }
 
