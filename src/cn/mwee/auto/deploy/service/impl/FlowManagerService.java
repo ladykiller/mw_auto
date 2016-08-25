@@ -264,13 +264,14 @@ public class FlowManagerService implements IFlowManagerService {
 
     private Map<String, String> initFlowParams(AutoTemplate template, Flow flow) {
         Map<String, String> flowParamMap = new HashMap<>();
+        flowParamMap.put("%flowId%",flow.getId()+"");
+        flowParamMap.put("%env%", deployEnv);
+        flowParamMap.put("%vcsType%", template.getVcsType());
+        flowParamMap.put("%vcsRep%", template.getVcsRep());
+        flowParamMap.put("%vcsBranch%", flow.getVcsBranch());
         String repUrl = template.getVcsRep();
         if (StringUtils.isNotBlank(repUrl)
                 && StringUtils.isNotBlank(flow.getVcsBranch())) {
-            flowParamMap.put("%env%", deployEnv);
-            flowParamMap.put("%vcsType%", template.getVcsType());
-            flowParamMap.put("%vcsRep%", template.getVcsRep());
-            flowParamMap.put("%vcsBranch%", flow.getVcsBranch());
             flowParamMap.put("%projectName%", repUrl.substring(repUrl.lastIndexOf('/') + 1, repUrl.lastIndexOf('.')));
         }
         return flowParamMap;
@@ -705,13 +706,14 @@ public class FlowManagerService implements IFlowManagerService {
         AutoTemplate subTemplate = templateManagerService.getSubTemplate(templateId);
         if (subTemplate == null) throw new Exception("模板["+templateId+"]未配置回滚模板");
         Flow rollBackFlow = new Flow();
-        rollBackFlow.setName(flow.getName()+"-回滚");
+        rollBackFlow.setName(flow.getName()+"["+flowId+"]-回滚");
         rollBackFlow.setTemplateId(subTemplate.getId());
         rollBackFlow.setProjectId(flow.getProjectId());
         rollBackFlow.setZones(flow.getZones());
-        rollBackFlow.setParams("{}");
+        rollBackFlow.setParams("{\"flowId\":"+flowId+"}");
         rollBackFlow.setIsreview(subTemplate.getReview());
         rollBackFlow.setState(TaskState.INIT.name());
+        rollBackFlow.setNeedbuild((byte)1);
         rollBackFlow.setCreator(AuthUtils.getCurrUserName());
         rollBackFlow.setCreateTime(new Date());
         return flowMapper.insertSelective(rollBackFlow) > 0;
