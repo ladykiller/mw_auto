@@ -156,6 +156,14 @@ public class FlowManagerService implements IFlowManagerService {
         if (template == null) {
             throw new NullPointerException("Cant find template for id:" + flow.getTemplateId());
         }
+        //回滚流程设置父模板信息
+        if (flow.getNeedbuild() == 1) {
+            AutoTemplate pTemplate = templateManagerService.getTemplate(template.getPid());
+            if (pTemplate != null) {
+                template.setVcsType(pTemplate.getVcsType());
+                template.setVcsRep(pTemplate.getVcsRep());
+            }
+        }
 
         //获取模板任务
         List<TemplateTask> tts = templateManagerService.getTemplateTasks(flow.getTemplateId());
@@ -177,18 +185,23 @@ public class FlowManagerService implements IFlowManagerService {
         for (TemplateTask tt : tts) {
             //prepareGroup
             if (tt.getGroup().equals(GroupType.PrepareGroup)) {
-                fts.add(buildFlowTask(tt, flowId, localHost, flowParamMap, userParamsMap));
+                FlowTask ft = buildFlowTask(tt, flowId, localHost, flowParamMap, userParamsMap);
+                if (ft != null) {
+                    fts.add(ft);
+                }
                 continue;
             }
             //区域组
             for (int i = 0; i < zones.length; i++) {
                 if (StringUtils.isBlank(zones[i])) continue;
-                flowParamMap.put("%zoneIndex%", (i+1)+"");
+                flowParamMap.put("%zoneIndex%", (i + 1) + "");
                 FlowTask flowTask = buildFlowTask(tt, flowId, zones[i], flowParamMap, userParamsMap);
-                if (flowStrategy != null) {
-                    calStrategy(flowTask, i, zoneStartTaskMap, flowStrategy);
+                if (flowTask != null) {
+                    if (flowStrategy != null) {
+                        calStrategy(flowTask, i, zoneStartTaskMap, flowStrategy);
+                    }
+                    fts.add(flowTask);
                 }
-                fts.add(flowTask);
             }
             /*
             for (String zone : zones) {
@@ -228,6 +241,12 @@ public class FlowManagerService implements IFlowManagerService {
      */
     private FlowTask buildFlowTask(TemplateTask tt, Integer flowId, String zone,
                                    Map<String, String> flowParamMap, Map<String, String> userParamsMap) {
+        String paramStr = "";
+        AutoTask task = autoTaskMapper.selectByPrimaryKey(tt.getTaskId());
+        if (task == null) return null;
+        if (StringUtils.isNotBlank(task.getParams())) {
+            paramStr = task.getParams();
+        }
         FlowTask ft = new FlowTask();
         ft.setGroup(tt.getGroup());
         ft.setPriority(tt.getPriority());
@@ -236,6 +255,7 @@ public class FlowManagerService implements IFlowManagerService {
         ft.setFlowId(flowId);
         ft.setZone(zone);
         ft.setDelay(0);
+        ft.setTaskParam(paramStr);
         flowParamMap.put("%zone%", zone);
         replaceFlowParams(ft, flowParamMap);
         replaceUserParams(ft, userParamsMap);
@@ -251,10 +271,8 @@ public class FlowManagerService implements IFlowManagerService {
      * @param paramMap paramMap
      */
     private void replaceUserParams(FlowTask ft, Map<String, String> paramMap) {
-
-        AutoTask task = autoTaskMapper.selectByPrimaryKey(ft.getTaskId());
-        if (task != null && StringUtils.isNotBlank(task.getParams())) {
-            String paramStr = task.getParams();
+        if (StringUtils.isNotBlank(ft.getTaskParam())) {
+            String paramStr = ft.getTaskParam();
             if (paramStr.indexOf('#') < 0) return;
             Set<String> keySet = paramMap.keySet();
             for (String key : keySet) {
@@ -267,8 +285,8 @@ public class FlowManagerService implements IFlowManagerService {
 
     private Map<String, String> initFlowParams(AutoTemplate template, Flow flow) {
         Map<String, String> flowParamMap = new HashMap<>();
-        flowParamMap.put("%bakDir%",autoBakDir);
-        flowParamMap.put("%flowId%",flow.getId()+"");
+        flowParamMap.put("%bakDir%", autoBakDir);
+        flowParamMap.put("%flowId%", flow.getId() + "");
         flowParamMap.put("%env%", deployEnv);
         flowParamMap.put("%vcsType%", template.getVcsType());
         flowParamMap.put("%vcsRep%", template.getVcsRep());
@@ -284,9 +302,8 @@ public class FlowManagerService implements IFlowManagerService {
     }
 
     private void replaceFlowParams(FlowTask ft, Map<String, String> flowParamMap) {
-        AutoTask task = autoTaskMapper.selectByPrimaryKey(ft.getTaskId());
-        if (task != null && StringUtils.isNotBlank(task.getParams())) {
-            String paramStr = task.getParams();
+        if (StringUtils.isNotBlank(ft.getTaskParam())) {
+            String paramStr = ft.getTaskParam();
             if (paramStr.indexOf('%') < 0) return;
             Set<String> keySet = flowParamMap.keySet();
             for (String key : keySet) {
@@ -313,7 +330,7 @@ public class FlowManagerService implements IFlowManagerService {
             flowMapper.updateByPrimaryKeySelective(flowTmp);
             if (TaskState.SUCCESS.name().equals(stateNew) ||
                     TaskState.ERROR.name().equals(stateNew)) {
-                sendNoticeMail(flow,stateNew);
+                sendNoticeMail(flow, stateNew);
             }
         }
         return true;
@@ -323,10 +340,10 @@ public class FlowManagerService implements IFlowManagerService {
         //在成功或失败是发送邮件
         try {
             String contentTemp = "流程[%s],当前状态[%s]";
-            String content = String.format(contentTemp,flow.getName(),stateNew);
+            String content = String.format(contentTemp, flow.getName(), stateNew);
             simpleMailSender.sendNotice4ProjectAsync(flow.getProjectId(), content);
         } catch (Exception e) {
-            logger.error("sendNoticeMail error",e);
+            logger.error("sendNoticeMail error", e);
         }
     }
 
@@ -693,7 +710,7 @@ public class FlowManagerService implements IFlowManagerService {
 
     @Override
     public List<Flow> getUserTopFlows(Integer userId) {
-        List<AuthPermission> projects =  projectService.getProjects4User(userId);
+        List<AuthPermission> projects = projectService.getProjects4User(userId);
         List<Integer> pIds = new ArrayList<>(projects.size());
         if (CollectionUtils.isEmpty(projects)) return new ArrayList<>();
         projects.forEach(project -> pIds.add(project.getId()));
@@ -710,16 +727,17 @@ public class FlowManagerService implements IFlowManagerService {
         Flow flow = getFlow(flowId);
         Integer templateId = flow.getTemplateId();
         AutoTemplate subTemplate = templateManagerService.getSubTemplate(templateId);
-        if (subTemplate == null) throw new Exception("模板["+templateId+"]未配置回滚模板");
+        if (subTemplate == null) throw new Exception("模板[" + templateId + "]未配置回滚模板");
         Flow rollBackFlow = new Flow();
-        rollBackFlow.setName(flow.getName()+"["+flowId+"]-回滚");
+        rollBackFlow.setName(flow.getName() + "[" + flowId + "]-回滚");
         rollBackFlow.setTemplateId(subTemplate.getId());
         rollBackFlow.setProjectId(flow.getProjectId());
         rollBackFlow.setZones(flow.getZones());
-        rollBackFlow.setParams("{\"version\":"+flowId+"}");
+        rollBackFlow.setParams("{\"version\":\"" + flowId + "\"}");
         rollBackFlow.setIsreview(subTemplate.getReview());
         rollBackFlow.setState(TaskState.INIT.name());
-        rollBackFlow.setNeedbuild((byte)1);
+        rollBackFlow.setNeedbuild((byte) 1);
+        rollBackFlow.setVcsBranch(flow.getVcsBranch());
         rollBackFlow.setCreator(AuthUtils.getCurrUserName());
         rollBackFlow.setCreateTime(new Date());
         return flowMapper.insertSelective(rollBackFlow) > 0;
