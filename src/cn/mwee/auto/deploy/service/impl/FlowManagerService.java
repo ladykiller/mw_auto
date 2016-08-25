@@ -710,7 +710,7 @@ public class FlowManagerService implements IFlowManagerService {
         rollBackFlow.setTemplateId(subTemplate.getId());
         rollBackFlow.setProjectId(flow.getProjectId());
         rollBackFlow.setZones(flow.getZones());
-        rollBackFlow.setParams("{\"flowId\":"+flowId+"}");
+        rollBackFlow.setParams("{\"versionNum\":"+flowId+"}");
         rollBackFlow.setIsreview(subTemplate.getReview());
         rollBackFlow.setState(TaskState.INIT.name());
         rollBackFlow.setNeedbuild((byte)1);
