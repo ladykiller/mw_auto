@@ -78,6 +78,7 @@ public class ProjectService implements IProjectService {
         flowListMenu.setIsproject(true);
         if (permissionService.add(flowListMenu)) {
             addDefaultBtn(flowListMenu.getId(),"流程审核","flowReview-"+projectId);
+            addDefaultBtn(flowListMenu.getId(),"流程回滚","flowRollBack-"+projectId);
         }
         AuthPermission zoneStatusMenu = new AuthPermission();
         zoneStatusMenu.setParentId(projectId);
