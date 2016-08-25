@@ -370,7 +370,9 @@ public class TemplateManagerService implements ITemplateManagerService {
     @Override
     public List<AutoTemplate> getTemplates4Project(Integer projectId) {
         AutoTemplateExample example = new AutoTemplateExample();
-        example.createCriteria().andProjectIdEqualTo(projectId);
+        example.createCriteria()
+                .andProjectIdEqualTo(projectId)
+                .andPidEqualTo(0);
         return autoTemplateMapper.selectByExample(example);
     }
 

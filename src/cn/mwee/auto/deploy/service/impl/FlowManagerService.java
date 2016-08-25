@@ -129,7 +129,7 @@ public class FlowManagerService implements IFlowManagerService {
             flow.setOperater(SecurityUtils.getSubject().getPrincipal() == null ? "system" : SecurityUtils.getSubject().getPrincipal().toString());
             flow.setUpdateTime(new Date());
             flowMapper.updateByPrimaryKeySelective(flow);
-            sendNoticeMail(flow,TaskState.ING.name());
+//            sendNoticeMail(flow,TaskState.ING.name());
             return true;
         } else {
             return false;
