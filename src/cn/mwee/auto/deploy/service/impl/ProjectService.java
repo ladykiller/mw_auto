@@ -201,7 +201,7 @@ public class ProjectService implements IProjectService {
         projectMenu.setIsproject(true);
         boolean result = permissionService.add(projectMenu);
         if (result && isDeploy) {
-            addDefaultBtn(projectMenu.getId(),menuName+"新增流程区",
+            addDefaultBtn(projectMenu.getId(),menuName+"-流程动态ip添加",
                     "addFlowZone"+projectId+"-"+templateId);
         }
         return result;

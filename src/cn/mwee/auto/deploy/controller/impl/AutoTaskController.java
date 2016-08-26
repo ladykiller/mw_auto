@@ -91,4 +91,12 @@ public class AutoTaskController implements IAutoTaskController
             return new NormalReturn("500","modify task error");
         }
     }
+
+
+    @Override
+    @Contract(TaskQparamRequest.class)
+    public NormalReturn queryTasks4Sel2(ServiceRequest request) {
+        TaskQparamRequest req = request.getContract();
+        return new NormalReturn(taskManagerService.getAutoTask4Sel2(req.getQueryParam()));
+    }
 }

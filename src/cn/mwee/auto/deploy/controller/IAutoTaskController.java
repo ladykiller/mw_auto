@@ -18,4 +18,6 @@ public interface IAutoTaskController extends IController
     NormalReturn deleteTask(ServiceRequest request);
 
     NormalReturn modifyTask(ServiceRequest request);
+
+    NormalReturn queryTasks4Sel2(ServiceRequest request);
 }

@@ -3,6 +3,7 @@ package cn.mwee.auto.deploy.service;
 import cn.mwee.auto.deploy.contract.task.QueryTasksRequest;
 import cn.mwee.auto.deploy.contract.task.QueryTasksResult;
 import cn.mwee.auto.deploy.model.AutoTask;
+import cn.mwee.auto.deploy.model.AutoTask4Sel;
 
 import java.util.List;
 import java.util.Set;
@@ -25,4 +26,6 @@ public interface ITaskManagerService {
     QueryTasksResult getAutoTasks(QueryTasksRequest request);
 
     List<AutoTask> getAutoTasksByIds (Set<Integer> ids);
+
+    List<AutoTask4Sel> getAutoTask4Sel2(String param);
 }
