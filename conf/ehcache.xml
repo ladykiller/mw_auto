@@ -6,14 +6,7 @@
 
     <diskStore path="java.io.tmpdir"/>
 
-    <cacheManagerPeerProviderFactory
-            class="net.sf.ehcache.distribution.RMICacheManagerPeerProviderFactory"
-            properties="peerDiscovery=automatic,multicastGroupAddress=230.0.0.1,
-            multicastGroupPort=4446,timeToLive=32"/>
-    <cacheManagerPeerListenerFactory
-            class="net.sf.ehcache.distribution.RMICacheManagerPeerListenerFactory"
-            properties="hostName=10.10.0.175, port=40001,socketTimeoutMillis=2000"/>
-    
+
     <!-- 登录记录缓存 锁定10分钟 -->
     <cache name="passwordRetryCache"
            maxEntriesLocalHeap="2000"
@@ -49,8 +42,6 @@
            timeToLiveSeconds="0"
            overflowToDisk="false"
            statistics="true">
-        <cacheEventListenerFactory
-                class="net.sf.ehcache.distribution.RMICacheReplicatorFactory"/>
     </cache>
 
 </ehcache>
