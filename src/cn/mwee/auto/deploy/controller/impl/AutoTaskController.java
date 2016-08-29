@@ -1,5 +1,6 @@
 package cn.mwee.auto.deploy.controller.impl;
 
+import cn.mwee.auto.deploy.contract.commom.SelQueryParamContract;
 import cn.mwee.auto.deploy.contract.task.*;
 import cn.mwee.auto.deploy.controller.IAutoTaskController;
 import cn.mwee.auto.deploy.model.AutoTask;
@@ -94,9 +95,9 @@ public class AutoTaskController implements IAutoTaskController
 
 
     @Override
-    @Contract(TaskQparamRequest.class)
+    @Contract(SelQueryParamContract.class)
     public NormalReturn queryTasks4Sel2(ServiceRequest request) {
-        TaskQparamRequest req = request.getContract();
+        SelQueryParamContract req = request.getContract();
         return new NormalReturn(taskManagerService.getAutoTask4Sel2(req.getQueryParam()));
     }
 }

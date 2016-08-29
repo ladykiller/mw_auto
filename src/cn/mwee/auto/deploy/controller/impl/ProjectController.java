@@ -2,6 +2,7 @@ package cn.mwee.auto.deploy.controller.impl;
 
 import cn.mwee.auto.auth.contract.permission.PermissionAddContract;
 import cn.mwee.auto.auth.model.AuthPermission;
+import cn.mwee.auto.deploy.contract.commom.SelQueryParamContract;
 import cn.mwee.auto.deploy.contract.project.*;
 import cn.mwee.auto.deploy.controller.IProjectController;
 import cn.mwee.auto.deploy.service.IProjectService;
@@ -164,5 +165,12 @@ public class ProjectController implements IProjectController {
     public NormalReturn getProjectZonesStatus(ServiceRequest request) {
         ProjectIdContract req = request.getContract();
         return new NormalReturn(projectService.getProjectZonesStatus(req.getProjectId()));
+    }
+
+    @Override
+    @Contract(SelQueryParamContract.class)
+    public NormalReturn queryProjects4Sel(ServiceRequest request) {
+        SelQueryParamContract req = request.getContract();
+        return new NormalReturn(projectService.queryProjects4Sel(req.getQueryParam()));
     }
 }

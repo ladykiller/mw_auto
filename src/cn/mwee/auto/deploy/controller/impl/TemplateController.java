@@ -1,11 +1,13 @@
 package cn.mwee.auto.deploy.controller.impl;
 
+import cn.mwee.auto.auth.model.AuthPermission;
 import cn.mwee.auto.deploy.AutoAbstractController;
 import cn.mwee.auto.deploy.contract.template.*;
 import cn.mwee.auto.deploy.controller.ITemplateController;
 import cn.mwee.auto.deploy.model.AutoTemplate;
 import cn.mwee.auto.deploy.model.TemplateTask;
 import cn.mwee.auto.deploy.model.TemplateZone;
+import cn.mwee.auto.deploy.service.IProjectService;
 import cn.mwee.auto.deploy.service.ITemplateManagerService;
 import cn.mwee.auto.deploy.service.IZoneService;
 import cn.mwee.auto.deploy.util.AutoConsts;
@@ -23,6 +25,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
+import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,6 +43,9 @@ public class TemplateController extends AutoAbstractController implements ITempl
 
     @Autowired
     private IZoneService zoneService;
+
+    @Resource
+    private IProjectService projectService;
 
     @Override
     @Contract(QueryTemplatesRequest.class)
@@ -64,8 +70,14 @@ public class TemplateController extends AutoAbstractController implements ITempl
     public NormalReturn getTemplate(ServiceRequest request)
     {
         TemplateIdQuery contract = request.getContract();
+        Map<String,Object> resultMap = new HashMap<>();
         AutoTemplate template = templateManagerService.getTemplate(contract.getTemplateId());
-        return new NormalReturn(template);
+        if (template != null) {
+            AuthPermission project = projectService.getProject(template.getProjectId());
+            resultMap.put("project",project);
+        }
+        resultMap.put("template",template);
+        return new NormalReturn(resultMap);
     }
 
     @Override

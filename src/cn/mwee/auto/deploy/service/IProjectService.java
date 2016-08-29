@@ -5,6 +5,7 @@ import cn.mwee.auto.auth.model.AuthUser;
 import cn.mwee.auto.auth.model.ProjectUserExtModel;
 import cn.mwee.auto.common.db.BaseQueryResult;
 import cn.mwee.auto.deploy.contract.project.ProjectQueryContract;
+import cn.mwee.auto.deploy.model.Model4Sel;
 
 import java.util.List;
 import java.util.Map;
@@ -126,5 +127,7 @@ public interface IProjectService {
      * @return
      */
     boolean updateProjectMenu(Integer menuId, String menuName,String menuUrl,String desc);
+
+    List<Model4Sel> queryProjects4Sel(String param);
 
 }

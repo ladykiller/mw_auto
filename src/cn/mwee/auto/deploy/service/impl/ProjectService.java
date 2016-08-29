@@ -11,6 +11,7 @@ import cn.mwee.auto.common.db.BaseQueryResult;
 import cn.mwee.auto.deploy.contract.project.ProjectQueryContract;
 import cn.mwee.auto.deploy.dao.ProjectUserExtMapper;
 import cn.mwee.auto.deploy.model.AutoTemplate;
+import cn.mwee.auto.deploy.model.Model4Sel;
 import cn.mwee.auto.deploy.service.IProjectService;
 import cn.mwee.auto.deploy.service.ITemplateManagerService;
 import cn.mwee.auto.deploy.util.AutoConsts.PermConst;
@@ -237,5 +238,25 @@ public class ProjectService implements IProjectService {
         projectMenu.setCode(menuUrl);
         projectMenu.setDescription(desc);
         return permissionService.update(projectMenu);
+    }
+
+    @Override
+    public List<Model4Sel> queryProjects4Sel(String param) {
+        AuthPermissionExample example = new AuthPermissionExample();
+        AuthPermissionExample.Criteria criteria = example.createCriteria();
+        criteria.andIsprojectEqualTo(true)
+                .andLevelEqualTo((byte) 1)
+                .andTypeEqualTo((byte) 1);
+        if (StringUtils.isNotBlank(param))
+            criteria.andNameLike(SqlUtils.wrapLike(param));
+        List<AuthPermission> list = authPermissionMapper.selectByExample(example);
+        List<Model4Sel> result = new ArrayList<>(list.size());
+        list.forEach(project -> {
+            Model4Sel model4Sel = new Model4Sel();
+            model4Sel.setId(project.getId());
+            model4Sel.setText(project.getName());
+            result.add(model4Sel);
+        });
+        return result;
     }
 }

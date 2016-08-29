@@ -16,7 +16,6 @@ import cn.mwee.auto.deploy.model.*;
 
 import static cn.mwee.auto.deploy.util.AutoConsts.*;
 
-import org.apache.commons.beanutils.locale.LocaleBeanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -144,7 +143,7 @@ public class TaskManagerService implements ITaskManagerService {
 
 
     @Override
-    public List<AutoTask4Sel> getAutoTask4Sel2(String param) {
+    public List<Model4Sel> getAutoTask4Sel2(String param) {
         String likeParam = SqlUtils.wrapLike(param);
         AutoTaskExample example = new AutoTaskExample();
         if (StringUtils.isNumeric(param)){
@@ -155,9 +154,9 @@ public class TaskManagerService implements ITaskManagerService {
         example.or(example.createCriteria().andExecLike(likeParam));
         example.or(example.createCriteria().andParamsLike(likeParam));
         List<AutoTask> list = autoTaskMapper.selectByExample(example);
-        List<AutoTask4Sel> result = new ArrayList<>(list.size());
+        List<Model4Sel> result = new ArrayList<>(list.size());
         list.forEach(autoTask -> {
-            AutoTask4Sel selModel = new AutoTask4Sel();
+            Model4Sel selModel = new Model4Sel();
             selModel.setId(autoTask.getId());
             selModel.setText(autoTask.getName() + (StringUtils.isBlank(autoTask.getDesc()) ? "" : "(" + autoTask.getDesc() + ")"));
             result.add(selModel);

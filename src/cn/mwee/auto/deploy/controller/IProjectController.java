@@ -113,4 +113,10 @@ public interface IProjectController extends IController {
      */
     NormalReturn getProjectZonesStatus(ServiceRequest request);
 
+    /**
+     * 获取项目所有模板中的区域服务状态
+     * @return
+     */
+    NormalReturn queryProjects4Sel(ServiceRequest request);
+
 }
