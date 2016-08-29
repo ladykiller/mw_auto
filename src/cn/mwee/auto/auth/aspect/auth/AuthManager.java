@@ -5,6 +5,7 @@
  */
 package cn.mwee.auto.auth.aspect.auth;
 
+import cn.mwee.auto.auth.util.AuthUtils;
 import cn.mwee.auto.misc.req.ServiceRequest;
 import cn.mwee.auto.misc.resp.NormalReturn;
 import org.apache.commons.lang3.StringUtils;
@@ -13,7 +14,9 @@ import org.apache.shiro.authz.UnauthenticatedException;
 import org.apache.shiro.authz.UnauthorizedException;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.session.mgt.DefaultSessionKey;
+import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.Subject;
+import org.apache.shiro.subject.support.DelegatingSubject;
 import org.apache.shiro.util.ThreadContext;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -46,10 +49,16 @@ public class AuthManager {
 			String token = req.getJson().getString("token");
 			if (StringUtils.isNotBlank(token)) {
 				try {
+                    /*
 					Session session = SecurityUtils.getSecurityManager().getSession(new DefaultSessionKey(token));
 					session.touch();
 					Subject subject = (Subject)session.getAttribute("subject");
-					ThreadContext.bind(subject);
+                    Subject newSubject = new DelegatingSubject(subject.getPrincipals(),true,null,session,SecurityUtils.getSecurityManager());
+                    */
+                    Subject subject = AuthUtils.getSubject(token);
+                    if (subject!=null){
+                        ThreadContext.bind(AuthUtils.getSubject(token));
+                    }
 				} catch (Exception e) {
 
 				}
