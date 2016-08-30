@@ -170,4 +170,12 @@ public interface IFlowManagerService {
      */
 	boolean rollBackFlow(Integer flowId) throws Exception;
 
+	/**
+	 * 获取项目和模板的最后发布的流程
+	 * @param templateId
+	 * @param projectId
+     * @return
+     */
+	Flow getLastFlow(Integer templateId, Integer projectId);
+
 }

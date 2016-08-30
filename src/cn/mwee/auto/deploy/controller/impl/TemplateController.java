@@ -5,8 +5,10 @@ import cn.mwee.auto.deploy.AutoAbstractController;
 import cn.mwee.auto.deploy.contract.template.*;
 import cn.mwee.auto.deploy.controller.ITemplateController;
 import cn.mwee.auto.deploy.model.AutoTemplate;
+import cn.mwee.auto.deploy.model.Flow;
 import cn.mwee.auto.deploy.model.TemplateTask;
 import cn.mwee.auto.deploy.model.TemplateZone;
+import cn.mwee.auto.deploy.service.IFlowManagerService;
 import cn.mwee.auto.deploy.service.IProjectService;
 import cn.mwee.auto.deploy.service.ITemplateManagerService;
 import cn.mwee.auto.deploy.service.IZoneService;
@@ -46,6 +48,9 @@ public class TemplateController extends AutoAbstractController implements ITempl
 
     @Resource
     private IProjectService projectService;
+
+    @Resource
+    private IFlowManagerService flowManagerService;
 
     @Override
     @Contract(QueryTemplatesRequest.class)
@@ -157,7 +162,6 @@ public class TemplateController extends AutoAbstractController implements ITempl
             if (template == null) {
                 return new NormalReturn("500","error","模板不存在");
             }
-
             Map<String,Object> result = new HashMap<>();
             //基础信息
             result.put("baseInfo",templateManagerService.getTemplate(req.getTemplateId()));
@@ -168,6 +172,10 @@ public class TemplateController extends AutoAbstractController implements ITempl
             //任务参数key
             result.put("taskParamKeys", templateManagerService.getTemplateTaskParamKeys(req.getTemplateId()));
             result.put("vcsInfo", templateManagerService.getGitRepInfo(template));
+            Flow lastFlow = flowManagerService.getLastFlow(req.getTemplateId(),null);
+            if (lastFlow != null) {
+                result.put("defaultVcsBranch", lastFlow.getVcsBranch());
+            }
             return new NormalReturn("200","success",result);
         } catch (Exception e) {
             logger.error("",e);

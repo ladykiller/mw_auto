@@ -745,6 +745,20 @@ public class FlowManagerService implements IFlowManagerService {
         return flowMapper.insertSelective(rollBackFlow) > 0;
     }
 
+
+    @Override
+    public Flow getLastFlow(Integer templateId, Integer projectId) {
+        FlowExample example = new FlowExample();
+        FlowExample.Criteria criteria = example.createCriteria();
+        if (templateId != null) criteria.andTemplateIdEqualTo(templateId);
+        if (projectId != null) criteria.andProjectIdEqualTo(projectId);
+        example.setOrderByClause("id desc");
+        example.setLimitStart(0);
+        example.setLimitEnd(1);
+        List<Flow> flows = flowMapper.selectByExample(example);
+        return CollectionUtils.isEmpty(flows) ? null : flows.get(0);
+    }
+
     public static void main(String[] args) {
         /*
         String str = "i am /#p#/#p#";
