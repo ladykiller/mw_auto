@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig"
+          p:maxTotal="500"
+          p:minIdle="20"
+          p:maxIdle="300"
+          p:maxWaitMillis="500"
+          p:testOnBorrow="true"
+          p:testOnReturn="true" />
+
+    <bean id="jedisConnFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
+          p:usePool="true"
+          p:poolConfig-ref="jedisPoolConfig"
+          p:hostName="10.0.21.52"
+          p:port="6382"/>
+
+    <bean id="jdkSerializationRedisSerializer"
+          class="org.springframework.data.redis.serializer.JdkSerializationRedisSerializer"/>
+
+    <bean id="stringRedisSerializer"
+          class="org.springframework.data.redis.serializer.StringRedisSerializer"/>
+
+    <bean id="retryTemplate" class="org.springframework.retry.support.RetryTemplate">
+        <property name="retryPolicy">
+            <bean class="org.springframework.retry.policy.TimeoutRetryPolicy">
+                <property name="timeout" value="50"/>
+                <!--50毫秒后重试-->
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="simpleRedisTemplate"
+          class="org.springframework.data.redis.core.RedisTemplate"
+          p:connectionFactory-ref="jedisConnFactory"
+          p:defaultSerializer-ref="stringRedisSerializer"
+          p:hashValueSerializer-ref="jdkSerializationRedisSerializer"/>
+
+    <bean id="redisClient" class="cn.mwee.auto.auth.util.RedisClient">
+        <property name="redisTemplate" ref="simpleRedisTemplate"/>
+        <property name="retryTemplate" ref="retryTemplate"/>
+    </bean>
+</beans>

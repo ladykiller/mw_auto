@@ -1,8 +1,9 @@
 package cn.mwee.auto.auth.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class AuthUser {
+public class AuthUser implements Serializable {
     /**
      * 主键id
      * auth_user.id

@@ -10,13 +10,15 @@
 	<bean id="cacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">
 	    <property name="cacheManagerConfigFile" value="classpath:ehcache.xml"/>
 	</bean>
-	<!-- 凭证匹配器 -->
+
+	<!-- 凭证匹配器 暂时未用 -->
     <bean id="credentialsMatcher" class="cn.mwee.auto.auth.shiro.credentials.RetryLimitHashedCredentialsMatcher">
         <constructor-arg ref="cacheManager"/>
         <property name="hashAlgorithmName" value="md5"/>
         <property name="hashIterations" value="2"/>
         <property name="storedCredentialsHexEncoded" value="true"/>
     </bean>
+
     <!-- 密码加密工具 -->
     <bean id="passwordHelper" class="cn.mwee.auto.auth.util.PasswordHelper">
     	<property name="randomNumberGenerator">
@@ -39,24 +41,35 @@
 
     <!-- 会话ID生成器 -->
     <bean id="sessionIdGenerator" class="org.apache.shiro.session.mgt.eis.JavaUuidSessionIdGenerator"/>
-    <!-- 会话DAO -->
+
+    <!-- 会话DAO 暂时未用 -->
     <bean id="sessionDAO" class="org.apache.shiro.session.mgt.eis.EnterpriseCacheSessionDAO">
         <property name="activeSessionsCacheName" value="shiro-activeSessionCache"/>
         <property name="sessionIdGenerator" ref="sessionIdGenerator"/>
     </bean>
+
+    <!-- redis SessionDao -->
+    <bean id="redisSessionDao" class="cn.mwee.auto.auth.shiro.session.RedisSessionDao">
+        <property name="sessionIdGenerator" ref="sessionIdGenerator"/>
+        <property name="redisClient" ref="redisClient"/>
+    </bean>
+
+
     <!-- 会话验证调度器 -->
     <bean id="sessionValidationScheduler" class="org.apache.shiro.session.mgt.quartz.QuartzSessionValidationScheduler">
         <property name="sessionValidationInterval" value="1800000"/>
         <property name="sessionManager" ref="sessionManager"/>
     </bean>
+
     <!-- 会话管理器 -->
     <bean id="sessionManager" class="org.apache.shiro.session.mgt.DefaultSessionManager">
         <property name="globalSessionTimeout" value="${shiro.session.timeout}"/>
         <property name="deleteInvalidSessions" value="true"/>
         <property name="sessionValidationSchedulerEnabled" value="true"/>
         <property name="sessionValidationScheduler" ref="sessionValidationScheduler"/>
-        <property name="sessionDAO" ref="sessionDAO"/>
+        <property name="sessionDAO" ref="redisSessionDao"/>
     </bean>
+
     <!-- 安全管理器 -->
     <bean id="securityManager" class="org.apache.shiro.mgt.DefaultSecurityManager">
         <property name="realms">
@@ -67,6 +80,7 @@
         <property name="sessionManager" ref="sessionManager"/>
         <property name="cacheManager" ref="cacheManager"/>
     </bean>
+
     <!-- 相当于调用SecurityUtils.setSecurityManager(securityManager) -->
     <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
         <property name="staticMethod" value="org.apache.shiro.SecurityUtils.setSecurityManager"/>
@@ -76,7 +90,7 @@
     <!-- Shiro生命周期处理器-->
     <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
     
-    <aop:config proxy-target-class="true"></aop:config>
+    <aop:config proxy-target-class="true"/>
 	<bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
 	    <property name="securityManager" ref="securityManager"/>
 	</bean>

@@ -21,6 +21,7 @@
     <import resource="propertyFileConfigurer.xml"/>
     <import resource="spring-service.xml"/>
     <import resource="spring-shiro.xml"/>
+    <import resource="spring-redis.xml"/>
     <bean class="org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor"/>
 
 </beans>

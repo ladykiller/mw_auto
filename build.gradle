@@ -90,4 +90,7 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile group: 'org.springframework', name: 'spring-test', version: '4.3.0.RELEASE'
     compile group: 'com.timgroup', name: 'java-statsd-client', version: '3.1.0'
+    compile 'org.springframework.data:spring-data-redis:1.6.4.RELEASE'
+    compile "redis.clients:jedis:2.8.0"
+
 }
