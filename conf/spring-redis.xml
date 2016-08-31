@@ -15,7 +15,9 @@
           p:usePool="true"
           p:poolConfig-ref="jedisPoolConfig"
           p:hostName="${redis.host}"
-          p:port="${redis.port}"/>
+          p:port="${redis.port}"
+          p:password="${redis.password}"
+          p:database="${redis.database}"/>
 
     <bean id="jdkSerializationRedisSerializer"
           class="org.springframework.data.redis.serializer.JdkSerializationRedisSerializer"/>
