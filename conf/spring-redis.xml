@@ -4,18 +4,18 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
     <bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig"
-          p:maxTotal="500"
-          p:minIdle="20"
-          p:maxIdle="300"
-          p:maxWaitMillis="500"
-          p:testOnBorrow="true"
-          p:testOnReturn="true" />
+          p:maxTotal="${redis.maxTotal}"
+          p:minIdle="${redis.minIdle}"
+          p:maxIdle="${redis.maxIdle}"
+          p:maxWaitMillis="${redis.maxWaitMillis}"
+          p:testOnBorrow="${redis.testOnBorrow}"
+          p:testOnReturn="${redis.testOnReturn}" />
 
     <bean id="jedisConnFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
           p:usePool="true"
           p:poolConfig-ref="jedisPoolConfig"
-          p:hostName="10.0.21.52"
-          p:port="6382"/>
+          p:hostName="${redis.host}"
+          p:port="${redis.port}"/>
 
     <bean id="jdkSerializationRedisSerializer"
           class="org.springframework.data.redis.serializer.JdkSerializationRedisSerializer"/>
@@ -26,7 +26,7 @@
     <bean id="retryTemplate" class="org.springframework.retry.support.RetryTemplate">
         <property name="retryPolicy">
             <bean class="org.springframework.retry.policy.TimeoutRetryPolicy">
-                <property name="timeout" value="50"/>
+                <property name="timeout" value="${redis.timeoutRetry}"/>
                 <!--50毫秒后重试-->
             </bean>
         </property>
