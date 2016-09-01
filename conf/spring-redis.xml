@@ -37,8 +37,7 @@
     <bean id="simpleRedisTemplate"
           class="org.springframework.data.redis.core.RedisTemplate"
           p:connectionFactory-ref="jedisConnFactory"
-          p:defaultSerializer-ref="stringRedisSerializer"
-          p:hashValueSerializer-ref="jdkSerializationRedisSerializer"/>
+          p:defaultSerializer-ref="jdkSerializationRedisSerializer" />
 
     <bean id="redisClient" class="cn.mwee.auto.auth.util.RedisClient">
         <property name="redisTemplate" ref="simpleRedisTemplate"/>

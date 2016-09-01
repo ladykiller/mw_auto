@@ -16,28 +16,33 @@ import java.util.Collections;
 @Setter
 public class RedisSessionDao extends AbstractSessionDAO {
 
-    private static final String SESSION_KEY="mwAuto:shiroSession";
+    private static final String SESSION_KEY="mwAuto:shiroSession:";
 
     private RedisClient redisClient;
+
+    private long defaultSessionTimeOut;
 
 
     @Override
     protected Serializable doCreate(Session session) {
         Serializable sessionId = generateSessionId(session);
         assignSessionId(session, sessionId);
-        redisClient.hAdd(SESSION_KEY,sessionId.toString(),session);
+//        redisClient.hAdd(SESSION_KEY,sessionId.toString(),session);
+        redisClient.set(SESSION_KEY+sessionId.toString(),session,defaultSessionTimeOut);
         return sessionId;
 
     }
 
     @Override
     protected Session doReadSession(Serializable sessionId) {
-        return (Session)redisClient.hGet(SESSION_KEY,sessionId.toString());
+        return (Session)redisClient.get(SESSION_KEY+sessionId.toString(),defaultSessionTimeOut);
+//        return (Session)redisClient.hGet(SESSION_KEY,sessionId.toString());
     }
 
     @Override
     public void update(Session session) throws UnknownSessionException {
-        redisClient.hAdd(SESSION_KEY,session.getId().toString(),session);
+        redisClient.set(SESSION_KEY+session.getId().toString(),session,defaultSessionTimeOut);
+//        redisClient.hAdd(SESSION_KEY,session.getId().toString(),session);
     }
 
     @Override

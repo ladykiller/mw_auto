@@ -52,6 +52,7 @@
     <bean id="redisSessionDao" class="cn.mwee.auto.auth.shiro.session.RedisSessionDao">
         <property name="sessionIdGenerator" ref="sessionIdGenerator"/>
         <property name="redisClient" ref="redisClient"/>
+        <property name="defaultSessionTimeOut" value="${shiro.session.timeout}"/>
     </bean>
 
 
