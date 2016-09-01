@@ -9,15 +9,30 @@
           p:maxIdle="${redis.maxIdle}"
           p:maxWaitMillis="${redis.maxWaitMillis}"
           p:testOnBorrow="${redis.testOnBorrow}"
-          p:testOnReturn="${redis.testOnReturn}" />
+          p:testOnReturn="${redis.testOnReturn}"/>
+
+    <bean id="redisSentinelConfig" class="org.springframework.data.redis.connection.RedisSentinelConfiguration">
+        <constructor-arg index="0">
+            <bean class="org.springframework.core.env.MapPropertySource">
+                <constructor-arg index="0" value="redisSentinelPropertySource"/>
+                <constructor-arg index="1">
+                    <map>
+                        <entry key="spring.redis.sentinel.master" value="${redis.sentinel.master}"/>
+                        <entry key="spring.redis.sentinel.nodes" value="${redis.sentinel.nodes}"/>
+                    </map>
+                </constructor-arg>
+            </bean>
+        </constructor-arg>
+    </bean>
 
     <bean id="jedisConnFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
           p:usePool="true"
           p:poolConfig-ref="jedisPoolConfig"
-          p:hostName="${redis.host}"
-          p:port="${redis.port}"
+          p:timeout="15000"
           p:password="${redis.password}"
-          p:database="${redis.database}"/>
+          p:database="${redis.database}">
+        <constructor-arg ref="redisSentinelConfig"/>
+    </bean>
 
     <bean id="jdkSerializationRedisSerializer"
           class="org.springframework.data.redis.serializer.JdkSerializationRedisSerializer"/>
@@ -37,7 +52,7 @@
     <bean id="simpleRedisTemplate"
           class="org.springframework.data.redis.core.RedisTemplate"
           p:connectionFactory-ref="jedisConnFactory"
-          p:defaultSerializer-ref="jdkSerializationRedisSerializer" />
+          p:defaultSerializer-ref="jdkSerializationRedisSerializer"/>
 
     <bean id="redisClient" class="cn.mwee.auto.auth.util.RedisClient">
         <property name="redisTemplate" ref="simpleRedisTemplate"/>

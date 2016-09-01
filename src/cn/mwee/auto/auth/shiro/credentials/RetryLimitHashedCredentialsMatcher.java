@@ -41,9 +41,11 @@ public class RetryLimitHashedCredentialsMatcher extends HashedCredentialsMatcher
         }
         
         boolean matches = super.doCredentialsMatch(token, info);
+
         if(matches) {
             passwordRetryCache.remove(username);
         }
+
         return matches;
 	}
 }

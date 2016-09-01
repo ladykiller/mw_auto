@@ -11,7 +11,7 @@
 	    <property name="cacheManagerConfigFile" value="classpath:ehcache.xml"/>
 	</bean>
 
-	<!-- 凭证匹配器 暂时未用 -->
+	<!-- 凭证匹配器 -->
     <bean id="credentialsMatcher" class="cn.mwee.auto.auth.shiro.credentials.RetryLimitHashedCredentialsMatcher">
         <constructor-arg ref="cacheManager"/>
         <property name="hashAlgorithmName" value="md5"/>
@@ -32,23 +32,23 @@
     <bean id="userRealm" class="cn.mwee.auto.auth.shiro.realm.UserRealm">
         <property name="userService" ref="userService"/>
         <property name="credentialsMatcher" ref="credentialsMatcher"/>
-        <property name="cachingEnabled" value="true"/>
-        <property name="authenticationCachingEnabled" value="false"/>
-        <property name="authenticationCacheName" value="authenticationCache"/>
-        <property name="authorizationCachingEnabled" value="true"/>
-        <property name="authorizationCacheName" value="authorizationCache"/>
+        <!--<property name="cachingEnabled" value="false"/>-->
+        <!--<property name="authenticationCachingEnabled" value="false"/>-->
+        <!--<property name="authenticationCacheName" value="authenticationCache"/>-->
+        <!--<property name="authorizationCachingEnabled" value="false"/>-->
+        <!--<property name="authorizationCacheName" value="authorizationCache"/>-->
     </bean>
 
     <!-- 会话ID生成器 -->
     <bean id="sessionIdGenerator" class="org.apache.shiro.session.mgt.eis.JavaUuidSessionIdGenerator"/>
 
-    <!-- 会话DAO 暂时未用 -->
+    <!-- 会话DAO 单机模式时使用 -->
     <bean id="sessionDAO" class="org.apache.shiro.session.mgt.eis.EnterpriseCacheSessionDAO">
         <property name="activeSessionsCacheName" value="shiro-activeSessionCache"/>
         <property name="sessionIdGenerator" ref="sessionIdGenerator"/>
     </bean>
 
-    <!-- redis SessionDao -->
+    <!-- redis 集群模式时使用 -->
     <bean id="redisSessionDao" class="cn.mwee.auto.auth.shiro.session.RedisSessionDao">
         <property name="sessionIdGenerator" ref="sessionIdGenerator"/>
         <property name="redisClient" ref="redisClient"/>
@@ -57,17 +57,18 @@
 
 
     <!-- 会话验证调度器 -->
+    <!--
     <bean id="sessionValidationScheduler" class="org.apache.shiro.session.mgt.quartz.QuartzSessionValidationScheduler">
         <property name="sessionValidationInterval" value="1800000"/>
         <property name="sessionManager" ref="sessionManager"/>
     </bean>
-
+    -->
     <!-- 会话管理器 -->
     <bean id="sessionManager" class="org.apache.shiro.session.mgt.DefaultSessionManager">
         <property name="globalSessionTimeout" value="${shiro.session.timeout}"/>
-        <property name="deleteInvalidSessions" value="true"/>
-        <property name="sessionValidationSchedulerEnabled" value="true"/>
-        <property name="sessionValidationScheduler" ref="sessionValidationScheduler"/>
+        <property name="deleteInvalidSessions" value="false"/>
+        <!--<property name="sessionValidationSchedulerEnabled" value="false"/>-->
+        <!--<property name="sessionValidationScheduler" ref="sessionValidationScheduler"/>-->
         <property name="sessionDAO" ref="redisSessionDao"/>
     </bean>
 
@@ -79,7 +80,7 @@
             </list>
         </property>
         <property name="sessionManager" ref="sessionManager"/>
-        <property name="cacheManager" ref="cacheManager"/>
+        <!--<property name="cacheManager" ref="cacheManager"/>-->
     </bean>
 
     <!-- 相当于调用SecurityUtils.setSecurityManager(securityManager) -->
