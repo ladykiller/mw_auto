@@ -13,3 +13,4 @@ echo "start failed"
 else
 echo "start ok"
 fi
+echo "MW_SUCCESS"

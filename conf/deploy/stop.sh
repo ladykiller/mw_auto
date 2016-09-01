@@ -8,5 +8,5 @@ if test $(pgrep -f "$PROCESS_NAME"|wc -l) -ne 0
 then
 pkill -9 -f "$PROCESS_NAME"
 fi
-
 echo "stop ok"
+echo "MW_SUCCESS"
